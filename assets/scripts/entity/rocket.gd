@@ -26,6 +26,7 @@ signal died
 
 var _shoot_timer: float = 0.0
 var _dead: bool = false
+var _death_pending: bool = false
 
 
 func _ready() -> void:
@@ -73,15 +74,23 @@ func _shoot() -> void:
 
 
 func _on_hurtbox_area_entered(area: Area2D) -> void:
-	if _dead:
+	if _dead or _death_pending:
 		return
 
 	var asteroid := area as Asteroid
-	if asteroid != null and asteroid.is_harmful():
-		_break_apart()
+	if asteroid != null and asteroid.is_collectible():
+		asteroid.collect()
+		return
+
+	if area.is_in_group("collision_damage"):
+		_death_pending = true
+		_break_apart.call_deferred()
 
 
 func _break_apart() -> void:
+	if _dead:
+		return
+	_death_pending = false
 	_dead = true
 	died.emit()
 	set_process(false)

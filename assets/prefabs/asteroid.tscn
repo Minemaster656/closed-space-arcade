@@ -6,7 +6,7 @@
 resource_local_to_scene = true
 radius = 24.0
 
-[node name="Asteroid" type="Area2D" groups=["asteroid"]]
+[node name="Asteroid" type="Area2D"]
 monitoring = false
 script = ExtResource("1_ast")
 

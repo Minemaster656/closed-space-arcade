@@ -4,6 +4,9 @@ class_name Asteroid
 signal despawned(who: Area2D)
 
 const GROUP_DAMAGEABLE := &"damageable"
+const GROUP_COLLISION_DAMAGE := &"collision_damage"
+const GROUP_ASTEROID := &"asteroid"
+const GROUP_SHARD := &"shard"
 const BOUNDS_CHECK_INTERVAL := 0.2
 
 @export_group("Movement")
@@ -11,10 +14,10 @@ const BOUNDS_CHECK_INTERVAL := 0.2
 @export var spin_speed: float = 0.9
 
 @export_group("Magnet")
-@export var magnet_radius: float = 170.0
-@export var collect_radius: float = 18.0
-@export var magnet_speed_min: float = 140.0
-@export var magnet_speed_max: float = 900.0
+@export var magnet_radius: float = 210.0
+@export var collect_radius: float = 40.0
+@export var magnet_speed_min: float = 200.0
+@export var magnet_speed_max: float = 1000.0
 
 @export_group("Audio")
 ## Звук попадания пока не добавлен. Можно назначить позже в инспекторе.
@@ -89,10 +92,25 @@ func setup(
 	circle.radius = type.collision_radius
 
 	set_deferred("monitorable", true)
-	if type.damageable and not type.collectible:
-		add_to_group(GROUP_DAMAGEABLE)
+	_sync_groups()
+
+
+func _sync_groups() -> void:
+	if type == null:
+		return
+
+	var is_shard := type.collectible
+	_set_group(GROUP_SHARD, is_shard)
+	_set_group(GROUP_ASTEROID, not is_shard)
+	_set_group(GROUP_DAMAGEABLE, type.damageable and not is_shard)
+	_set_group(GROUP_COLLISION_DAMAGE, type.harmful and not is_shard)
+
+
+func _set_group(group: StringName, enabled: bool) -> void:
+	if enabled:
+		add_to_group(group)
 	else:
-		remove_from_group(GROUP_DAMAGEABLE)
+		remove_from_group(group)
 
 
 func _process(delta: float) -> void:
@@ -135,7 +153,18 @@ func is_damageable() -> bool:
 
 
 func is_harmful() -> bool:
-	return type != null and type.harmful
+	return not _dead and type != null and type.harmful and not type.collectible
+
+
+func is_collectible() -> bool:
+	return not _dead and type != null and type.collectible
+
+
+## Принудительный сбор (например, при касании корпуса ракеты).
+func collect() -> void:
+	if not is_collectible():
+		return
+	_collect()
 
 
 func park() -> void:
@@ -144,6 +173,9 @@ func park() -> void:
 	visible = false
 	set_process(false)
 	remove_from_group(GROUP_DAMAGEABLE)
+	remove_from_group(GROUP_COLLISION_DAMAGE)
+	remove_from_group(GROUP_ASTEROID)
+	remove_from_group(GROUP_SHARD)
 	set_deferred("monitorable", false)
 	global_position = Vector2(0.0, 100000.0)
 
