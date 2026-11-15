@@ -1,11 +1,19 @@
 [gd_scene format=3 uid="uid://v6vuhycyd1xr"]
 
 [ext_resource type="PackedScene" uid="uid://ca8s3c23lo7uc" path="res://assets/prefabs/rocket.tscn" id="1_cb66b"]
+[ext_resource type="PackedScene" uid="uid://5w5rbq41p7ra" path="res://assets/prefabs/bullet.tscn" id="2_pool"]
+[ext_resource type="Script" path="res://assets/scripts/managers/bullet_pool.gd" id="3_pool"]
 
 [node name="Game" type="Node2D" unique_id=1587643132]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=916745351]
 
-[node name="Rocket" parent="." unique_id=1685500372 instance=ExtResource("1_cb66b")]
+[node name="Rocket" parent="." unique_id=1685500372 node_paths=PackedStringArray("pool") instance=ExtResource("1_cb66b")]
+pool = NodePath("../Managers/BulletPool")
 
 [node name="Managers" type="Node2D" parent="." unique_id=1223067182]
+
+[node name="BulletPool" type="Node2D" parent="Managers"]
+script = ExtResource("3_pool")
+bullet_scene = ExtResource("2_pool")
+initial_size = 32
