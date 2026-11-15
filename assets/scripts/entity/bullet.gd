@@ -18,6 +18,10 @@ signal disposed(who: Area2D)
 var _disposed: bool = false
 
 
+func _ready() -> void:
+	area_entered.connect(_on_area_entered)
+
+
 func _process(delta: float) -> void:
 	global_position += direction * speed * delta
 	_check_out_of_screen()
@@ -25,6 +29,20 @@ func _process(delta: float) -> void:
 
 func reset_state() -> void:
 	_disposed = false
+
+
+func _on_area_entered(area: Area2D) -> void:
+	if _disposed:
+		return
+	if not area.is_in_group("damageable"):
+		return
+	if area.has_method("is_damageable") and not area.is_damageable():
+		return
+	if not area.has_method("take_damage"):
+		return
+
+	area.take_damage(damage)
+	_dispose()
 
 
 func _check_out_of_screen() -> void:
@@ -36,5 +54,11 @@ func _check_out_of_screen() -> void:
 	var bounds := rect.grow_individual(margin.x, margin.y, margin.x, margin.y)
 
 	if not bounds.has_point(global_position):
-		_disposed = true
-		disposed.emit(self)
+		_dispose()
+
+
+func _dispose() -> void:
+	if _disposed:
+		return
+	_disposed = true
+	disposed.emit(self)

@@ -2,18 +2,60 @@
 
 [ext_resource type="PackedScene" uid="uid://ca8s3c23lo7uc" path="res://assets/prefabs/rocket.tscn" id="1_cb66b"]
 [ext_resource type="PackedScene" uid="uid://5w5rbq41p7ra" path="res://assets/prefabs/bullet.tscn" id="2_pool"]
-[ext_resource type="Script" path="res://assets/scripts/managers/bullet_pool.gd" id="3_pool"]
+[ext_resource type="Script" uid="uid://cpu4s7gtalo8p" path="res://assets/scripts/managers/bullet_pool.gd" id="3_pool"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/asteroid.tscn" id="4_ast_scene"]
+[ext_resource type="Script" uid="uid://cnr166p0xqc6b" path="res://assets/scripts/managers/asteroid_pool.gd" id="5_ast_pool"]
+[ext_resource type="Script" uid="uid://bemgjchgbji8d" path="res://assets/scripts/managers/asteroid_spawner.gd" id="6_spawner"]
+[ext_resource type="Script" uid="uid://fpfwvm4d1oyk" path="res://assets/scripts/resources/asteroid_type.gd" id="7_ast_type"]
+[ext_resource type="Resource" path="res://assets/resources/asteroids/large.tres" id="8_large"]
+[ext_resource type="Resource" path="res://assets/resources/asteroids/medium.tres" id="9_medium"]
+[ext_resource type="Resource" path="res://assets/resources/asteroids/small.tres" id="10_small"]
+[ext_resource type="Script" uid="uid://crsv826ymna7t" path="res://assets/scripts/game.gd" id="11_game"]
+[ext_resource type="Script" uid="uid://c2842u7awm2yr" path="res://assets/scripts/ui/metal_counter.gd" id="12_metal"]
 
 [node name="Game" type="Node2D" unique_id=1587643132]
+script = ExtResource("11_game")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=916745351]
 
 [node name="Rocket" parent="." unique_id=1685500372 node_paths=PackedStringArray("pool") instance=ExtResource("1_cb66b")]
+position = Vector2(0, 420)
 pool = NodePath("../Managers/BulletPool")
 
 [node name="Managers" type="Node2D" parent="." unique_id=1223067182]
 
-[node name="BulletPool" type="Node2D" parent="Managers"]
+[node name="BulletPool" type="Node2D" parent="Managers" unique_id=163655567]
 script = ExtResource("3_pool")
 bullet_scene = ExtResource("2_pool")
-initial_size = 32
+
+[node name="AsteroidPool" type="Node2D" parent="Managers" unique_id=1393017530]
+script = ExtResource("5_ast_pool")
+default_scene = ExtResource("4_ast_scene")
+prewarm_per_scene = 192
+
+[node name="AsteroidSpawner" type="Node" parent="Managers" unique_id=454640812 node_paths=PackedStringArray("asteroid_pool")]
+script = ExtResource("6_spawner")
+asteroid_pool = NodePath("../AsteroidPool")
+types = Array[ExtResource("7_ast_type")]([ExtResource("8_large"), ExtResource("9_medium"), ExtResource("10_small")])
+max_active = 160
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1834101567]
+
+[node name="MetalCounter" type="Label" parent="UI" unique_id=864372652]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -76.0
+offset_right = 120.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.85, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "МЕТАЛЛ: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("12_metal")

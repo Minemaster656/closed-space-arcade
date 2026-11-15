@@ -30,7 +30,7 @@ func spawn(spawn_position: Vector2, spawn_direction: Vector2) -> Bullet:
 	bullet.global_position = spawn_position
 	bullet.direction = spawn_direction.normalized()
 	bullet.visible = true
-	bullet.process_mode = Node.PROCESS_MODE_INHERIT
+	bullet.set_process(true)
 	bullet.set_deferred("monitoring", true)
 	bullet.set_deferred("monitorable", true)
 	_active.append(bullet)
@@ -58,6 +58,6 @@ func _on_bullet_disposed(who: Area2D) -> void:
 
 func _park(bullet: Bullet) -> void:
 	bullet.visible = false
-	bullet.process_mode = Node.PROCESS_MODE_DISABLED
+	bullet.set_process(false)
 	bullet.set_deferred("monitoring", false)
 	bullet.set_deferred("monitorable", false)

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AsteroidType" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://assets/scripts/resources/asteroid_type.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://0enbaqc14bbu" path="res://assets/sprites/asteroids/asteroid_shard_0.png" id="2_shard0"]
+[ext_resource type="Texture2D" uid="uid://4bu617w3a7aj" path="res://assets/sprites/asteroids/asteroid_shard_1.png" id="3_shard1"]
+[ext_resource type="Texture2D" uid="uid://cifge4e2tpkvk" path="res://assets/sprites/asteroids/asteroid_shard_2.png" id="4_shard2"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"small"
+display_name = "Small"
+weight = 0.0
+min_speed = 150.0
+max_speed = 220.0
+max_hp = 1.0
+damage = 0.0
+damageable = false
+harmful = false
+textures = Array[Texture2D]([ExtResource("2_shard0"), ExtResource("3_shard1"), ExtResource("4_shard2")])
+scale_multiplier = 1.0
+collision_radius = 7.0
+tint = Color(1, 1, 1, 1)
+child_min = 0
+child_max = 0
+collectible = true
+metal_value = 1
