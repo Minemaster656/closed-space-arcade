@@ -1,5 +1,8 @@
 extends Node2D
 
+const STARFIELD_MARGIN: float = 64.0
+const STARFIELD_RESIZE_THRESHOLD: float = 48.0
+
 @export var shake_strength_min: float = 0.35
 @export var shake_strength_max: float = 3.0
 @export var asteroid_speed_multiplier_max: float = 2.4
@@ -10,6 +13,8 @@ extends Node2D
 @onready var asteroid_spawner: AsteroidSpawner = $Managers/AsteroidSpawner
 @onready var starfield: GPUParticles2D = $Starfield
 
+var _starfield_applied_size: Vector2 = Vector2.ZERO
+
 
 func _ready() -> void:
 	var visible := Utils.get_visible_world_rect()
@@ -17,18 +22,33 @@ func _ready() -> void:
 	var follower := rocket.get_node_or_null("FingerFollower") as FollowFinger2D
 	if follower != null:
 		follower.area = rect
-	_setup_starfield(visible)
+	_apply_starfield(visible)
 	rocket.died.connect(_on_rocket_died)
 
 
-func _setup_starfield(rect: Rect2) -> void:
+func _apply_starfield(rect: Rect2) -> void:
 	starfield.position = rect.get_center()
 	var mat := starfield.process_material as ParticleProcessMaterial
 	if mat != null:
-		mat.emission_box_extents = Vector3(rect.size.x * 0.5 + 64.0, rect.size.y * 0.5 + 64.0, 1.0)
+		mat.emission_box_extents = Vector3(rect.size.x * 0.5 + STARFIELD_MARGIN, rect.size.y * 0.5 + STARFIELD_MARGIN, 1.0)
+	_starfield_applied_size = rect.size
+
+
+func _sync_starfield_size() -> void:
+	var rect := Utils.get_visible_world_rect()
+	var size := rect.size
+	var applied := _starfield_applied_size
+	if applied == Vector2.ZERO:
+		_apply_starfield(rect)
+		return
+	if absf(size.x - applied.x) <= STARFIELD_RESIZE_THRESHOLD and absf(size.y - applied.y) <= STARFIELD_RESIZE_THRESHOLD:
+		return
+	_apply_starfield(rect)
 
 
 func _process(_delta: float) -> void:
+	_sync_starfield_size()
+
 	if not is_instance_valid(rocket) or rocket.is_dead():
 		return
 
