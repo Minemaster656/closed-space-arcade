@@ -58,7 +58,9 @@ func fade_in(duration: float = FADE_DURATION) -> void:
 
 
 ## Затемняет экран, меняет сцену и проявляет новую сцену fade'ом из clear color.
-func goto(path: String, out_duration: float = FADE_DURATION, in_duration: float = FADE_DURATION) -> void:
+func goto(path: String, out_duration: float = FADE_DURATION, in_duration: float = FADE_DURATION, music: String = "") -> void:
+	if music != "":
+		Music.play(music, out_duration)
 	await fade_out(out_duration)
 	get_tree().change_scene_to_file(path)
 	await fade_in(in_duration)

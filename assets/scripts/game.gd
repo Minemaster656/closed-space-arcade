@@ -18,6 +18,7 @@ var _starfield_applied_size: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
+	Music.play("fly")
 	var visible := Utils.get_visible_world_rect()
 	var rect := visible.grow(-rocket_screen_margin)
 	var follower := rocket.get_node_or_null("FingerFollower") as FollowFinger2D
@@ -73,4 +74,4 @@ func _on_rocket_died() -> void:
 func _begin_meta_progression() -> void:
 	var delay := rocket.break_cleanup_delay + 0.1
 	await get_tree().create_timer(delay).timeout
-	Transition.goto(META_SCENE)
+	Transition.goto(META_SCENE, Transition.FADE_DURATION, Transition.FADE_DURATION, "progression")

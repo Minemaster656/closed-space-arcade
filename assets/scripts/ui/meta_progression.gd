@@ -10,10 +10,11 @@ const GAME_SCENE: String = "res://assets/scenes/game.tscn"
 
 
 func _ready() -> void:
+	Music.play("progression")
 	_title.text = tr("meta_title")
 	_play_button.text = tr("meta_play")
 	_play_button.pressed.connect(_on_play_pressed)
 
 
 func _on_play_pressed() -> void:
-	Transition.goto(GAME_SCENE)
+	Transition.goto(GAME_SCENE, Transition.FADE_DURATION, Transition.FADE_DURATION, "fly")
