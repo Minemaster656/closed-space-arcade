@@ -77,7 +77,7 @@ func _process(_delta: float) -> void:
     asteroid_pool.speed_multiplier = mult
 
     _distance += mult * _delta
-    score_label.text = "ДИСТАНЦИЯ: %d" % int(_distance)
+    score_label.text = tr("ui_distance") % int(_distance)
 
 
 func _danger_multiplier(danger: float) -> float:
@@ -121,6 +121,8 @@ func _on_launch_finished() -> void:
 
 
 func _on_rocket_died() -> void:
+    GameState.submit_distance(_distance)
+    GameState.save()
     asteroid_spawner.stop()
     _begin_meta_progression()
 

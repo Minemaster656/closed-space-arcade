@@ -68,6 +68,13 @@ func _shoot() -> void:
 
 	bullet.speed = bullet_speed
 	bullet.damage = damage
+	GameState.shot_fired.emit({
+		"rocket": self,
+		"bullet": bullet,
+		"position": _shoot_point.global_position,
+		"direction": -_shoot_point.global_transform.y.normalized(),
+		"damage": damage,
+	})
 
 
 func _on_hurtbox_area_entered(area: Area2D) -> void:
@@ -91,6 +98,15 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 
 	if area.is_in_group("collision_damage"):
 		print("ROCKET HIT area=", area.name, " type=", tid, " groups=", area.get_groups(), " parent=", area.get_parent())
+		var hit_damage := 1.0
+		if asteroid != null and asteroid.type != null:
+			hit_damage = asteroid.type.damage
+		GameState.damage_taken.emit({
+			"target": self,
+			"source": area,
+			"damage": hit_damage,
+			"position": global_position,
+		})
 		if OS.has_environment("ROCKET_TEST_NODEATH"):
 			return
 		_death_pending = true

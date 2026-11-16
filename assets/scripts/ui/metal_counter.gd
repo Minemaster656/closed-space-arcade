@@ -1,6 +1,6 @@
 extends Label
 
-@export var prefix: String = "МЕТАЛЛ: "
+@export var prefix_key: String = "ui_metal"
 @export var punch_scale: float = 1.25
 @export var flash_color: Color = Color(1.0, 0.85, 0.35, 1.0)
 
@@ -14,7 +14,7 @@ func _ready() -> void:
 
 
 func _refresh(value: int) -> void:
-	text = "%s%d" % [prefix, value]
+	text = tr(prefix_key) % value
 	_update_pivot()
 
 	if _tween != null and _tween.is_valid():

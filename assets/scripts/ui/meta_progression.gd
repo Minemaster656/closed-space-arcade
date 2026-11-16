@@ -11,8 +11,12 @@ const GAME_SCENE: String = "res://assets/scenes/game.tscn"
 
 func _ready() -> void:
 	Music.play("progression")
-	_title.text = tr("meta_title")
 	_play_button.text = tr("meta_play")
+	_title.text = "%s\n%s\n%s" % [
+		tr("meta_title"),
+		tr("meta_record_distance") % int(GameState.record_distance),
+		tr("ui_metal") % GameState.metal,
+	]
 	_play_button.pressed.connect(_on_play_pressed)
 
 

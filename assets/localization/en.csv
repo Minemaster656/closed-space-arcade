@@ -1,3 +1,6 @@
 keys,en,ru
 meta_title,Upgrades,Улучшения
 meta_play,Let's go!,Поехали!
+ui_metal,"METAL: %d","МЕТАЛЛ: %d"
+ui_distance,"DISTANCE: %d","ДИСТАНЦИЯ: %d"
+meta_record_distance,"RECORD DISTANCE: %d","РЕКОРД ДИСТАНЦИЯ: %d"

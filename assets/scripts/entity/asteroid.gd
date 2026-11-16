@@ -216,15 +216,37 @@ func _flash_hit() -> void:
 
 func _shatter() -> void:
     _dead = true
-    if type.child_type != null and is_instance_valid(pool) and type.child_max > 0:
-        var count := randi_range(type.child_min, type.child_max)
-        for i in count:
-            var angle := TAU * (float(i) / float(count)) + randf_range(-0.35, 0.35)
-            var offset := Vector2.from_angle(angle) * type.collision_radius * 0.5
-            var child_direction := (_direction + Vector2.from_angle(angle) * 0.8).normalized()
-            var child_speed := randf_range(type.child_type.min_speed, type.child_type.max_speed)
-            pool.spawn(type.child_type, global_position + offset, child_direction, child_speed)
+    var event := {
+        "asteroid": self,
+        "type": type,
+        "type_id": type.id if type != null else &"",
+        "position": global_position,
+        "direction": _direction,
+        "speed": _speed,
+        "child_type": type.child_type if type != null else null,
+        "child_min": type.child_min if type != null else 0,
+        "child_max": type.child_max if type != null else 0,
+        "handled": false,
+    }
+    GameState.meteor_shatter_requested.emit(event)
+    if not event.get("handled", false):
+        _spawn_shatter_children(event)
     despawned.emit(self)
+
+
+func _spawn_shatter_children(event: Dictionary = {}) -> void:
+    var ctype: AsteroidType = event.get("child_type", type.child_type if type != null else null)
+    var cmin: int = int(event.get("child_min", type.child_min if type != null else 0))
+    var cmax: int = int(event.get("child_max", type.child_max if type != null else 0))
+    if ctype == null or not is_instance_valid(pool) or cmax <= 0:
+        return
+    var count := randi_range(cmin, cmax)
+    for i in count:
+        var angle := TAU * (float(i) / float(count)) + randf_range(-0.35, 0.35)
+        var offset := Vector2.from_angle(angle) * type.collision_radius * 0.5
+        var child_direction := (_direction + Vector2.from_angle(angle) * 0.8).normalized()
+        var child_speed := randf_range(ctype.min_speed, ctype.max_speed)
+        pool.spawn(ctype, global_position + offset, child_direction, child_speed)
 
 
 func _update_magnet(delta: float) -> void:

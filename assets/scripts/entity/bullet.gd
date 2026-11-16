@@ -41,6 +41,12 @@ func _on_area_entered(area: Area2D) -> void:
 	if not area.has_method("take_damage"):
 		return
 
+	GameState.projectile_hit_meteor.emit({
+		"bullet": self,
+		"target": area,
+		"damage": damage,
+		"position": global_position,
+	})
 	area.take_damage(damage)
 	_dispose()
 
