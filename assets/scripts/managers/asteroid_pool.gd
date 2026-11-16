@@ -5,7 +5,7 @@ class_name AsteroidPool
 @export var default_scene: PackedScene
 
 ## Сколько экземпляров на каждую сцену создать заранее.
-@export var prewarm_per_scene: int = 64
+@export var prewarm_per_scene: int = 16
 
 ## Множитель скорости всех активных астероидов (растёт, когда ракета поднимается).
 var speed_multiplier: float = 1.0
