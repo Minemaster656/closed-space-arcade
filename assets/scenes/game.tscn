@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://v6vuhycyd1xr"]
 
 [ext_resource type="PackedScene" uid="uid://ca8s3c23lo7uc" path="res://assets/prefabs/rocket.tscn" id="1_cb66b"]
+[ext_resource type="Texture2D" uid="uid://62md32ptgci3" path="res://assets/sprites/fx/stars.png" id="1_stars"]
 [ext_resource type="PackedScene" uid="uid://5w5rbq41p7ra" path="res://assets/prefabs/bullet.tscn" id="2_pool"]
 [ext_resource type="Script" uid="uid://cpu4s7gtalo8p" path="res://assets/scripts/managers/bullet_pool.gd" id="3_pool"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/asteroid.tscn" id="4_ast_scene"]
@@ -13,11 +14,37 @@
 [ext_resource type="Script" uid="uid://crsv826ymna7t" path="res://assets/scripts/game.gd" id="11_game"]
 [ext_resource type="Script" uid="uid://c2842u7awm2yr" path="res://assets/scripts/ui/metal_counter.gd" id="12_metal"]
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_stars"]
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 4
+particles_anim_loop = true
+
+[sub_resource type="Gradient" id="Gradient_stars"]
+offsets = PackedFloat32Array(0, 0.18, 0.82, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_stars"]
+gradient = SubResource("Gradient_stars")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pkhv0"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(260, 400, 1)
+direction = Vector3(0, 1, 0)
+spread = 12.0
+initial_velocity_min = 5.0
+initial_velocity_max = 18.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.099999994
+scale_max = 0.79999995
+color_ramp = SubResource("GradientTexture1D_stars")
+anim_offset_max = 1.0
+
 [node name="Game" type="Node2D" unique_id=1587643132]
 script = ExtResource("11_game")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=916745351]
-zoom = Vector2(2, 2)
 
 [node name="Rocket" parent="." unique_id=1685500372 node_paths=PackedStringArray("pool") instance=ExtResource("1_cb66b")]
 pool = NodePath("../Managers/BulletPool")
@@ -59,3 +86,15 @@ text = "МЕТАЛЛ: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("12_metal")
+
+[node name="Starfield" type="GPUParticles2D" parent="." unique_id=517482068]
+modulate = Color(1, 1, 1, 0.15686275)
+z_index = -10
+material = SubResource("CanvasItemMaterial_stars")
+amount = 120
+texture = ExtResource("1_stars")
+lifetime = 10.0
+preprocess = 10.0
+randomness = 0.6
+visibility_rect = Rect2(-300, -450, 600, 900)
+process_material = SubResource("ParticleProcessMaterial_pkhv0")

@@ -8,14 +8,24 @@ extends Node2D
 @onready var rocket: Rocket = $Rocket
 @onready var asteroid_pool: AsteroidPool = $Managers/AsteroidPool
 @onready var asteroid_spawner: AsteroidSpawner = $Managers/AsteroidSpawner
+@onready var starfield: GPUParticles2D = $Starfield
 
 
 func _ready() -> void:
-	var rect := Utils.get_visible_world_rect().grow(-rocket_screen_margin)
+	var visible := Utils.get_visible_world_rect()
+	var rect := visible.grow(-rocket_screen_margin)
 	var follower := rocket.get_node_or_null("FingerFollower") as FollowFinger2D
 	if follower != null:
 		follower.area = rect
+	_setup_starfield(visible)
 	rocket.died.connect(_on_rocket_died)
+
+
+func _setup_starfield(rect: Rect2) -> void:
+	starfield.position = rect.get_center()
+	var mat := starfield.process_material as ParticleProcessMaterial
+	if mat != null:
+		mat.emission_box_extents = Vector3(rect.size.x * 0.5 + 64.0, rect.size.y * 0.5 + 64.0, 1.0)
 
 
 func _process(_delta: float) -> void:
