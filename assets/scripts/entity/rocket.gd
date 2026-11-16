@@ -78,11 +78,24 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 		return
 
 	var asteroid := area as Asteroid
+	var tid := "<none>"
+	if asteroid != null and asteroid.type != null:
+		tid = asteroid.type.id
+	print("ROCKET AREA ENTER type=", tid,
+		" type.collectible=", asteroid != null and asteroid.type != null and asteroid.type.collectible,
+		" dead=", asteroid != null and asteroid._dead,
+		" collectible()=", asteroid != null and asteroid.is_collectible(),
+		" harmful=", asteroid != null and asteroid.is_harmful(),
+		" groups=", area.get_groups())
+
 	if asteroid != null and asteroid.is_collectible():
 		asteroid.collect()
 		return
 
 	if area.is_in_group("collision_damage"):
+		print("ROCKET HIT area=", area.name, " type=", tid, " groups=", area.get_groups(), " parent=", area.get_parent())
+		if OS.has_environment("ROCKET_TEST_NODEATH"):
+			return
 		_death_pending = true
 		_break_apart.call_deferred()
 

@@ -17,9 +17,9 @@
 script = ExtResource("11_game")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=916745351]
+zoom = Vector2(2, 2)
 
 [node name="Rocket" parent="." unique_id=1685500372 node_paths=PackedStringArray("pool") instance=ExtResource("1_cb66b")]
-position = Vector2(0, 420)
 pool = NodePath("../Managers/BulletPool")
 
 [node name="Managers" type="Node2D" parent="." unique_id=1223067182]
