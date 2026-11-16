@@ -19,6 +19,11 @@ config/icon="res://icon.svg"
 
 Utils="*uid://dud2pgoc6ocuo"
 GameState="*res://assets/scripts/globals/game_state.gd"
+Transition="*res://assets/scripts/globals/transition.gd"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://assets/localization/en.en.translation")
 
 [display]
 

@@ -2,6 +2,7 @@ extends Node2D
 
 const STARFIELD_MARGIN: float = 64.0
 const STARFIELD_RESIZE_THRESHOLD: float = 48.0
+const META_SCENE: String = "res://assets/scenes/meta_progression.tscn"
 
 @export var shake_strength_min: float = 0.35
 @export var shake_strength_max: float = 3.0
@@ -66,3 +67,10 @@ func _process(_delta: float) -> void:
 
 func _on_rocket_died() -> void:
 	asteroid_spawner.stop()
+	_begin_meta_progression()
+
+
+func _begin_meta_progression() -> void:
+	var delay := rocket.break_cleanup_delay + 0.1
+	await get_tree().create_timer(delay).timeout
+	Transition.goto(META_SCENE)
