@@ -51,14 +51,11 @@ func is_dead() -> bool:
 	return _dead
 
 
-func set_danger(danger: float) -> void:
+func set_danger(multiplier: float) -> void:
 	if _dead:
 		return
-	_sprite.strength = lerpf(
-		shake_strength_min,
-		shake_strength_max,
-		clampf(danger, 0.0, 1.0)
-	)
+	var base := lerpf(shake_strength_min, shake_strength_max, 0.5)
+	_sprite.strength = base * multiplier * 0.5
 
 
 func _shoot() -> void:

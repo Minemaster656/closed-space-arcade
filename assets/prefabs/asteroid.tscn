@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://1avmtx1m76s2" path="res://assets/scripts/entity/asteroid.gd" id="1_ast"]
 [ext_resource type="Texture2D" uid="uid://01agrb0v6iey" path="res://assets/sprites/asteroids/asteroid_big_0.png" id="2_ansim"]
+[ext_resource type="Script" uid="uid://bcqlrabs5lc1b" path="res://assets/scripts/components/hp_bar.gd" id="3_hpbar"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ast"]
 resource_local_to_scene = true
@@ -16,3 +17,27 @@ texture = ExtResource("2_ansim")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=584631850]
 shape = SubResource("CircleShape2D_ast")
+
+[node name="HPBar" type="Node2D" parent="." unique_id=2109384756]
+position = Vector2(-48, 26)
+script = ExtResource("3_hpbar")
+flash_duration = 0.2
+fill_duration = 0.5
+
+[node name="BG" type="ColorRect" parent="HPBar" unique_id=2109384757]
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 97.0
+offset_bottom = 9.0
+color = Color(1, 1, 1, 0.4392157)
+
+[node name="White" type="ColorRect" parent="HPBar" unique_id=2109384758]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 95.0
+offset_bottom = 7.0
+color = Color(1, 1, 1, 0.62352943)
+
+[node name="Fill" type="ColorRect" parent="HPBar" unique_id=2109384759]
+offset_right = 96.0
+offset_bottom = 8.0

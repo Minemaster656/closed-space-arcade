@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://62md32ptgci3" path="res://assets/sprites/fx/stars.png" id="1_stars"]
 [ext_resource type="PackedScene" uid="uid://5w5rbq41p7ra" path="res://assets/prefabs/bullet.tscn" id="2_pool"]
 [ext_resource type="Script" uid="uid://cpu4s7gtalo8p" path="res://assets/scripts/managers/bullet_pool.gd" id="3_pool"]
-[ext_resource type="PackedScene" path="res://assets/prefabs/asteroid.tscn" id="4_ast_scene"]
+[ext_resource type="PackedScene" uid="uid://dmqhece1lhs1f" path="res://assets/prefabs/asteroid.tscn" id="4_ast_scene"]
 [ext_resource type="Script" uid="uid://cnr166p0xqc6b" path="res://assets/scripts/managers/asteroid_pool.gd" id="5_ast_pool"]
 [ext_resource type="Script" uid="uid://bemgjchgbji8d" path="res://assets/scripts/managers/asteroid_spawner.gd" id="6_spawner"]
 [ext_resource type="Script" uid="uid://fpfwvm4d1oyk" path="res://assets/scripts/resources/asteroid_type.gd" id="7_ast_type"]
@@ -43,8 +43,15 @@ anim_offset_max = 1.0
 
 [node name="Game" type="Node2D" unique_id=1587643132]
 script = ExtResource("11_game")
+ambient_color = Color(0.62967473, 0.62967473, 0.6296747, 1)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=916745351]
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=-885748531]
+color = Color(0.843608, 0.83693993, 0.9259373, 1)
+
+[node name="StartPlatform" type="ColorRect" parent="." unique_id=160700492]
+color = Color(0.45, 0.5, 0.6, 1)
 
 [node name="Rocket" parent="." unique_id=1685500372 node_paths=PackedStringArray("pool") instance=ExtResource("1_cb66b")]
 pool = NodePath("../Managers/BulletPool")
@@ -87,8 +94,22 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("12_metal")
 
+[node name="ScoreCounter" type="Label" parent="UI" unique_id=-823380159]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -110.0
+offset_top = 22.0
+offset_right = 110.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 24
+text = "ДИСТАНЦИЯ: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Starfield" type="GPUParticles2D" parent="." unique_id=517482068]
-modulate = Color(1, 1, 1, 0.15686275)
+modulate = Color(1, 1, 1, 0.2627451)
 z_index = -10
 material = SubResource("CanvasItemMaterial_stars")
 amount = 120

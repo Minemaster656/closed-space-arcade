@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://bgo4bd5s1bbhk"]
 
-[ext_resource type="Script" path="res://assets/scripts/ui/meta_progression.gd" id="1_mp"]
+[ext_resource type="Script" uid="uid://dcw8161178g05" path="res://assets/scripts/ui/meta_progression.gd" id="1_mp"]
 
-[node name="MetaProgression" type="Control"]
+[node name="MetaProgression" type="Control" unique_id=543472371]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -10,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mp")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=189635782]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,16 +19,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBox" type="VBoxContainer" parent="CenterContainer" unique_id=1765788072]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="CenterContainer/VBox"]
+[node name="Title" type="Label" parent="CenterContainer/VBox" unique_id=1679707324]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "meta_title"
 horizontal_alignment = 1
 
-[node name="PlayButton" type="Button" parent="CenterContainer/VBox"]
+[node name="PlayButton" type="Button" parent="CenterContainer/VBox" unique_id=1772548781]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "meta_play"

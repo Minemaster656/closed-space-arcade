@@ -30,10 +30,12 @@ var pool_scene: PackedScene
 
 @onready var _sprite: Sprite2D = $Sprite
 @onready var _collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var hp_bar = $HPBar
 
 var _direction: Vector2 = Vector2.DOWN
 var _speed: float = 100.0
 var _hp: float = 1.0
+var _max_hp: float = 1.0
 var _spin: float = 0.0
 var _sprite_base_scale: Vector2 = Vector2.ONE
 var _player: Node2D
@@ -62,6 +64,7 @@ func setup(
         _direction = Vector2.DOWN
     _speed = spawn_speed
     _hp = type.max_hp
+    _max_hp = type.max_hp
     _dead = false
     _magnetized = false
     _bounds_timer = randf_range(0.0, BOUNDS_CHECK_INTERVAL)
@@ -90,6 +93,9 @@ func setup(
         circle = CircleShape2D.new()
         _collision_shape.shape = circle
     circle.radius = type.collision_radius
+
+    hp_bar.setup(_max_hp, _hp)
+    hp_bar.visible = _hp < _max_hp
 
     set_deferred("monitorable", true)
     _sync_groups()
@@ -140,6 +146,8 @@ func take_damage(amount: float) -> void:
         return
 
     _hp -= amount
+    hp_bar.set_health(_hp)
+    hp_bar.visible = true
     _play_hit_sound()
     if _hp <= 0.0:
         _shatter()
@@ -177,6 +185,7 @@ func park() -> void:
     remove_from_group(GROUP_ASTEROID)
     remove_from_group(GROUP_SHARD)
     set_deferred("monitorable", false)
+    hp_bar.visible = false
     global_position = Vector2(0.0, 100000.0)
 
 
