@@ -1,10 +1,16 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://bgo4bd5s1bbhk"]
 
-[ext_resource type="Script" path="res://assets/scripts/ui/meta_progression.gd" id="1_mp"]
-[ext_resource type="Script" path="res://assets/scripts/components/juicy_button.gd" id="2_juicy"]
-[ext_resource type="Script" path="res://assets/scripts/ui/metal_counter.gd" id="3_metal"]
+[ext_resource type="Script" uid="uid://dcw8161178g05" path="res://assets/scripts/ui/meta_progression.gd" id="1_mp"]
+[ext_resource type="Script" uid="uid://f0xd2gobp401" path="res://assets/scripts/components/juicy_button.gd" id="2_juicy"]
+[ext_resource type="Script" uid="uid://c2842u7awm2yr" path="res://assets/scripts/ui/metal_counter.gd" id="3_metal"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/upgrade_row.tscn" id="4_row"]
+[ext_resource type="Resource" path="res://assets/resources/upgrades/damage.tres" id="5_damage"]
+[ext_resource type="Resource" path="res://assets/resources/upgrades/fire_rate.tres" id="6_fire_rate"]
+[ext_resource type="Resource" path="res://assets/resources/upgrades/projectile_speed.tres" id="7_projectile_speed"]
+[ext_resource type="Resource" path="res://assets/resources/upgrades/piercing.tres" id="8_piercing"]
+[ext_resource type="Resource" path="res://assets/resources/upgrades/more_metal.tres" id="9_more_metal"]
 
-[node name="MetaProgression" type="Control"]
+[node name="MetaProgression" type="Control" unique_id=2057652826]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +19,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mp")
 
-[node name="Pages" type="Control" parent="."]
+[node name="Pages" type="Control" parent="." unique_id=2034116788]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +27,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MainPage" type="Control" parent="Pages"]
+[node name="MainPage" type="Control" parent="Pages" unique_id=950804005]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,7 +35,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Center" type="CenterContainer" parent="Pages/MainPage"]
+[node name="Center" type="CenterContainer" parent="Pages/MainPage" unique_id=1290492643]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,50 +43,58 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="Pages/MainPage/Center"]
+[node name="VBox" type="VBoxContainer" parent="Pages/MainPage/Center" unique_id=936506279]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Title" type="Label" parent="Pages/MainPage/Center/VBox"]
+[node name="Title" type="Label" parent="Pages/MainPage/Center/VBox" unique_id=316855648]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "meta_title"
 horizontal_alignment = 1
 
-[node name="Record" type="Label" parent="Pages/MainPage/Center/VBox"]
+[node name="Record" type="Label" parent="Pages/MainPage/Center/VBox" unique_id=1877452006]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.78, 0.86, 1)
 theme_override_font_sizes/font_size = 20
 text = "meta_max_distance"
 horizontal_alignment = 1
 
-[node name="Metal" type="Label" parent="Pages/MainPage/Center/VBox"]
+[node name="Metal" type="Label" parent="Pages/MainPage/Center/VBox" unique_id=1812287062]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "ui_metal"
 horizontal_alignment = 1
 script = ExtResource("3_metal")
 
-[node name="Spacer" type="Control" parent="Pages/MainPage/Center/VBox"]
+[node name="Spacer" type="Control" parent="Pages/MainPage/Center/VBox" unique_id=846136789]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="ShopButton" type="Button" parent="Pages/MainPage/Center/VBox"]
+[node name="ShopButton" type="Button" parent="Pages/MainPage/Center/VBox" unique_id=1582579348]
 custom_minimum_size = Vector2(320, 64)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "meta_shop_button"
 script = ExtResource("2_juicy")
 
-[node name="PlayButton" type="Button" parent="Pages/MainPage/Center/VBox"]
+[node name="PlayButton" type="Button" parent="Pages/MainPage/Center/VBox" unique_id=1289127010]
 custom_minimum_size = Vector2(320, 64)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "meta_play"
 script = ExtResource("2_juicy")
 
-[node name="ShopPage" type="Control" parent="Pages"]
+[node name="ResetButton" type="Button" parent="Pages/MainPage/Center/VBox" unique_id=1002637675]
+custom_minimum_size = Vector2(320, 44)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.58, 0.58, 1)
+theme_override_font_sizes/font_size = 16
+text = "meta_reset"
+script = ExtResource("2_juicy")
+
+[node name="ShopPage" type="Control" parent="Pages" unique_id=596414065]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -88,7 +102,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Margin" type="MarginContainer" parent="Pages/ShopPage"]
+[node name="Margin" type="MarginContainer" parent="Pages/ShopPage" unique_id=2065867038]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -100,15 +114,15 @@ theme_override_constants/margin_top = 14
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
-[node name="VBox" type="VBoxContainer" parent="Pages/ShopPage/Margin"]
+[node name="VBox" type="VBoxContainer" parent="Pages/ShopPage/Margin" unique_id=318587011]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="TopBar" type="HBoxContainer" parent="Pages/ShopPage/Margin/VBox"]
+[node name="TopBar" type="HBoxContainer" parent="Pages/ShopPage/Margin/VBox" unique_id=1879830718]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="BackButton" type="Button" parent="Pages/ShopPage/Margin/VBox/TopBar"]
+[node name="BackButton" type="Button" parent="Pages/ShopPage/Margin/VBox/TopBar" unique_id=41838586]
 custom_minimum_size = Vector2(136, 56)
 layout_mode = 2
 size_flags_vertical = 4
@@ -116,28 +130,52 @@ theme_override_font_sizes/font_size = 22
 text = "meta_back"
 script = ExtResource("2_juicy")
 
-[node name="Title" type="Label" parent="Pages/ShopPage/Margin/VBox/TopBar"]
+[node name="Title" type="Label" parent="Pages/ShopPage/Margin/VBox/TopBar" unique_id=1929824467]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
 theme_override_font_sizes/font_size = 28
 text = "meta_shop_title"
 horizontal_alignment = 1
 
-[node name="Metal" type="Label" parent="Pages/ShopPage/Margin/VBox/TopBar"]
+[node name="Metal" type="Label" parent="Pages/ShopPage/Margin/VBox/TopBar" unique_id=1484049493]
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_font_sizes/font_size = 18
 text = "ui_metal"
 horizontal_alignment = 2
 script = ExtResource("3_metal")
 
-[node name="Scroll" type="ScrollContainer" parent="Pages/ShopPage/Margin/VBox"]
+[node name="Scroll" type="ScrollContainer" parent="Pages/ShopPage/Margin/VBox" unique_id=701450755]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="Rows" type="VBoxContainer" parent="Pages/ShopPage/Margin/VBox/Scroll"]
+[node name="Rows" type="VBoxContainer" parent="Pages/ShopPage/Margin/VBox/Scroll" unique_id=292057367]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 10
+
+[node name="Damage" parent="Pages/ShopPage/Margin/VBox/Scroll/Rows" instance=ExtResource("4_row")]
+layout_mode = 2
+definition = ExtResource("5_damage")
+
+[node name="FireRate" parent="Pages/ShopPage/Margin/VBox/Scroll/Rows" instance=ExtResource("4_row")]
+layout_mode = 2
+definition = ExtResource("6_fire_rate")
+
+[node name="ProjectileSpeed" parent="Pages/ShopPage/Margin/VBox/Scroll/Rows" instance=ExtResource("4_row")]
+layout_mode = 2
+definition = ExtResource("7_projectile_speed")
+
+[node name="Piercing" parent="Pages/ShopPage/Margin/VBox/Scroll/Rows" instance=ExtResource("4_row")]
+layout_mode = 2
+definition = ExtResource("8_piercing")
+
+[node name="MoreMetal" parent="Pages/ShopPage/Margin/VBox/Scroll/Rows" instance=ExtResource("4_row")]
+layout_mode = 2
+definition = ExtResource("9_more_metal")
+
+[node name="ResetConfirm" type="ConfirmationDialog" parent="." unique_id=1628238957]
+title = "meta_reset_title"
+ok_button_text = "meta_reset_ok"
+dialog_text = "meta_reset_confirm"
+cancel_button_text = "meta_reset_cancel"

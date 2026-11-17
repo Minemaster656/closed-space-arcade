@@ -9,6 +9,11 @@ meta_max_distance,"Max distance: %d%s","Максимальная дистанц�
 meta_shop_button,Shop,Магазин
 meta_shop_title,Upgrades,Улучшения
 meta_back,Back,Назад
+meta_reset,Reset progress,Сбросить прогресс
+meta_reset_title,Reset save,Сброс сохранения
+meta_reset_confirm,"Delete all progress: metal, record and upgrades?","Удалить весь прогресс: металл, рекорд и улучшения?"
+meta_reset_ok,Reset,Сбросить
+meta_reset_cancel,Cancel,Отмена
 upgrade_level,Lv. %d,Ур. %d
 upgrade_level_limited,Lv. %d/%d,Ур. %d/%d
 upgrade_max,MAX,МАКС

@@ -70,6 +70,24 @@ func reset_metal() -> void:
 	metal_changed.emit(metal)
 
 
+## Полностью удаляет сохранение и сбрасывает прогресс в памяти.
+## Нужно для отладки «с нуля».
+func reset_save() -> void:
+	metal = 0
+	record_distance = 0.0
+	record_metal = 0
+	_metal_fraction = 0.0
+	upgrade_levels.clear()
+
+	if FileAccess.file_exists(SAVE_PATH):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
+
+	metal_changed.emit(metal)
+	record_distance_changed.emit(record_distance)
+	record_metal_changed.emit(record_metal)
+	upgrades_changed.emit()
+
+
 func submit_distance(distance: float) -> void:
 	if distance <= record_distance:
 		return

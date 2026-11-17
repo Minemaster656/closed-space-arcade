@@ -5,7 +5,6 @@ extends Control
 ## остаётся адаптивным при любом разрешении/аспекте.
 
 const GAME_SCENE: String = "res://assets/scenes/game.tscn"
-const ROW_SCENE: PackedScene = preload("res://assets/prefabs/upgrade_row.tscn")
 const PAGE_DURATION: float = 0.45
 const ROW_STAGGER: float = 0.05
 const ROW_TWEEN_DURATION: float = 0.32
@@ -18,6 +17,8 @@ const ROW_TWEEN_DURATION: float = 0.32
 @onready var _record: Label = $Pages/MainPage/Center/VBox/Record
 @onready var _shop_button: Button = $Pages/MainPage/Center/VBox/ShopButton
 @onready var _play_button: Button = $Pages/MainPage/Center/VBox/PlayButton
+@onready var _reset_button: Button = $Pages/MainPage/Center/VBox/ResetButton
+@onready var _reset_confirm: ConfirmationDialog = $ResetConfirm
 @onready var _back_button: Button = $Pages/ShopPage/Margin/VBox/TopBar/BackButton
 @onready var _shop_title: Label = $Pages/ShopPage/Margin/VBox/TopBar/Title
 @onready var _rows: VBoxContainer = $Pages/ShopPage/Margin/VBox/Scroll/Rows
@@ -34,29 +35,26 @@ func _ready() -> void:
 	_shop_title.text = tr("meta_shop_title")
 	_shop_button.text = tr("meta_shop_button")
 	_play_button.text = tr("meta_play")
+	_reset_button.text = tr("meta_reset")
 	_back_button.text = tr("meta_back")
+	_reset_confirm.title = tr("meta_reset_title")
+	_reset_confirm.dialog_text = tr("meta_reset_confirm")
+	_reset_confirm.ok_button_text = tr("meta_reset_ok")
+	_reset_confirm.cancel_button_text = tr("meta_reset_cancel")
 	_update_record()
 
 	_play_button.pressed.connect(_on_play_pressed)
 	_shop_button.pressed.connect(_open_shop)
+	_reset_button.pressed.connect(_on_reset_pressed)
+	_reset_confirm.confirmed.connect(_on_reset_confirmed)
 	_back_button.pressed.connect(_close_shop)
 	GameState.upgrades_changed.connect(_refresh_rows)
 	GameState.metal_changed.connect(_on_metal_changed)
+	GameState.record_distance_changed.connect(_on_record_distance_changed)
 	get_viewport().size_changed.connect(_on_viewport_resized)
 
-	_build_rows()
 	_layout_pages()
 	_play_entrance()
-
-
-func _build_rows() -> void:
-	for id in GameState.UPGRADE_ORDER:
-		var def := GameState.get_upgrade_def(id)
-		if def == null:
-			continue
-		var row := ROW_SCENE.instantiate() as UpgradeRow
-		_rows.add_child(row)
-		row.setup(def)
 
 
 func _refresh_rows() -> void:
@@ -68,6 +66,19 @@ func _refresh_rows() -> void:
 
 func _on_metal_changed(_total: int) -> void:
 	_refresh_rows()
+
+
+func _on_record_distance_changed(_value: float) -> void:
+	_update_record()
+
+
+func _on_reset_pressed() -> void:
+	_reset_confirm.popup_centered()
+
+
+func _on_reset_confirmed() -> void:
+	GameState.reset_save()
+	_update_record()
 
 
 func _update_record() -> void:

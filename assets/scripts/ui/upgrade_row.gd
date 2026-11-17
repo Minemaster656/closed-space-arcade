@@ -5,6 +5,9 @@ class_name UpgradeRow
 
 signal purchase_succeeded(id: StringName)
 
+## Какой апгрейд показывает эта строка. Задаётся прямо в инспекторе сцены.
+@export var definition: UpgradeDef
+
 @onready var _icon: TextureRect = $Margin/HBox/Icon
 @onready var _name_label: Label = $Margin/HBox/Info/Name
 @onready var _desc_label: Label = $Margin/HBox/Info/Desc
@@ -18,6 +21,8 @@ var _flash_tween: Tween
 func _ready() -> void:
 	resized.connect(_update_pivot)
 	_update_pivot()
+	if definition != null:
+		setup(definition)
 
 
 func setup(def: UpgradeDef) -> void:
@@ -27,7 +32,8 @@ func setup(def: UpgradeDef) -> void:
 	_icon.texture = _def.icon
 	_name_label.text = tr(_def.title_key)
 	_desc_label.text = tr(_def.description_key)
-	_price_button.pressed.connect(_on_price_pressed)
+	if not _price_button.pressed.is_connected(_on_price_pressed):
+		_price_button.pressed.connect(_on_price_pressed)
 	refresh()
 
 
