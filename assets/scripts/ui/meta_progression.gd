@@ -6,6 +6,9 @@ extends Control
 
 const GAME_SCENE: String = "res://assets/scenes/game.tscn"
 const PAGE_DURATION: float = 0.45
+
+## Префаб одной строки магазина. Можно заменить прямо в инспекторе.
+@export var upgrade_row_scene: PackedScene = preload("res://assets/prefabs/upgrade_row.tscn")
 const ROW_STAGGER: float = 0.05
 const ROW_TWEEN_DURATION: float = 0.32
 
@@ -53,8 +56,37 @@ func _ready() -> void:
 	GameState.record_distance_changed.connect(_on_record_distance_changed)
 	get_viewport().size_changed.connect(_on_viewport_resized)
 
+	_build_rows()
 	_layout_pages()
 	_play_entrance()
+
+
+func _build_rows() -> void:
+	if upgrade_row_scene == null:
+		return
+	for id in GameState.UPGRADE_ORDER:
+		var def := GameState.get_upgrade_def(id)
+		if def == null:
+			continue
+		var row := upgrade_row_scene.instantiate() as UpgradeRow
+		_rows.add_child(row)
+		row.purchase_requested.connect(_on_row_purchase_requested)
+		row.setup(def)
+
+
+func _on_row_purchase_requested(id: StringName) -> void:
+	var row := _find_row(id)
+	var success := GameState.buy_upgrade(id)
+	if row != null:
+		row.notify_purchase_result(success)
+
+
+func _find_row(id: StringName) -> UpgradeRow:
+	for child in _rows.get_children():
+		var row := child as UpgradeRow
+		if row != null and row.get_upgrade_id() == id:
+			return row
+	return null
 
 
 func _refresh_rows() -> void:

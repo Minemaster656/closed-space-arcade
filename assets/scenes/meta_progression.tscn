@@ -3,12 +3,6 @@
 [ext_resource type="Script" uid="uid://dcw8161178g05" path="res://assets/scripts/ui/meta_progression.gd" id="1_mp"]
 [ext_resource type="Script" uid="uid://f0xd2gobp401" path="res://assets/scripts/components/juicy_button.gd" id="2_juicy"]
 [ext_resource type="Script" uid="uid://c2842u7awm2yr" path="res://assets/scripts/ui/metal_counter.gd" id="3_metal"]
-[ext_resource type="PackedScene" path="res://assets/prefabs/upgrade_row.tscn" id="4_row"]
-[ext_resource type="Resource" path="res://assets/resources/upgrades/damage.tres" id="5_damage"]
-[ext_resource type="Resource" path="res://assets/resources/upgrades/fire_rate.tres" id="6_fire_rate"]
-[ext_resource type="Resource" path="res://assets/resources/upgrades/projectile_speed.tres" id="7_projectile_speed"]
-[ext_resource type="Resource" path="res://assets/resources/upgrades/piercing.tres" id="8_piercing"]
-[ext_resource type="Resource" path="res://assets/resources/upgrades/more_metal.tres" id="9_more_metal"]
 
 [node name="MetaProgression" type="Control" unique_id=2057652826]
 layout_mode = 3
@@ -153,26 +147,6 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 10
-
-[node name="Damage" parent="Pages/ShopPage/Margin/VBox/Scroll/Rows" instance=ExtResource("4_row")]
-layout_mode = 2
-definition = ExtResource("5_damage")
-
-[node name="FireRate" parent="Pages/ShopPage/Margin/VBox/Scroll/Rows" instance=ExtResource("4_row")]
-layout_mode = 2
-definition = ExtResource("6_fire_rate")
-
-[node name="ProjectileSpeed" parent="Pages/ShopPage/Margin/VBox/Scroll/Rows" instance=ExtResource("4_row")]
-layout_mode = 2
-definition = ExtResource("7_projectile_speed")
-
-[node name="Piercing" parent="Pages/ShopPage/Margin/VBox/Scroll/Rows" instance=ExtResource("4_row")]
-layout_mode = 2
-definition = ExtResource("8_piercing")
-
-[node name="MoreMetal" parent="Pages/ShopPage/Margin/VBox/Scroll/Rows" instance=ExtResource("4_row")]
-layout_mode = 2
-definition = ExtResource("9_more_metal")
 
 [node name="ResetConfirm" type="ConfirmationDialog" parent="." unique_id=1628238957]
 title = "meta_reset_title"
