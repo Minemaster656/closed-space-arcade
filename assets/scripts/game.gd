@@ -34,7 +34,15 @@ func _ready() -> void:
     _apply_starfield(visible)
     rocket.died.connect(_on_rocket_died)
     ambient.color = ambient_color
+    _apply_meta_upgrades()
     _start_launch()
+
+
+func _apply_meta_upgrades() -> void:
+    rocket.damage += GameState.get_damage_bonus()
+    rocket.shoot_cooldown /= GameState.get_shoot_rate_multiplier()
+    rocket.bullet_speed *= GameState.get_bullet_speed_multiplier()
+    rocket.bullet_pierce += GameState.get_bullet_pierce()
 
 
 func _apply_starfield(rect: Rect2) -> void:
@@ -74,10 +82,17 @@ func _process(_delta: float) -> void:
 
     rocket.set_danger(mult)
     asteroid_spawner.difficulty = danger
+    asteroid_spawner.distance = _distance
     asteroid_pool.speed_multiplier = mult
 
     _distance += mult * _delta
-    score_label.text = tr("ui_distance") % int(_distance)
+    var dist := int(_distance)
+    var record := int(GameState.record_distance)
+    var meter := tr("ui_meter")
+    if dist > record:
+        score_label.text = tr("ui_distance") % [dist, meter]
+    else:
+        score_label.text = tr("ui_distance_progress") % [dist, meter, record]
 
 
 func _danger_multiplier(danger: float) -> float:

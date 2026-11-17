@@ -2,5 +2,23 @@ keys,en,ru
 meta_title,Upgrades,Улучшения
 meta_play,Let's go!,Поехали!
 ui_metal,"METAL: %d","МЕТАЛЛ: %d"
-ui_distance,"DISTANCE: %d","ДИСТАНЦИЯ: %d"
-meta_record_distance,"RECORD DISTANCE: %d","РЕКОРД ДИСТАНЦИЯ: %d"
+ui_distance,"Distance: %d%s","Дистанция: %d%s"
+ui_distance_progress,"Distance: %d%s/%d","Дистанция: %d%s/%d"
+ui_meter,"m","м"
+meta_max_distance,"Max distance: %d%s","Максимальная дистанция: %d%s"
+meta_shop_button,Shop,Магазин
+meta_shop_title,Upgrades,Улучшения
+meta_back,Back,Назад
+upgrade_level,Lv. %d,Ур. %d
+upgrade_level_limited,Lv. %d/%d,Ур. %d/%d
+upgrade_max,MAX,МАКС
+upgrade_damage_title,Damage,Урон
+upgrade_damage_desc,+1 bullet damage per level.,+1 урона пули за уровень.
+upgrade_fire_rate_title,Fire rate,Скорострельность
+upgrade_fire_rate_desc,Fire rate x2 per level. Max 3.,Скорострельность x2 за уровень. Максимум 3.
+upgrade_projectile_speed_title,Projectile speed,Скорость снарядов
+upgrade_projectile_speed_desc,Bullet speed x1.5 per level. Max 2.,Скорость пуль x1.5 за уровень. Максимум 2.
+upgrade_piercing_title,Piercing,Пробивание
+upgrade_piercing_desc,Penetrate +1 target per level. Max 5.,Пробитие +1 цели за уровень. Максимум 5.
+upgrade_more_metal_title,More metal,Больше металла
+upgrade_more_metal_desc,+10% metal per level. Max 10.,+10% металла за уровень. Максимум 10.

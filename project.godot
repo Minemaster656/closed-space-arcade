@@ -22,10 +22,6 @@ GameState="*res://assets/scripts/globals/game_state.gd"
 Transition="*res://assets/scripts/globals/transition.gd"
 Music="*res://assets/scripts/globals/music.gd"
 
-[internationalization]
-
-locale/translations=PackedStringArray("res://assets/localization/en.en.translation")
-
 [display]
 
 window/size/viewport_width=720
@@ -40,6 +36,14 @@ window/handheld/orientation=1
 
 player_bullet=""
 collision_damage=""
+enemy_bullet=""
+enemy=""
+collectable=""
+damageable=""
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://assets/localization/en.en.translation", "res://assets/localization/en.ru.translation")
 
 [physics]
 
@@ -51,4 +55,5 @@ textures/canvas_textures/default_texture_filter=3
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0.0503122, 0.048974954, 0.10486833, 1)

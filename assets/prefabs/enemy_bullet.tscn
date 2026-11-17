@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://assets/scripts/entity/enemy_bullet.gd" id="1_script"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7y8sj"]
+radius = 9.0
+
+[node name="EnemyBullet" type="Area2D" unique_id=727297862 groups=["collision_damage", "enemy_bullet"]]
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=548618746]
+shape = SubResource("CircleShape2D_7y8sj")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=953195945]
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+color = Color(0.8862745, 0.19607843, 0.27450982, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect" unique_id=1092798310]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -25.0
+offset_right = 14.0
+color = Color(0.8862745, 0.19607843, 0.27450982, 0.35686275)
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect2" type="ColorRect" parent="ColorRect" unique_id=599841108]
+layout_mode = 0
+offset_left = 5.0
+offset_top = -40.0
+offset_right = 11.0
+color = Color(0.8862745, 0.19607843, 0.27450982, 0.35686275)
+metadata/_edit_use_anchors_ = true

@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dmax1aimq3xee"]
+
+[ext_resource type="Texture2D" uid="uid://cjqsspu1yskka" path="res://assets/sprites/asteroids/comet.png" id="1_ld2xt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_351fr"]
+radius = 14.0
+
+[node name="Comet" type="Area2D" unique_id=1779938311 groups=["collectable"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=64811216]
+shape = SubResource("CircleShape2D_351fr")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1356313358]
+texture = ExtResource("1_ld2xt")

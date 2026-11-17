@@ -30,7 +30,7 @@ var pool_scene: PackedScene
 
 @onready var _sprite: Sprite2D = $Sprite
 @onready var _collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var hp_bar = $HPBar
+@onready var hp_bar: HPBar = $HPBar
 
 var _direction: Vector2 = Vector2.DOWN
 var _speed: float = 100.0
@@ -94,8 +94,7 @@ func setup(
         _collision_shape.shape = circle
     circle.radius = type.collision_radius
 
-    hp_bar.setup(_max_hp, _hp)
-    hp_bar.visible = _hp < _max_hp
+    hp_bar.reset(_max_hp, _hp)
 
     set_deferred("monitorable", true)
     _sync_groups()
@@ -147,7 +146,7 @@ func take_damage(amount: float) -> void:
 
     _hp -= amount
     hp_bar.set_health(_hp)
-    hp_bar.visible = true
+    hp_bar.show_bar()
     _play_hit_sound()
     if _hp <= 0.0:
         _shatter()
@@ -185,7 +184,7 @@ func park() -> void:
     remove_from_group(GROUP_ASTEROID)
     remove_from_group(GROUP_SHARD)
     set_deferred("monitorable", false)
-    hp_bar.visible = false
+    hp_bar.hide_bar()
     global_position = Vector2(0.0, 100000.0)
 
 

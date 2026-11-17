@@ -1,8 +1,10 @@
-[gd_scene format=3 uid="uid://bgo4bd5s1bbhk"]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource type="Script" uid="uid://dcw8161178g05" path="res://assets/scripts/ui/meta_progression.gd" id="1_mp"]
+[ext_resource type="Script" path="res://assets/scripts/ui/meta_progression.gd" id="1_mp"]
+[ext_resource type="Script" path="res://assets/scripts/components/juicy_button.gd" id="2_juicy"]
+[ext_resource type="Script" path="res://assets/scripts/ui/metal_counter.gd" id="3_metal"]
 
-[node name="MetaProgression" type="Control" unique_id=543472371]
+[node name="MetaProgression" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +13,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mp")
 
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=189635782]
+[node name="Pages" type="Control" parent="."]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,16 +22,123 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="CenterContainer" unique_id=1765788072]
-layout_mode = 2
+[node name="MainPage" type="Control" parent="Pages"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Title" type="Label" parent="CenterContainer/VBox" unique_id=1679707324]
+[node name="Center" type="CenterContainer" parent="Pages/MainPage"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Pages/MainPage/Center"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Pages/MainPage/Center/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "meta_title"
 horizontal_alignment = 1
 
-[node name="PlayButton" type="Button" parent="CenterContainer/VBox" unique_id=1772548781]
+[node name="Record" type="Label" parent="Pages/MainPage/Center/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.75, 0.78, 0.86, 1)
+theme_override_font_sizes/font_size = 20
+text = "meta_max_distance"
+horizontal_alignment = 1
+
+[node name="Metal" type="Label" parent="Pages/MainPage/Center/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "ui_metal"
+horizontal_alignment = 1
+script = ExtResource("3_metal")
+
+[node name="Spacer" type="Control" parent="Pages/MainPage/Center/VBox"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ShopButton" type="Button" parent="Pages/MainPage/Center/VBox"]
+custom_minimum_size = Vector2(320, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "meta_shop_button"
+script = ExtResource("2_juicy")
+
+[node name="PlayButton" type="Button" parent="Pages/MainPage/Center/VBox"]
+custom_minimum_size = Vector2(320, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "meta_play"
+script = ExtResource("2_juicy")
+
+[node name="ShopPage" type="Control" parent="Pages"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="Pages/ShopPage"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Pages/ShopPage/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TopBar" type="HBoxContainer" parent="Pages/ShopPage/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BackButton" type="Button" parent="Pages/ShopPage/Margin/VBox/TopBar"]
+custom_minimum_size = Vector2(136, 56)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 22
+text = "meta_back"
+script = ExtResource("2_juicy")
+
+[node name="Title" type="Label" parent="Pages/ShopPage/Margin/VBox/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 28
+text = "meta_shop_title"
+horizontal_alignment = 1
+
+[node name="Metal" type="Label" parent="Pages/ShopPage/Margin/VBox/TopBar"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 18
+text = "ui_metal"
+horizontal_alignment = 2
+script = ExtResource("3_metal")
+
+[node name="Scroll" type="ScrollContainer" parent="Pages/ShopPage/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Rows" type="VBoxContainer" parent="Pages/ShopPage/Margin/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10

@@ -8,6 +8,7 @@ signal died
 @export var damage: float = 1
 @export var shoot_cooldown: float = 0.5
 @export var bullet_speed: float = 900.0
+@export var bullet_pierce: int = 0
 @export var auto_shoot: bool = true
 
 @export_group("Danger")
@@ -68,12 +69,14 @@ func _shoot() -> void:
 
 	bullet.speed = bullet_speed
 	bullet.damage = damage
+	bullet.pierce = bullet_pierce
 	GameState.shot_fired.emit({
 		"rocket": self,
 		"bullet": bullet,
 		"position": _shoot_point.global_position,
 		"direction": -_shoot_point.global_transform.y.normalized(),
 		"damage": damage,
+		"pierce": bullet_pierce,
 	})
 
 

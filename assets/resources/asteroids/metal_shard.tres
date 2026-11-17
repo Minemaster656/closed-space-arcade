@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AsteroidType" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://assets/scripts/resources/asteroid_type.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/asteroids/metal_small.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"metal_shard"
+display_name = "Metal Shard"
+collectible = true
+metal_value = 3
+textures = [ExtResource("2")]
+scale_multiplier = 0.6
+collision_radius = 12.0
+max_hp = 1.0
+damageable = false
+harmful = false

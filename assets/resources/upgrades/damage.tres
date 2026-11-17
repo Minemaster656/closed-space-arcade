@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeDef" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/scripts/resources/upgrade_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrades/upg_damage.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"damage"
+title_key = "upgrade_damage_title"
+description_key = "upgrade_damage_desc"
+icon = ExtResource("2_icon")
+price_a = 5.0
+price_p = 1.7
+price_c = 10.0

@@ -13,6 +13,11 @@
 [ext_resource type="Resource" path="res://assets/resources/asteroids/small.tres" id="10_small"]
 [ext_resource type="Script" uid="uid://crsv826ymna7t" path="res://assets/scripts/game.gd" id="11_game"]
 [ext_resource type="Script" uid="uid://c2842u7awm2yr" path="res://assets/scripts/ui/metal_counter.gd" id="12_metal"]
+[ext_resource type="Resource" path="res://assets/resources/asteroids/shooter.tres" id="13_shooter"]
+[ext_resource type="Script" uid="uid://ca64lsdftha4h" path="res://assets/scripts/managers/enemy_bullet_pool.gd" id="14_ebp"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/enemy_bullet.tscn" id="15_ebullet"]
+[ext_resource type="Script" uid="uid://dpwkur5q11ors" path="res://assets/scripts/managers/shooter_enemy_pool.gd" id="16_epool"]
+[ext_resource type="PackedScene" uid="uid://4xweel8in5xt" path="res://assets/prefabs/shooter_enemy.tscn" id="17_eshooter"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_stars"]
 particles_animation = true
@@ -62,15 +67,24 @@ pool = NodePath("../Managers/BulletPool")
 script = ExtResource("3_pool")
 bullet_scene = ExtResource("2_pool")
 
+[node name="EnemyBulletPool" type="Node2D" parent="Managers" unique_id=1182400177]
+script = ExtResource("14_ebp")
+bullet_scene = ExtResource("15_ebullet")
+
+[node name="EnemyPool" type="Node2D" parent="Managers" unique_id=280912482]
+script = ExtResource("16_epool")
+scene = ExtResource("17_eshooter")
+
 [node name="AsteroidPool" type="Node2D" parent="Managers" unique_id=1393017530]
 script = ExtResource("5_ast_pool")
 default_scene = ExtResource("4_ast_scene")
 prewarm_per_scene = 192
 
-[node name="AsteroidSpawner" type="Node" parent="Managers" unique_id=454640812 node_paths=PackedStringArray("asteroid_pool")]
+[node name="AsteroidSpawner" type="Node" parent="Managers" unique_id=454640812 node_paths=PackedStringArray("asteroid_pool", "shooter_pool")]
 script = ExtResource("6_spawner")
 asteroid_pool = NodePath("../AsteroidPool")
-types = Array[ExtResource("7_ast_type")]([ExtResource("8_large"), ExtResource("9_medium"), ExtResource("10_small")])
+types = Array[ExtResource("7_ast_type")]([ExtResource("8_large"), ExtResource("9_medium"), ExtResource("10_small"), ExtResource("13_shooter")])
+shooter_pool = NodePath("../EnemyPool")
 max_active = 160
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1834101567]
@@ -104,12 +118,12 @@ offset_right = 110.0
 offset_bottom = 50.0
 theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
 theme_override_font_sizes/font_size = 24
-text = "ui_distance"
+text = "Distance: 0m"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Starfield" type="GPUParticles2D" parent="." unique_id=517482068]
-modulate = Color(1, 1, 1, 0.2627451)
+modulate = Color(1, 1, 1, 0.38039216)
 z_index = -10
 material = SubResource("CanvasItemMaterial_stars")
 amount = 120

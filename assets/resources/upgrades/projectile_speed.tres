@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeDef" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/scripts/resources/upgrade_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrades/upg_projectile_speed.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"projectile_speed"
+title_key = "upgrade_projectile_speed_title"
+description_key = "upgrade_projectile_speed_desc"
+icon = ExtResource("2_icon")
+max_level = 2
+price_a = 30.0
+price_p = 2.0
+price_c = 15.0

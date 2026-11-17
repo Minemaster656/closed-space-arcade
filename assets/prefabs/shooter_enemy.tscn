@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://4xweel8in5xt"]
+
+[ext_resource type="Texture2D" uid="uid://fmk6hh08mer6" path="res://assets/sprites/enemies/shooter.png" id="1_p1ljo"]
+[ext_resource type="Script" uid="uid://b7ppg2ieodsxi" path="res://assets/scripts/entity/shooter_enemy.gd" id="2_script"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/hp_bar.tscn" id="3_hpbar"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_omots"]
+radius = 26.0
+
+[node name="ShooterEnemy" type="Area2D" unique_id=1035396127 groups=["collision_damage", "damageable", "enemy", "shooter"]]
+script = ExtResource("2_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=572961103]
+shape = SubResource("CircleShape2D_omots")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1186084669]
+scale = Vector2(2, 2)
+texture = ExtResource("1_p1ljo")
+
+[node name="HPBar" parent="." instance=ExtResource("3_hpbar")]
+position = Vector2(-28, 42)
+size = Vector2(56, 6)

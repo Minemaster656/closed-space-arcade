@@ -10,6 +10,9 @@ class_name Bullet
 ## Урон, который пуля передаст цели.
 @export var damage: float = 1.0
 
+## Сколько ещё целей пуля может пробить после текущей.
+@export var pierce: int = 0
+
 ## На сколько долей экрана пуля может вылететь за границы, прежде чем вернётся в пул.
 @export_range(0.0, 1.0, 0.01) var despawn_margin: float = 0.25
 
@@ -48,6 +51,10 @@ func _on_area_entered(area: Area2D) -> void:
 		"position": global_position,
 	})
 	area.take_damage(damage)
+
+	if pierce > 0:
+		pierce -= 1
+		return
 	_dispose()
 
 
