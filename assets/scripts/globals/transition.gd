@@ -62,7 +62,16 @@ func goto(path: String, out_duration: float = FADE_DURATION, in_duration: float 
 	if music != "":
 		Music.play(music, out_duration)
 	await fade_out(out_duration)
-	get_tree().change_scene_to_file(path)
+
+	# В обычном запуске сцены живут внутри SubViewport оболочки AppFrame, чтобы
+	# сохранять вертикальный аспект. Fallback нужен при запуске сцены напрямую
+	# из редактора (F6).
+	var app := get_tree().get_first_node_in_group(&"app_frame")
+	if app != null and app.has_method("change_scene"):
+		app.call("change_scene", path)
+	else:
+		get_tree().change_scene_to_file(path)
+
 	await fade_in(in_duration)
 
 
