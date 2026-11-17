@@ -5,7 +5,6 @@ class_name UpgradeRow
 
 signal purchase_succeeded(id: StringName)
 
-@onready var _frame: NinePatchRect = $Frame
 @onready var _icon: TextureRect = $Margin/HBox/Icon
 @onready var _name_label: Label = $Margin/HBox/Info/Name
 @onready var _desc_label: Label = $Margin/HBox/Info/Desc
