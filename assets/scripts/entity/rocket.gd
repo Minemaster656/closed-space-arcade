@@ -129,7 +129,7 @@ func _break_apart() -> void:
 	_sprite.set_process(false)
 	_break_sound.play()
 
-	var host := get_tree().current_scene
+	var host := Utils.get_game_root()
 	if host == null:
 		host = get_parent()
 

@@ -122,7 +122,7 @@ func take_damage(amount: float) -> void:
 
 
 func _resolve_pools() -> void:
-	var scene := get_tree().current_scene
+	var scene := Utils.get_game_root()
 	if scene == null:
 		return
 	if not is_instance_valid(_pool):

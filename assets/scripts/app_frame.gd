@@ -11,6 +11,7 @@ const DESIGN_SIZE := Vector2(720.0, 1280.0)
 const DESIGN_ASPECT := 720.0 / 1280.0
 const GAME_SCENE := "res://assets/scenes/game.tscn"
 const GAME_VIEWPORT_GROUP := &"game_viewport"
+const GAME_ROOT_GROUP := &"game_root"
 
 @onready var _backdrop: TextureRect = $Backdrop
 @onready var _game_container: SubViewportContainer = $GameContainer
@@ -22,6 +23,16 @@ const GAME_VIEWPORT_GROUP := &"game_viewport"
 func _ready() -> void:
 	add_to_group(&"app_frame")
 	_game_viewport.add_to_group(GAME_VIEWPORT_GROUP)
+	# 2D-раскладка остаётся в дизайн-размере 720x1280, а рендер идёт в
+	# физическом разрешении окна. Без этого игра рисовалась в 720x1280 и
+	# растягивалась, из-за чего текст и иконки становились мыльными.
+	_game_viewport.size_2d_override = Vector2i(DESIGN_SIZE)
+	_game_viewport.size_2d_override_stretch = true
+	# SubViewport не наследует project setting фильтрации текстур: по
+	# умолчанию у него LINEAR, из-за чего все текстуры внутри игры мылятся.
+	# Ставим тот же режим, что и в настройках проекта (Nearest Mipmap).
+	_game_viewport.canvas_item_default_texture_filter = \
+		Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
 	_force_portrait_on_mobile()
 	_bind_viewport_textures()
 	get_viewport().size_changed.connect(_layout)
@@ -38,10 +49,13 @@ func change_scene(path: String) -> void:
 		return
 
 	for child in _game_viewport.get_children():
+		child.remove_from_group(GAME_ROOT_GROUP)
 		_game_viewport.remove_child(child)
 		child.queue_free()
 
-	_game_viewport.add_child(packed.instantiate())
+	var instance := packed.instantiate()
+	instance.add_to_group(GAME_ROOT_GROUP)
+	_game_viewport.add_child(instance)
 
 
 func _bind_viewport_textures() -> void:
@@ -57,8 +71,16 @@ func _layout() -> void:
 		return
 
 	var scale_factor := minf(window.x / DESIGN_SIZE.x, window.y / DESIGN_SIZE.y)
-	_game_container.scale = Vector2(scale_factor, scale_factor)
-	_game_container.position = ((window - DESIGN_SIZE * scale_factor) * 0.5).round()
+	var target_size := (DESIGN_SIZE * scale_factor).round()
+	target_size.x = maxf(target_size.x, 2.0)
+	target_size.y = maxf(target_size.y, 2.0)
+
+	# Контейнер занимает физический размер игрового прямоугольника. Сам
+	# SubViewport растягивает 2D-контент из 720x1280 в этот размер, поэтому
+	# рендер идёт в нативном разрешении, а не апскейлится из 720x1280.
+	_game_container.scale = Vector2.ONE
+	_game_container.size = target_size
+	_game_container.position = ((window - target_size) * 0.5).round()
 
 	var bg_material := _backdrop.material as ShaderMaterial
 	if bg_material != null:

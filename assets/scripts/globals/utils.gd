@@ -21,6 +21,15 @@ func get_visible_world_rect() -> Rect2:
 	return _cached_rect
 
 
+## Корень текущей игровой сцены. В обычном запуске это Game/MetaProgression
+## внутри SubViewport оболочки, а не App из корневого viewport.
+func get_game_root() -> Node:
+	var root := get_tree().get_first_node_in_group(&"game_root")
+	if root != null:
+		return root
+	return get_tree().current_scene
+
+
 ## Игровая сцена живёт в SubViewport оболочки, а этот автолоад — в корневом
 ## viewport. Поэтому размеры мира нужно брать у игрового viewport'а.
 func _game_viewport() -> Viewport:

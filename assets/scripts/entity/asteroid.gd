@@ -308,5 +308,8 @@ func _play_hit_sound() -> void:
     player.volume_db = hit_sound_volume_db
     player.global_position = global_position
     player.finished.connect(player.queue_free)
-    get_tree().current_scene.add_child(player)
+    var host := Utils.get_game_root()
+    if host == null:
+        host = get_parent()
+    host.add_child(player)
     player.play()
