@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Utils="*uid://dud2pgoc6ocuo"
 GameState="*res://assets/scripts/globals/game_state.gd"
+PauseManager="*res://assets/scripts/globals/pause_manager.gd"
 Transition="*res://assets/scripts/globals/transition.gd"
 Music="*res://assets/scripts/globals/music.gd"
 

@@ -16,6 +16,7 @@ const META_SCENE: String = "res://assets/scenes/meta_progression.tscn"
 @onready var starfield: GPUParticles2D = $Starfield
 @onready var ambient: CanvasModulate = $CanvasModulate
 @onready var score_label: Label = $UI/ScoreCounter
+@onready var pause_button: Button = $UI/PauseButton
 @onready var start_platform: ColorRect = $StartPlatform
 
 var _starfield_applied_size: Vector2 = Vector2.ZERO
@@ -25,7 +26,10 @@ var _play_position: Vector2
 
 
 func _ready() -> void:
+    PauseManager.reset()
     Music.play("fly")
+    pause_button.tooltip_text = tr("ui_pause")
+    pause_button.pressed.connect(_on_pause_pressed)
     var visible := Utils.get_visible_world_rect()
     var rect := visible.grow(-rocket_screen_margin)
     var follower := rocket.get_node_or_null("FingerFollower") as FollowFinger2D
@@ -136,10 +140,20 @@ func _on_launch_finished() -> void:
 
 
 func _on_rocket_died() -> void:
+    PauseManager.abort()
+    pause_button.disabled = true
     GameState.submit_distance(_distance)
     GameState.save()
     asteroid_spawner.stop()
     _begin_meta_progression()
+
+
+func _on_pause_pressed() -> void:
+    PauseManager.pause()
+
+
+func _exit_tree() -> void:
+    PauseManager.reset()
 
 
 func _begin_meta_progression() -> void:

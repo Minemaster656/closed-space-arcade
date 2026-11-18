@@ -5,6 +5,9 @@ ui_metal,"METAL: %d","МЕТАЛЛ: %d"
 ui_distance,"Distance: %d%s","Дистанция: %d%s"
 ui_distance_progress,"Distance: %d%s/%d","Дистанция: %d%s/%d"
 ui_meter,"m","м"
+ui_pause,Pause,Пауза
+ui_paused,PAUSED,ПАУЗА
+ui_resume,Resume,Продолжить
 meta_max_distance,"Max distance: %d%s","Максимальная дистанция: %d%s"
 meta_shop_button,Shop,Магазин
 meta_shop_title,Upgrades,Улучшения

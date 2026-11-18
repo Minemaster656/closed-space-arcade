@@ -1,0 +1,93 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://assets/scripts/ui/pause_overlay.gd" id="1_overlay"]
+[ext_resource type="Shader" path="res://assets/shaders/pause_fx.gdshader" id="2_fx"]
+[ext_resource type="Script" path="res://assets/scripts/components/juicy_button.gd" id="3_juicy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pause"]
+shader = ExtResource("2_fx")
+shader_parameter/intensity = 0.0
+shader_parameter/aberration_px = 3.0
+shader_parameter/scanline_strength = 0.22
+shader_parameter/scanline_count = 540.0
+shader_parameter/vignette_strength = 0.35
+shader_parameter/darken_strength = 0.28
+shader_parameter/tint = Color(0.55, 0.68, 0.9, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.04, 0.06, 0.12, 0.72)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.72, 1, 0.55)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+content_margin_left = 36.0
+content_margin_top = 28.0
+content_margin_right = 36.0
+content_margin_bottom = 30.0
+
+[node name="PauseOverlay" type="CanvasLayer"]
+process_mode = 3
+layer = 40
+script = ExtResource("1_overlay")
+
+[node name="Root" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Fx" type="ColorRect" parent="Root"]
+material = SubResource("ShaderMaterial_pause")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Center" type="CenterContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Panel" type="PanelContainer" parent="Root/Center"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Root/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="Title" type="Label" parent="Root/Center/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.03, 0.08, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 64
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Root/Center/Panel/VBox"]
+custom_minimum_size = Vector2(300, 76)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "Resume"
+script = ExtResource("3_juicy")

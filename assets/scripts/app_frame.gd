@@ -22,6 +22,11 @@ const GAME_ROOT_GROUP := &"game_root"
 
 func _ready() -> void:
 	add_to_group(&"app_frame")
+	# Контейнер и SubViewport должны продолжать обрабатывать ввод, когда
+	# дерево на паузе: иначе кнопка Resume внутри игрового Viewport не кликается.
+	# Сама игровая сцена при этом явно стоит в PROCESS_MODE_PAUSABLE.
+	_game_container.process_mode = Node.PROCESS_MODE_ALWAYS
+	_game_viewport.process_mode = Node.PROCESS_MODE_ALWAYS
 	_game_viewport.add_to_group(GAME_VIEWPORT_GROUP)
 	# 2D-раскладка остаётся в дизайн-размере 720x1280, а рендер идёт в
 	# физическом разрешении окна. Без этого игра рисовалась в 720x1280 и
