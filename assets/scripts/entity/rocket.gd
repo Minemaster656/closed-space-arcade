@@ -60,24 +60,32 @@ func set_danger(multiplier: float) -> void:
 
 
 func _shoot() -> void:
-	var bullet := pool.spawn(
-		_shoot_point.global_position,
-		-_shoot_point.global_transform.y.normalized()
-	)
-	if bullet == null:
-		return
-
-	bullet.speed = bullet_speed
-	bullet.damage = damage
-	bullet.pierce = bullet_pierce
-	GameState.shot_fired.emit({
+	var origin := _shoot_point.global_position
+	var direction := -_shoot_point.global_transform.y.normalized()
+	var shot := ShotContext.create(origin, direction)
+	GameState.shot_requested.emit({
+		"context": shot,
 		"rocket": self,
-		"bullet": bullet,
-		"position": _shoot_point.global_position,
-		"direction": -_shoot_point.global_transform.y.normalized(),
-		"damage": damage,
-		"pierce": bullet_pierce,
 	})
+
+	for spec in shot.specs:
+		if spec == null:
+			continue
+		var bullet := pool.spawn(origin + spec.position_offset, spec.direction)
+		if bullet == null:
+			continue
+
+		bullet.speed = bullet_speed * spec.speed_multiplier
+		bullet.damage = damage * spec.damage_multiplier
+		bullet.pierce = bullet_pierce + spec.pierce_bonus
+		GameState.shot_fired.emit({
+			"rocket": self,
+			"bullet": bullet,
+			"position": origin + spec.position_offset,
+			"direction": spec.direction,
+			"damage": bullet.damage,
+			"pierce": bullet.pierce,
+		})
 
 
 func _on_hurtbox_area_entered(area: Area2D) -> void:
@@ -95,6 +103,10 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 		" harmful=", asteroid != null and asteroid.is_harmful(),
 		" groups=", area.get_groups())
 
+	if area.is_in_group("collectable") and area.has_method("collect"):
+		area.collect()
+		return
+
 	if asteroid != null and asteroid.is_collectible():
 		asteroid.collect()
 		return
@@ -104,12 +116,16 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 		var hit_damage := 1.0
 		if asteroid != null and asteroid.type != null:
 			hit_damage = asteroid.type.damage
-		GameState.damage_taken.emit({
+		var damage_event := {
 			"target": self,
 			"source": area,
 			"damage": hit_damage,
 			"position": global_position,
-		})
+			"prevented": false,
+		}
+		GameState.damage_taken.emit(damage_event)
+		if damage_event.get("prevented", false):
+			return
 		if OS.has_environment("ROCKET_TEST_NODEATH"):
 			return
 		_death_pending = true

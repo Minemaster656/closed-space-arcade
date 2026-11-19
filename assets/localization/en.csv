@@ -30,3 +30,9 @@ upgrade_piercing_title,Piercing,Пробивание
 upgrade_piercing_desc,Penetrate +1 target per level. Max 5.,Пробитие +1 цели за уровень. Максимум 5.
 upgrade_more_metal_title,More metal,Больше металла
 upgrade_more_metal_desc,+10% metal per level. Max 10.,+10% металла за уровень. Максимум 10.
+ui_comet_hint,Collect the comet!,Собери комету!
+ui_reward_title,Choose a card,Выбери карточку
+card_laser_title,Laser,Лазер
+card_laser_desc,"Prototype card. The effect is not implemented yet.","Карточка-заглушка. Эффект пока не реализован."
+card_multishot_title,Multishot,Мультивыстрел
+card_multishot_desc,"Prototype card. The effect is not implemented yet.","Карточка-заглушка. Эффект пока не реализован."

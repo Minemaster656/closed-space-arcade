@@ -20,6 +20,11 @@
 [ext_resource type="PackedScene" uid="uid://4xweel8in5xt" path="res://assets/prefabs/shooter_enemy.tscn" id="17_eshooter"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/pause_overlay.tscn" id="18_pause"]
 [ext_resource type="Script" path="res://assets/scripts/components/juicy_button.gd" id="19_juicy"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/vignette.tscn" id="20_vignette"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/comet.tscn" id="21_comet"]
+[ext_resource type="Script" path="res://assets/scripts/managers/comet_spawner.gd" id="22_comet_spawner"]
+[ext_resource type="Resource" path="res://assets/resources/cards/card_pool.tres" id="23_card_pool"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/reward_overlay.tscn" id="24_reward_overlay"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_stars"]
 particles_animation = true
@@ -52,6 +57,7 @@ anim_offset_max = 1.0
 process_mode = 1
 script = ExtResource("11_game")
 ambient_color = Color(0.62967473, 0.62967473, 0.6296747, 1)
+card_pool = ExtResource("23_card_pool")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=916745351]
 
@@ -90,7 +96,14 @@ types = Array[ExtResource("7_ast_type")]([ExtResource("8_large"), ExtResource("9
 shooter_pool = NodePath("../EnemyPool")
 max_active = 160
 
+[node name="CometSpawner" type="Node" parent="Managers" unique_id=2011010101]
+script = ExtResource("22_comet_spawner")
+comet_scene = ExtResource("21_comet")
+interval_meters = 50.0
+
 [node name="UI" type="CanvasLayer" parent="." unique_id=1834101567]
+
+[node name="Vignette" parent="UI" instance=ExtResource("20_vignette")]
 
 [node name="MetalCounter" type="Label" parent="UI" unique_id=864372652]
 anchors_preset = 7
@@ -138,6 +151,8 @@ tooltip_text = "ui_pause"
 script = ExtResource("19_juicy")
 
 [node name="PauseOverlay" parent="." instance=ExtResource("18_pause")]
+
+[node name="RewardOverlay" parent="." instance=ExtResource("24_reward_overlay")]
 
 [node name="Starfield" type="GPUParticles2D" parent="." unique_id=517482068]
 modulate = Color(1, 1, 1, 0.38039216)

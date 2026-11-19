@@ -44,13 +44,16 @@ func _on_area_entered(area: Area2D) -> void:
 	if not area.has_method("take_damage"):
 		return
 
-	GameState.projectile_hit_meteor.emit({
+	var hit_event := {
 		"bullet": self,
 		"target": area,
 		"damage": damage,
 		"position": global_position,
-	})
-	area.take_damage(damage)
+		"cancelled": false,
+	}
+	GameState.projectile_hit_meteor.emit(hit_event)
+	if not hit_event.get("cancelled", false):
+		area.take_damage(float(hit_event.get("damage", damage)))
 
 	if pierce > 0:
 		pierce -= 1

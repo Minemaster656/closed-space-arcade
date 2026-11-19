@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dcw8161178g05" path="res://assets/scripts/ui/meta_progression.gd" id="1_mp"]
 [ext_resource type="Script" uid="uid://f0xd2gobp401" path="res://assets/scripts/components/juicy_button.gd" id="2_juicy"]
 [ext_resource type="Script" uid="uid://c2842u7awm2yr" path="res://assets/scripts/ui/metal_counter.gd" id="3_metal"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/vignette.tscn" id="4_vignette"]
 
 [node name="MetaProgression" type="Control" unique_id=2057652826]
 layout_mode = 3
@@ -12,6 +13,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mp")
+
+[node name="Vignette" parent="." instance=ExtResource("4_vignette")]
 
 [node name="Pages" type="Control" parent="." unique_id=2034116788]
 layout_mode = 1

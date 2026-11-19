@@ -7,6 +7,7 @@ signal upgrades_changed
 
 # Gameplay events (interceptable/modifiable by perks via listeners)
 signal damage_taken(event: Dictionary)
+signal shot_requested(event: Dictionary)
 signal shot_fired(event: Dictionary)
 signal projectile_hit_meteor(event: Dictionary)
 signal meteor_shatter_requested(event: Dictionary)

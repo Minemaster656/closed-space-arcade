@@ -9,15 +9,21 @@ const META_SCENE: String = "res://assets/scenes/meta_progression.tscn"
 @export var asteroid_speed_multiplier_max: float = 2.4
 @export var rocket_screen_margin: float = 40.0
 @export var ambient_color: Color = Color(0.06, 0.05, 0.11, 1.0)
+@export var card_pool: CardPool
 
 @onready var rocket: Rocket = $Rocket
 @onready var asteroid_pool: AsteroidPool = $Managers/AsteroidPool
 @onready var asteroid_spawner: AsteroidSpawner = $Managers/AsteroidSpawner
+@onready var comet_spawner: CometSpawner = $Managers/CometSpawner
 @onready var starfield: GPUParticles2D = $Starfield
 @onready var ambient: CanvasModulate = $CanvasModulate
 @onready var score_label: Label = $UI/ScoreCounter
 @onready var pause_button: Button = $UI/PauseButton
 @onready var start_platform: ColorRect = $StartPlatform
+@onready var reward_overlay: RewardOverlay = $RewardOverlay
+
+var run_context: RunContext
+var run_flow: RunFlow
 
 var _starfield_applied_size: Vector2 = Vector2.ZERO
 var _distance: float = 0.0
@@ -39,6 +45,7 @@ func _ready() -> void:
     rocket.died.connect(_on_rocket_died)
     ambient.color = ambient_color
     _apply_meta_upgrades()
+    _setup_run()
     _start_launch()
 
 
@@ -47,6 +54,20 @@ func _apply_meta_upgrades() -> void:
     rocket.shoot_cooldown /= GameState.get_shoot_rate_multiplier()
     rocket.bullet_speed *= GameState.get_bullet_speed_multiplier()
     rocket.bullet_pierce += GameState.get_bullet_pierce()
+
+
+func _setup_run() -> void:
+    run_context = RunContext.new()
+    run_context.name = "RunContext"
+    add_child(run_context)
+    run_context.setup(rocket, self, asteroid_spawner, comet_spawner, card_pool)
+    comet_spawner.run_context = run_context
+
+    run_flow = RunFlow.new()
+    run_flow.name = "RunFlow"
+    add_child(run_flow)
+    run_flow.setup(run_context, reward_overlay, card_pool)
+    comet_spawner.comet_collected.connect(run_flow.on_comet_collected)
 
 
 func _apply_starfield(rect: Rect2) -> void:
@@ -90,6 +111,7 @@ func _process(_delta: float) -> void:
     asteroid_pool.speed_multiplier = mult
 
     _distance += mult * _delta
+    comet_spawner.distance = _distance
     var dist := int(_distance)
     var record := int(GameState.record_distance)
     var meter := tr("ui_meter")
@@ -124,6 +146,8 @@ func _start_launch() -> void:
     if follower != null:
         follower.set_process(false)
     asteroid_spawner.stop()
+    comet_spawner.stop()
+    comet_spawner.reset_distance(0.0)
     _launch_tween = create_tween()
     _launch_tween.tween_property(rocket, "global_position", _play_position, 0.8) \
         .set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -137,14 +161,18 @@ func _on_launch_finished() -> void:
         follower.set_process(true)
     rocket.auto_shoot = true
     asteroid_spawner.enabled = true
+    comet_spawner.enabled = true
 
 
 func _on_rocket_died() -> void:
     PauseManager.abort()
+    if run_flow != null:
+        run_flow.on_run_dead()
     pause_button.disabled = true
     GameState.submit_distance(_distance)
     GameState.save()
     asteroid_spawner.stop()
+    comet_spawner.stop()
     _begin_meta_progression()
 
 

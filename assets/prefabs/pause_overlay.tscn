@@ -81,7 +81,7 @@ theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
 theme_override_colors/font_outline_color = Color(0.02, 0.03, 0.08, 1)
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 64
-text = "PAUSED"
+text = "ui_paused"
 horizontal_alignment = 1
 
 [node name="ResumeButton" type="Button" parent="Root/Center/Panel/VBox"]
@@ -89,5 +89,5 @@ custom_minimum_size = Vector2(300, 76)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92, 0.98, 1, 1)
 theme_override_font_sizes/font_size = 30
-text = "Resume"
+text = "ui_resume"
 script = ExtResource("3_juicy")
