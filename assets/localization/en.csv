@@ -8,6 +8,11 @@ ui_meter,"m","м"
 ui_pause,Pause,Пауза
 ui_paused,PAUSED,ПАУЗА
 ui_resume,Resume,Продолжить
+ui_exit_shop,To shop,В магазин
+ui_exit_shop_title,End run?,Завершить забег?
+ui_exit_shop_text,"The ship will be destroyed and the run will end. Continue?","Корабль будет разрушен, а забег завершится. Продолжить?"
+ui_confirm,Yes,Да
+ui_cancel,Cancel,Отмена
 meta_max_distance,"Max distance: %d%s","Максимальная дистанция: %d%s"
 meta_shop_button,Shop,Магазин
 meta_shop_title,Upgrades,Улучшения
@@ -21,18 +26,28 @@ upgrade_level,Lv. %d,Ур. %d
 upgrade_level_limited,Lv. %d/%d,Ур. %d/%d
 upgrade_max,MAX,МАКС
 upgrade_damage_title,Damage,Урон
-upgrade_damage_desc,+1 bullet damage per level.,+1 урона пули за уровень.
+upgrade_damage_desc,+1 bullet damage per level. Max 5.,+1 урона пули за уровень. Максимум 5.
 upgrade_fire_rate_title,Fire rate,Скорострельность
-upgrade_fire_rate_desc,Fire rate x2 per level. Max 3.,Скорострельность x2 за уровень. Максимум 3.
+upgrade_fire_rate_desc,Fire rate +50%. Max 1.,Скорострельность +50%. Максимум 1.
 upgrade_projectile_speed_title,Projectile speed,Скорость снарядов
-upgrade_projectile_speed_desc,Bullet speed x1.5 per level. Max 2.,Скорость пуль x1.5 за уровень. Максимум 2.
+upgrade_projectile_speed_desc,Bullet speed x1.5. Max 1.,Скорость пуль x1.5. Максимум 1.
 upgrade_piercing_title,Piercing,Пробивание
-upgrade_piercing_desc,Penetrate +1 target per level. Max 5.,Пробитие +1 цели за уровень. Максимум 5.
+upgrade_piercing_desc,Penetrate +1 target. Max 1.,Пробитие +1 цели. Максимум 1.
 upgrade_more_metal_title,More metal,Больше металла
-upgrade_more_metal_desc,+10% metal per level. Max 10.,+10% металла за уровень. Максимум 10.
+upgrade_more_metal_desc,+25% metal. Max 1.,+25% металла. Максимум 1.
 ui_comet_hint,Collect the comet!,Собери комету!
 ui_reward_title,Choose a card,Выбери карточку
 card_laser_title,Laser,Лазер
-card_laser_desc,"Prototype card. The effect is not implemented yet.","Карточка-заглушка. Эффект пока не реализован."
+card_laser_desc,"Rare comet card. Prototype: effect is not implemented yet.","Редкая карта кометы. Прототип: эффект пока не реализован."
 card_multishot_title,Multishot,Мультивыстрел
-card_multishot_desc,"Prototype card. The effect is not implemented yet.","Карточка-заглушка. Эффект пока не реализован."
+card_multishot_desc,"Adds one bullet per stack, up to 5. Always keeps a center shot; even counts add one random side shot.","Добавляет пулю за стак, до 5. Всегда оставляет центральный выстрел; чётное количество добавляет один случайный боковой."
+card_damage_title,Damage,Урон
+card_damage_desc,+1 bullet damage.,+1 урона пули.
+card_fire_rate_title,Fire rate,Скорострельность
+card_fire_rate_desc,"Shoot 12% faster.","Стрельба на 12% быстрее."
+card_pierce_title,Piercing,Пробивание
+card_pierce_desc,+1 pierced target.,+1 пробиваемая цель.
+card_projectile_speed_title,Projectile speed,Скорость снарядов
+card_projectile_speed_desc,Bullet speed +20%.,Скорость пуль +20%.
+card_overcharge_title,Overcharge,Перезаряд
+card_overcharge_desc,"Rare comet card: +2 damage and +15% bullet speed.","Редкая карта кометы: +2 урона и +15% скорости пуль."

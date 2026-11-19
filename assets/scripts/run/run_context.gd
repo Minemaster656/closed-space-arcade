@@ -12,7 +12,9 @@ var card_pool: CardPool
 
 var stats: StatSheet = StatSheet.new()
 var behavior_root: Node
+var progression: RunProgression
 var card_counts: Dictionary = {}
+var _active_behavior_ids: Dictionary = {}
 
 ## Показывали ли уже упругую подсказку у кометы в этом забеге.
 var hint_shown: bool = false
@@ -34,6 +36,11 @@ func setup(
 	behavior_root = Node.new()
 	behavior_root.name = "CardBehaviors"
 	add_child(behavior_root)
+
+	progression = RunProgression.new()
+	progression.name = "Progression"
+	add_child(progression)
+	progression.setup(self)
 
 	stats.set_base(&"damage", rocket.damage)
 	stats.set_base(&"shoot_cooldown", rocket.shoot_cooldown)
@@ -63,6 +70,11 @@ func apply_card(card: CardDef) -> bool:
 		if behavior_scene == null:
 			continue
 		var behavior := behavior_scene.instantiate()
+		if behavior is CardBehavior and behavior.behavior_id != &"":
+			if _active_behavior_ids.has(behavior.behavior_id):
+				behavior.free()
+				continue
+			_active_behavior_ids[behavior.behavior_id] = true
 		behavior_root.add_child(behavior)
 		if behavior is CardBehavior:
 			behavior.equip(self)

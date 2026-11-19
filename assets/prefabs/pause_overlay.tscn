@@ -91,3 +91,70 @@ theme_override_colors/font_color = Color(0.92, 0.98, 1, 1)
 theme_override_font_sizes/font_size = 30
 text = "ui_resume"
 script = ExtResource("3_juicy")
+
+[node name="ShopButton" type="Button" parent="Root/Center/Panel/VBox"]
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.88, 0.95, 1)
+theme_override_font_sizes/font_size = 24
+text = "ui_exit_shop"
+script = ExtResource("3_juicy")
+
+[node name="ConfirmCenter" type="CenterContainer" parent="Root"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="ConfirmPanel" type="PanelContainer" parent="Root/ConfirmCenter"]
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Root/ConfirmCenter/ConfirmPanel"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Root/ConfirmCenter/ConfirmPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.03, 0.08, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 36
+text = "ui_exit_shop_title"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="Root/ConfirmCenter/ConfirmPanel/VBox"]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.9, 0.96, 1)
+theme_override_font_sizes/font_size = 22
+text = "ui_exit_shop_text"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Root/ConfirmCenter/ConfirmPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="CancelButton" type="Button" parent="Root/ConfirmCenter/ConfirmPanel/VBox/Buttons"]
+custom_minimum_size = Vector2(170, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.92, 0.98, 1)
+theme_override_font_sizes/font_size = 24
+text = "ui_cancel"
+script = ExtResource("3_juicy")
+
+[node name="ConfirmButton" type="Button" parent="Root/ConfirmCenter/ConfirmPanel/VBox/Buttons"]
+custom_minimum_size = Vector2(170, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.78, 1)
+theme_override_font_sizes/font_size = 24
+text = "ui_confirm"
+script = ExtResource("3_juicy")

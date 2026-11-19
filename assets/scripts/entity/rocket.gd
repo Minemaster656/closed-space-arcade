@@ -52,6 +52,15 @@ func is_dead() -> bool:
 	return _dead
 
 
+## Принудительное разрушение (например, выход в магазин из паузы).
+## Визуально и по последствиям совпадает с обычной смертью от столкновения.
+func force_death() -> void:
+	if _dead or _death_pending:
+		return
+	_death_pending = true
+	_break_apart.call_deferred()
+
+
 func set_danger(multiplier: float) -> void:
 	if _dead:
 		return
@@ -93,15 +102,6 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 		return
 
 	var asteroid := area as Asteroid
-	var tid := "<none>"
-	if asteroid != null and asteroid.type != null:
-		tid = asteroid.type.id
-	print("ROCKET AREA ENTER type=", tid,
-		" type.collectible=", asteroid != null and asteroid.type != null and asteroid.type.collectible,
-		" dead=", asteroid != null and asteroid._dead,
-		" collectible()=", asteroid != null and asteroid.is_collectible(),
-		" harmful=", asteroid != null and asteroid.is_harmful(),
-		" groups=", area.get_groups())
 
 	if area.is_in_group("collectable") and area.has_method("collect"):
 		area.collect()
@@ -112,7 +112,6 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 		return
 
 	if area.is_in_group("collision_damage"):
-		print("ROCKET HIT area=", area.name, " type=", tid, " groups=", area.get_groups(), " parent=", area.get_parent())
 		var hit_damage := 1.0
 		if asteroid != null and asteroid.type != null:
 			hit_damage = asteroid.type.damage

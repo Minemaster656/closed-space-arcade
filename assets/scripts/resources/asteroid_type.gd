@@ -33,3 +33,7 @@ class_name AsteroidType
 @export_group("Metal")
 @export var collectible: bool = false
 @export var metal_value: int = 1
+
+@export_group("Experience")
+## Сколько XP получает игрок за уничтожение этого типа.
+@export var xp_value: int = 1

@@ -225,9 +225,12 @@ func _shatter() -> void:
         "child_type": type.child_type if type != null else null,
         "child_min": type.child_min if type != null else 0,
         "child_max": type.child_max if type != null else 0,
+        "xp": type.xp_value if type != null else 0,
         "handled": false,
     }
     GameState.meteor_shatter_requested.emit(event)
+    GameState.asteroid_destroyed.emit(event)
+    GameState.xp_granted.emit(int(event.get("xp", 0)))
     if not event.get("handled", false):
         _spawn_shatter_children(event)
     despawned.emit(self)
@@ -280,6 +283,7 @@ func _collect() -> void:
         return
     _dead = true
     GameState.add_metal(type.metal_value)
+    GameState.xp_granted.emit(type.xp_value)
     if _spawn_tween != null and _spawn_tween.is_valid():
         _spawn_tween.kill()
     _spawn_tween = create_tween().set_parallel(true)

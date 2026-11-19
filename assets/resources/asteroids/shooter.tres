@@ -14,3 +14,4 @@ damage = 1.0
 damageable = true
 harmful = true
 collision_radius = 13.0
+xp_value = 8

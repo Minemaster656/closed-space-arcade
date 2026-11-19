@@ -25,6 +25,7 @@
 [ext_resource type="Script" path="res://assets/scripts/managers/comet_spawner.gd" id="22_comet_spawner"]
 [ext_resource type="Resource" path="res://assets/resources/cards/card_pool.tres" id="23_card_pool"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/reward_overlay.tscn" id="24_reward_overlay"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/xp_bar.tscn" id="25_xp_bar"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_stars"]
 particles_animation = true
@@ -137,6 +138,16 @@ theme_override_font_sizes/font_size = 24
 text = "Distance: 0m"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="XPBar" parent="UI" instance=ExtResource("25_xp_bar")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -260.0
+offset_top = 54.0
+offset_right = 260.0
+offset_bottom = 72.0
+grow_horizontal = 2
 
 [node name="PauseButton" type="Button" parent="UI" unique_id=1902384761]
 offset_left = 20.0

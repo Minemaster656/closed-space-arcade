@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CardDef" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://assets/scripts/resources/card_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrades/upg_shoot_freq.png" id="2_icon"]
+[ext_resource type="Script" path="res://assets/scripts/resources/stat_modifier.gd" id="3_mod"]
+
+[sub_resource type="Resource" id="StatModifier_fire_rate"]
+script = ExtResource("3_mod")
+stat = &"shoot_cooldown"
+operation = "mul"
+value = 0.88
+
+[resource]
+script = ExtResource("1_def")
+id = &"fire_rate_up"
+title_key = "card_fire_rate_title"
+description_key = "card_fire_rate_desc"
+icon = ExtResource("2_icon")
+rarity = &"common"
+weight = 0.9
+repeat_falloff = 0.7
+max_stacks = 5
+tags = Array[StringName]([&"stat", &"fire_rate"])
+modifiers = Array[ExtResource("3_mod")]([SubResource("StatModifier_fire_rate")])

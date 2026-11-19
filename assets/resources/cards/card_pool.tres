@@ -1,12 +1,18 @@
-[gd_resource type="Resource" script_class="CardPool" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="CardPool" load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://assets/scripts/run/card_pool.gd" id="1_pool"]
 [ext_resource type="Script" path="res://assets/scripts/resources/card_def.gd" id="2_card_def"]
-[ext_resource type="Resource" path="res://assets/resources/cards/laser.tres" id="3_laser"]
-[ext_resource type="Resource" path="res://assets/resources/cards/multishot.tres" id="4_multishot"]
+[ext_resource type="Resource" path="res://assets/resources/cards/multishot.tres" id="3_multishot"]
+[ext_resource type="Resource" path="res://assets/resources/cards/damage_up.tres" id="4_damage"]
+[ext_resource type="Resource" path="res://assets/resources/cards/fire_rate_up.tres" id="5_fire_rate"]
+[ext_resource type="Resource" path="res://assets/resources/cards/pierce_up.tres" id="6_pierce"]
+[ext_resource type="Resource" path="res://assets/resources/cards/projectile_speed_up.tres" id="7_speed"]
+[ext_resource type="Resource" path="res://assets/resources/cards/laser.tres" id="8_laser"]
+[ext_resource type="Resource" path="res://assets/resources/cards/overcharge.tres" id="9_overcharge"]
 
 [resource]
 script = ExtResource("1_pool")
-cards = Array[ExtResource("2_card_def")]([ExtResource("3_laser"), ExtResource("4_multishot")])
+cards = Array[ExtResource("2_card_def")]([ExtResource("3_multishot"), ExtResource("4_damage"), ExtResource("5_fire_rate"), ExtResource("6_pierce"), ExtResource("7_speed")])
+comet_cards = Array[ExtResource("2_card_def")]([ExtResource("8_laser"), ExtResource("9_overcharge")])
 min_offers = 2
 max_offers = 4

@@ -9,6 +9,7 @@ id = &"metal_shard"
 display_name = "Metal Shard"
 collectible = true
 metal_value = 3
+xp_value = 0
 textures = [ExtResource("2")]
 scale_multiplier = 0.6
 collision_radius = 12.0

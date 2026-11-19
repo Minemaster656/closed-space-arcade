@@ -11,10 +11,13 @@ signal shot_requested(event: Dictionary)
 signal shot_fired(event: Dictionary)
 signal projectile_hit_meteor(event: Dictionary)
 signal meteor_shatter_requested(event: Dictionary)
+signal asteroid_destroyed(event: Dictionary)
+signal xp_granted(amount: int)
 
 const SAVE_PATH := "user://save.cfg"
 const SAVE_SECTION := "records"
 const UPGRADES_SECTION := "upgrades"
+const UNLOCKS_SECTION := "unlocks"
 
 const UPGRADE_DAMAGE: StringName = &"damage"
 const UPGRADE_FIRE_RATE: StringName = &"fire_rate"
@@ -42,6 +45,7 @@ var metal: int = 0
 var record_distance: float = 0.0
 var record_metal: int = 0
 var upgrade_levels: Dictionary = {}
+var unlocked_cards: Dictionary = {}
 
 ## Накопленная дробная часть бонуса металла, чтобы +10% не терялись на мелких дропах.
 var _metal_fraction: float = 0.0
@@ -79,6 +83,7 @@ func reset_save() -> void:
 	record_metal = 0
 	_metal_fraction = 0.0
 	upgrade_levels.clear()
+	unlocked_cards.clear()
 
 	if FileAccess.file_exists(SAVE_PATH):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
@@ -125,12 +130,27 @@ func can_buy_upgrade(id: StringName) -> bool:
 	return metal >= get_upgrade_price(id)
 
 
+func is_card_unlocked(id: StringName) -> bool:
+	return bool(unlocked_cards.get(id, false))
+
+
+func unlock_card(id: StringName) -> void:
+	if id == &"" or is_card_unlocked(id):
+		return
+	unlocked_cards[id] = true
+	upgrades_changed.emit()
+	save()
+
+
 func buy_upgrade(id: StringName) -> bool:
 	if not can_buy_upgrade(id):
 		return false
+	var def := get_upgrade_def(id)
 	var level := get_upgrade_level(id)
 	metal -= get_upgrade_price(id)
 	upgrade_levels[id] = level + 1
+	if def != null and def.unlock_card != null:
+		unlocked_cards[def.unlock_card.id] = true
 	metal_changed.emit(metal)
 	upgrades_changed.emit()
 	save()
@@ -142,7 +162,7 @@ func get_damage_bonus() -> float:
 
 
 func get_shoot_rate_multiplier() -> float:
-	return pow(2.0, float(get_upgrade_level(UPGRADE_FIRE_RATE)))
+	return 1.0 + 0.5 * float(get_upgrade_level(UPGRADE_FIRE_RATE))
 
 
 func get_bullet_speed_multiplier() -> float:
@@ -154,7 +174,7 @@ func get_bullet_pierce() -> int:
 
 
 func get_metal_multiplier() -> float:
-	return 1.0 + 0.1 * float(get_upgrade_level(UPGRADE_MORE_METAL))
+	return 1.0 + 0.25 * float(get_upgrade_level(UPGRADE_MORE_METAL))
 
 
 func _update_record_metal(value: int) -> void:
@@ -175,11 +195,15 @@ func save() -> void:
 		var level := get_upgrade_level(id)
 		if level > 0:
 			cfg.set_value(UPGRADES_SECTION, String(id), level)
+	for id in unlocked_cards.keys():
+		if bool(unlocked_cards[id]):
+			cfg.set_value(UNLOCKS_SECTION, String(id), true)
 	cfg.save(SAVE_PATH)
 
 
 func load_save() -> void:
 	upgrade_levels.clear()
+	unlocked_cards.clear()
 	_metal_fraction = 0.0
 
 	var cfg := ConfigFile.new()
@@ -193,3 +217,7 @@ func load_save() -> void:
 		var level := int(cfg.get_value(UPGRADES_SECTION, String(id), 0))
 		if level > 0:
 			upgrade_levels[id] = level
+	if cfg.has_section(UNLOCKS_SECTION):
+		for key in cfg.get_section_keys(UNLOCKS_SECTION):
+			if bool(cfg.get_value(UNLOCKS_SECTION, key, false)):
+				unlocked_cards[StringName(key)] = true

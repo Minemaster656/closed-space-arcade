@@ -26,3 +26,4 @@ child_min = 1
 child_max = 3
 collectible = false
 metal_value = 0
+xp_value = 2

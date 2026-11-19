@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="CardDef" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="CardDef" load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://assets/scripts/resources/card_def.gd" id="1_def"]
 [ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrades/upg_shoot_freq.png" id="2_icon"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/behaviors/multishot_behavior.tscn" id="3_behavior"]
 
 [resource]
 script = ExtResource("1_def")
@@ -10,5 +11,8 @@ title_key = "card_multishot_title"
 description_key = "card_multishot_desc"
 icon = ExtResource("2_icon")
 rarity = &"common"
-weight = 1.0
-max_stacks = 0
+weight = 1.2
+repeat_falloff = 0.6
+max_stacks = 4
+tags = Array[StringName]([&"weapon", &"projectile"])
+behaviors = Array[PackedScene]([ExtResource("3_behavior")])

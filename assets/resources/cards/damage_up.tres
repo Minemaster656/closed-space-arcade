@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CardDef" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://assets/scripts/resources/card_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrades/upg_damage.png" id="2_icon"]
+[ext_resource type="Script" path="res://assets/scripts/resources/stat_modifier.gd" id="3_mod"]
+
+[sub_resource type="Resource" id="StatModifier_damage"]
+script = ExtResource("3_mod")
+stat = &"damage"
+operation = "add"
+value = 1.0
+
+[resource]
+script = ExtResource("1_def")
+id = &"damage_up"
+title_key = "card_damage_title"
+description_key = "card_damage_desc"
+icon = ExtResource("2_icon")
+rarity = &"common"
+weight = 1.0
+repeat_falloff = 0.7
+max_stacks = 5
+tags = Array[StringName]([&"stat", &"damage"])
+modifiers = Array[ExtResource("3_mod")]([SubResource("StatModifier_damage")])

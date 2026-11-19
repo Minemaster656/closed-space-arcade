@@ -13,6 +13,10 @@ class_name UpgradeDef
 ## 0 — уровень не ограничен.
 @export var max_level: int = 0
 
+@export_group("Unlock")
+## Если задано, покупка разблокирует эту карточку в обычном пуле забега.
+@export var unlock_card: CardDef
+
 @export_group("Price")
 ## price(level) = ceil(a * level^p + b * level + c)
 ## level — количество уже купленных уровней.

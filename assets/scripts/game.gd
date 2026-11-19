@@ -18,9 +18,11 @@ const META_SCENE: String = "res://assets/scenes/meta_progression.tscn"
 @onready var starfield: GPUParticles2D = $Starfield
 @onready var ambient: CanvasModulate = $CanvasModulate
 @onready var score_label: Label = $UI/ScoreCounter
+@onready var xp_bar: RunXpBar = $UI/XPBar
 @onready var pause_button: Button = $UI/PauseButton
 @onready var start_platform: ColorRect = $StartPlatform
 @onready var reward_overlay: RewardOverlay = $RewardOverlay
+@onready var pause_overlay: PauseOverlay = $PauseOverlay
 
 var run_context: RunContext
 var run_flow: RunFlow
@@ -36,6 +38,7 @@ func _ready() -> void:
     Music.play("fly")
     pause_button.tooltip_text = tr("ui_pause")
     pause_button.pressed.connect(_on_pause_pressed)
+    pause_overlay.shop_requested.connect(_on_exit_to_shop_requested)
     var visible := Utils.get_visible_world_rect()
     var rect := visible.grow(-rocket_screen_margin)
     var follower := rocket.get_node_or_null("FingerFollower") as FollowFinger2D
@@ -61,6 +64,7 @@ func _setup_run() -> void:
     run_context.name = "RunContext"
     add_child(run_context)
     run_context.setup(rocket, self, asteroid_spawner, comet_spawner, card_pool)
+    xp_bar.setup(run_context.progression)
     comet_spawner.run_context = run_context
 
     run_flow = RunFlow.new()
@@ -178,6 +182,12 @@ func _on_rocket_died() -> void:
 
 func _on_pause_pressed() -> void:
     PauseManager.pause()
+
+
+func _on_exit_to_shop_requested() -> void:
+    PauseManager.abort()
+    if is_instance_valid(rocket) and not rocket.is_dead():
+        rocket.force_death()
 
 
 func _exit_tree() -> void:

@@ -19,9 +19,15 @@ class_name CardDef
 @export_group("Offers")
 @export var rarity: StringName = &"common"
 @export var weight: float = 1.0
+## Во сколько раз падает вес карточки за каждый уже взятый стак.
+@export_range(0.05, 1.0, 0.05) var repeat_falloff: float = 0.65
 ## 0 — количество не ограничено.
 @export var max_stacks: int = 0
 @export var tags: Array[StringName] = []
+
+@export_group("Unlock")
+## false — карточка попадает в пул только после разблокировки в мета-магазине.
+@export var unlocked_by_default: bool = true
 
 @export_group("Effects")
 @export var modifiers: Array[StatModifier] = []
