@@ -23,6 +23,11 @@ func _run() -> void:
 	_check(game.card_pool != null, "card_pool exists")
 	_check(game.xp_bar != null, "xp_bar exists")
 
+	# Не даём случайным убийствам на старте открыть лишний reward
+	# до того, как тест сам выставит нужный порог XP.
+	game.run_context.progression.xp = 0
+	game.run_context.progression.xp_to_next = 999999
+
 	_test_meta()
 	_test_pool(game)
 	await _test_multishot(game)
@@ -87,7 +92,12 @@ func _test_multishot(game: Variant) -> void:
 
 
 func _test_xp_reward(game: Variant) -> void:
-	GameState.xp_granted.emit(6)
+	game.run_context.progression.xp = 0
+	game.run_context.progression.xp_to_next = 18
+	GameState.xp_granted.emit(18)
+	# Сразу поднимаем следующий порог, чтобы фоновые убийства
+	# не открыли второй reward во время проверки.
+	game.run_context.progression.xp_to_next = 999999
 	await get_tree().create_timer(0.8).timeout
 
 	_check(game.run_context.progression.level == 2, "xp level reaches 2")

@@ -7,8 +7,8 @@ class_name RunProgression
 signal xp_changed(xp: int, needed: int, level: int)
 signal level_up(level: int)
 
-const BASE_XP: int = 6
-const XP_GROWTH: float = 1.32
+const BASE_XP: int = 18
+const XP_GROWTH: float = 1.35
 
 var level: int = 1
 var xp: int = 0
