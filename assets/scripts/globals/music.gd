@@ -16,6 +16,7 @@ var _players: Array[AudioStreamPlayer] = []
 var _active_index: int = 0
 var _current_track: String = ""
 var _tween: Tween
+var _focus_suspended: bool = false
 
 
 func _ready() -> void:
@@ -25,6 +26,22 @@ func _ready() -> void:
 		player.volume_db = SILENT_DB
 		add_child(player)
 		_players.append(player)
+
+
+func _notification(what: int) -> void:
+	# Музыка живёт в автолоаде с PROCESS_MODE_ALWAYS, поэтому пауза дерева
+	# её не останавливает. Глушим плееры отдельно при потере фокуса.
+	match what:
+		NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_WINDOW_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED:
+			_set_focus_suspended(true)
+		NOTIFICATION_APPLICATION_FOCUS_IN, NOTIFICATION_WM_WINDOW_FOCUS_IN, NOTIFICATION_APPLICATION_RESUMED:
+			_set_focus_suspended(false)
+
+
+func _set_focus_suspended(suspended: bool) -> void:
+	_focus_suspended = suspended
+	for player in _players:
+		player.stream_paused = suspended
 
 
 func play(track: String, fade: float = FADE_DURATION) -> void:
@@ -51,6 +68,7 @@ func play(track: String, fade: float = FADE_DURATION) -> void:
 
 	new_player.stream = stream
 	new_player.volume_db = SILENT_DB
+	new_player.stream_paused = _focus_suspended
 	new_player.play()
 	_current_track = track
 

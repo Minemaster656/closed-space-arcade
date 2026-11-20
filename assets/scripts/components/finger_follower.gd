@@ -36,24 +36,41 @@ func _unhandled_input(event: InputEvent) -> void:
 		if _dragging and event.index == _touch_index:
 			_set_target(_screen_to_world(event.position))
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		_on_press(event.pressed, _screen_to_world(event.position), -1)
+		# На ПК управление переключается кликом: первый клик включает
+		# следование за мышью, повторный — выключает.
+		if event.pressed:
+			_toggle_mouse_drag(_screen_to_world(event.position))
 	elif event is InputEventMouseMotion:
 		if _dragging and _touch_index == -1:
 			_set_target(_screen_to_world(event.position))
 
 func _on_press(pressed: bool, world_pos: Vector2, index: int) -> void:
 	if pressed:
-		if _dragging or target == null:
-			return
-		if not drag_anywhere and world_pos.distance_to(target.global_position) > grab_radius:
-			return
-		_dragging = true
-		_touch_index = index
-		_set_target(world_pos)
+		_start_drag(world_pos, index)
 	else:
-		if index == _touch_index:
-			_dragging = false
-			_touch_index = -1
+		_stop_drag(index)
+
+func _start_drag(world_pos: Vector2, index: int) -> void:
+	if _dragging or target == null:
+		return
+	if not drag_anywhere and world_pos.distance_to(target.global_position) > grab_radius:
+		return
+	_dragging = true
+	_touch_index = index
+	_set_target(world_pos)
+
+func _stop_drag(index: int) -> void:
+	if index == _touch_index:
+		_dragging = false
+		_touch_index = -1
+
+func _toggle_mouse_drag(world_pos: Vector2) -> void:
+	if _dragging:
+		# Не прерываем активное касание на тач-устройстве.
+		if _touch_index == -1:
+			_stop_drag(-1)
+		return
+	_start_drag(world_pos, -1)
 
 func _set_target(world_pos: Vector2) -> void:
 	var desired := world_pos + finger_offset

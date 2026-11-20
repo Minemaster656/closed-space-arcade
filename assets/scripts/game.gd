@@ -34,6 +34,7 @@ var _play_position: Vector2
 
 
 func _ready() -> void:
+    add_to_group(PauseManager.FOCUS_PAUSE_GROUP)
     PauseManager.reset()
     Music.play("fly")
     pause_button.tooltip_text = tr("ui_pause")

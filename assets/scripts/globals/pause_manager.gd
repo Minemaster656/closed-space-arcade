@@ -11,6 +11,10 @@ signal modal_frozen_changed(frozen: bool)
 const PAUSE_TIME_SCALE: float = 0.05
 const RESUME_DURATION: float = 1.0
 
+## Сцены с этим тегом ставятся на паузу при потере фокуса окна.
+## Меню/магазин тега не имеют, поэтому их сворачивание окна не ломает.
+const FOCUS_PAUSE_GROUP: StringName = &"pause_on_focus_loss"
+
 var _paused: bool = false
 var _modal_frozen: bool = false
 var _can_pause: bool = true
@@ -20,6 +24,24 @@ var _modal_generation: int = 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+
+
+func _notification(what: int) -> void:
+	# Покрывает десктоп (WM), мобильные и веб (APPLICATION_FOCUS_*),
+	# а также сворачивание приложения на Android/iOS (APPLICATION_PAUSED).
+	match what:
+		NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_WINDOW_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED:
+			_pause_on_focus_lost()
+
+
+## Автопауза только для активной игровой сцены. Возврат фокуса не снимает
+## паузу: игрок продолжает сам, чтобы не пропустить момент возобновления.
+func _pause_on_focus_lost() -> void:
+	if _paused or _modal_frozen or not _can_pause:
+		return
+	if get_tree().get_first_node_in_group(FOCUS_PAUSE_GROUP) == null:
+		return
+	pause()
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
