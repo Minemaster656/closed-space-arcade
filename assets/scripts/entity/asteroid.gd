@@ -308,6 +308,7 @@ func _play_hit_sound() -> void:
     if hit_sound == null:
         return
     var player := AudioStreamPlayer2D.new()
+    player.bus = AudioSettings.SFX_BUS
     player.stream = hit_sound
     player.volume_db = hit_sound_volume_db
     player.global_position = global_position

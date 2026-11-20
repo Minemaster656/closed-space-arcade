@@ -17,11 +17,22 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+Bridge="*res://addons/playgama_bridge/bridge.gd"
 Utils="*uid://dud2pgoc6ocuo"
 GameState="*res://assets/scripts/globals/game_state.gd"
+AudioSettings="*res://assets/scripts/globals/audio_settings.gd"
 PauseManager="*res://assets/scripts/globals/pause_manager.gd"
+PlatformIntegration="*res://assets/scripts/globals/platform_integration.gd"
 Transition="*res://assets/scripts/globals/transition.gd"
 Music="*res://assets/scripts/globals/music.gd"
+
+[audio]
+
+buses/default_bus_layout="res://default_bus_layout.tres"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/playgama_bridge/plugin.cfg")
 
 [display]
 

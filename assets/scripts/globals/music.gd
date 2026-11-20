@@ -23,6 +23,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	for i in 2:
 		var player := AudioStreamPlayer.new()
+		player.bus = AudioSettings.MUSIC_BUS
 		player.volume_db = SILENT_DB
 		add_child(player)
 		_players.append(player)

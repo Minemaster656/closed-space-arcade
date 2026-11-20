@@ -41,8 +41,16 @@ func _ready() -> void:
 	_force_portrait_on_mobile()
 	_bind_viewport_textures()
 	get_viewport().size_changed.connect(_layout)
-	change_scene(GAME_SCENE)
 	_layout()
+	_start_initial_scene()
+
+
+## На вебе прогресс может прийти из облака асинхронно. Не запускаем игру,
+## пока GameState не прочитал сохранение, иначе магазин и забег увидят нули.
+func _start_initial_scene() -> void:
+	if not GameState.is_loaded():
+		await GameState.loaded
+	change_scene(GAME_SCENE)
 
 
 ## Заменяет текущую игровую сцену. Вызывается из Transition вместо

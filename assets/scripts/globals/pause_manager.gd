@@ -68,6 +68,12 @@ func can_pause() -> bool:
 	return _can_pause
 
 
+## Внешняя пауза от платформы (Яндекс/Playgama). Не ставит на паузу меню,
+## где нет игровой сцены, и не возобновляет игру автоматически.
+func pause_for_platform() -> void:
+	_pause_on_focus_lost()
+
+
 func pause() -> void:
 	if _paused or _modal_frozen or not _can_pause:
 		return

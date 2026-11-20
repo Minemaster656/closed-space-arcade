@@ -88,6 +88,7 @@ shape = SubResource("CapsuleShape2D_rocket")
 [node name="BreakSound" type="AudioStreamPlayer" parent="." unique_id=1842654203]
 stream = ExtResource("7_break")
 volume_db = -4.0
+bus = &"SFX"
 
 [node name="FingerFollower" type="Node2D" parent="." unique_id=375218279 node_paths=PackedStringArray("target")]
 script = ExtResource("6_4v76y")

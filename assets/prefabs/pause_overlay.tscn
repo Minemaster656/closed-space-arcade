@@ -92,6 +92,27 @@ theme_override_font_sizes/font_size = 30
 text = "ui_resume"
 script = ExtResource("3_juicy")
 
+[node name="AudioRow" type="HBoxContainer" parent="Root/Center/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="MusicButton" type="Button" parent="Root/Center/Panel/VBox/AudioRow"]
+custom_minimum_size = Vector2(142, 56)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.9, 0.98, 1)
+theme_override_font_sizes/font_size = 20
+text = "ui_music_on"
+script = ExtResource("3_juicy")
+
+[node name="SfxButton" type="Button" parent="Root/Center/Panel/VBox/AudioRow"]
+custom_minimum_size = Vector2(142, 56)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.9, 0.98, 1)
+theme_override_font_sizes/font_size = 20
+text = "ui_sfx_on"
+script = ExtResource("3_juicy")
+
 [node name="ShopButton" type="Button" parent="Root/Center/Panel/VBox"]
 custom_minimum_size = Vector2(300, 64)
 layout_mode = 2

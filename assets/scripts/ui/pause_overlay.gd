@@ -15,6 +15,9 @@ const CONTENT_IN: float = 0.32
 @onready var _fx: ColorRect = $Root/Fx
 @onready var _title: Label = $Root/Center/Panel/VBox/Title
 @onready var _resume_button: Button = $Root/Center/Panel/VBox/ResumeButton
+@onready var _audio_row: HBoxContainer = $Root/Center/Panel/VBox/AudioRow
+@onready var _music_button: Button = $Root/Center/Panel/VBox/AudioRow/MusicButton
+@onready var _sfx_button: Button = $Root/Center/Panel/VBox/AudioRow/SfxButton
 @onready var _shop_button: Button = $Root/Center/Panel/VBox/ShopButton
 @onready var _confirm_center: CenterContainer = $Root/ConfirmCenter
 @onready var _confirm_title: Label = $Root/ConfirmCenter/ConfirmPanel/VBox/Title
@@ -36,21 +39,27 @@ func _ready() -> void:
 	_title.text = tr("ui_paused")
 	_resume_button.text = tr("ui_resume")
 	_shop_button.text = tr("ui_exit_shop")
+	_refresh_audio_labels()
 	_confirm_title.text = tr("ui_exit_shop_title")
 	_confirm_text.text = tr("ui_exit_shop_text")
 	_cancel_button.text = tr("ui_cancel")
 	_confirm_button.text = tr("ui_confirm")
 	_resume_button.pressed.connect(_on_resume_pressed)
+	_music_button.pressed.connect(_on_music_pressed)
+	_sfx_button.pressed.connect(_on_sfx_pressed)
 	_shop_button.pressed.connect(_on_shop_pressed)
 	_cancel_button.pressed.connect(_hide_confirm)
 	_confirm_button.pressed.connect(_on_confirm_pressed)
 	_resume_button.resized.connect(_update_pivots)
+	_music_button.resized.connect(_update_pivots)
+	_sfx_button.resized.connect(_update_pivots)
 	_shop_button.resized.connect(_update_pivots)
 	_cancel_button.resized.connect(_update_pivots)
 	_confirm_button.resized.connect(_update_pivots)
 	_title.resized.connect(_update_pivots)
 	_update_pivots()
 	PauseManager.paused_changed.connect(_on_paused_changed)
+	AudioSettings.changed.connect(_refresh_audio_labels)
 
 
 func _on_paused_changed(paused: bool) -> void:
@@ -64,6 +73,19 @@ func _on_resume_pressed() -> void:
 	PauseManager.resume()
 
 
+func _on_music_pressed() -> void:
+	AudioSettings.toggle_music()
+
+
+func _on_sfx_pressed() -> void:
+	AudioSettings.toggle_sfx()
+
+
+func _refresh_audio_labels() -> void:
+	_music_button.text = tr("ui_music_off" if AudioSettings.is_music_muted() else "ui_music_on")
+	_sfx_button.text = tr("ui_sfx_off" if AudioSettings.is_sfx_muted() else "ui_sfx_on")
+
+
 func _show() -> void:
 	_kill_tween()
 	_hide_confirm(false)
@@ -72,12 +94,15 @@ func _show() -> void:
 	_title.text = tr("ui_paused")
 	_resume_button.text = tr("ui_resume")
 	_shop_button.text = tr("ui_exit_shop")
+	_refresh_audio_labels()
 	_update_pivots()
 
 	_title.scale = Vector2(0.82, 0.82)
 	_title.modulate.a = 0.0
 	_resume_button.scale = Vector2(0.92, 0.92)
 	_resume_button.modulate.a = 0.0
+	_audio_row.scale = Vector2(0.92, 0.92)
+	_audio_row.modulate.a = 0.0
 	_shop_button.scale = Vector2(0.92, 0.92)
 	_shop_button.modulate.a = 0.0
 
@@ -90,9 +115,12 @@ func _show() -> void:
 	_fx_tween.tween_property(_resume_button, "modulate:a", 1.0, CONTENT_IN).set_delay(0.1)
 	_fx_tween.tween_property(_resume_button, "scale", Vector2.ONE, 0.36) \
 		.set_delay(0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_fx_tween.tween_property(_shop_button, "modulate:a", 1.0, CONTENT_IN).set_delay(0.16)
-	_fx_tween.tween_property(_shop_button, "scale", Vector2.ONE, 0.36) \
+	_fx_tween.tween_property(_audio_row, "modulate:a", 1.0, CONTENT_IN).set_delay(0.16)
+	_fx_tween.tween_property(_audio_row, "scale", Vector2.ONE, 0.36) \
 		.set_delay(0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_fx_tween.tween_property(_shop_button, "modulate:a", 1.0, CONTENT_IN).set_delay(0.22)
+	_fx_tween.tween_property(_shop_button, "scale", Vector2.ONE, 0.36) \
+		.set_delay(0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 func _hide() -> void:
@@ -105,6 +133,7 @@ func _hide() -> void:
 	_fx_tween.tween_method(_set_intensity, _intensity, 0.0, FX_OUT)
 	_fx_tween.tween_property(_title, "modulate:a", 0.0, FX_OUT)
 	_fx_tween.tween_property(_resume_button, "modulate:a", 0.0, FX_OUT)
+	_fx_tween.tween_property(_audio_row, "modulate:a", 0.0, FX_OUT)
 	_fx_tween.tween_property(_shop_button, "modulate:a", 0.0, FX_OUT)
 	_fx_tween.tween_callback(_finish_hide).set_delay(FX_OUT)
 
@@ -160,6 +189,9 @@ func _set_intensity(value: float) -> void:
 func _update_pivots() -> void:
 	_title.pivot_offset = _title.size * 0.5
 	_resume_button.pivot_offset = _resume_button.size * 0.5
+	_audio_row.pivot_offset = _audio_row.size * 0.5
+	_music_button.pivot_offset = _music_button.size * 0.5
+	_sfx_button.pivot_offset = _sfx_button.size * 0.5
 	_shop_button.pivot_offset = _shop_button.size * 0.5
 	_cancel_button.pivot_offset = _cancel_button.size * 0.5
 	_confirm_button.pivot_offset = _confirm_button.size * 0.5

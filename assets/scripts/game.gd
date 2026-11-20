@@ -167,10 +167,13 @@ func _on_launch_finished() -> void:
     rocket.auto_shoot = true
     asteroid_spawner.enabled = true
     comet_spawner.enabled = true
+    PlatformIntegration.mark_game_ready()
+    PlatformIntegration.gameplay_started()
 
 
 func _on_rocket_died() -> void:
     PauseManager.abort()
+    PlatformIntegration.gameplay_stopped()
     if run_flow != null:
         run_flow.on_run_dead()
     pause_button.disabled = true
@@ -178,21 +181,24 @@ func _on_rocket_died() -> void:
     GameState.save()
     asteroid_spawner.stop()
     comet_spawner.stop()
-    _begin_meta_progression()
-
-
-func _on_pause_pressed() -> void:
-    PauseManager.pause()
+    # Смерть — естественная пауза забега: показываем рекламу до магазина.
+    PlatformIntegration.show_interstitial()
 
 
 func _on_exit_to_shop_requested() -> void:
+    PlatformIntegration.gameplay_stopped()
     PauseManager.abort()
     if is_instance_valid(rocket) and not rocket.is_dead():
         rocket.force_death()
 
 
 func _exit_tree() -> void:
+    PlatformIntegration.gameplay_stopped()
     PauseManager.reset()
+
+
+func _on_pause_pressed() -> void:
+    PauseManager.pause()
 
 
 func _begin_meta_progression() -> void:

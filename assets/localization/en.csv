@@ -13,6 +13,10 @@ ui_exit_shop_title,End run?,Завершить забег?
 ui_exit_shop_text,"The ship will be destroyed and the run will end. Continue?","Корабль будет разрушен, а забег завершится. Продолжить?"
 ui_confirm,Yes,Да
 ui_cancel,Cancel,Отмена
+ui_music_on,"Music: ON","Музыка: вкл"
+ui_music_off,"Music: OFF","Музыка: выкл"
+ui_sfx_on,"Sounds: ON","Звуки: вкл"
+ui_sfx_off,"Sounds: OFF","Звуки: выкл"
 meta_max_distance,"Max distance: %d%s","Максимальная дистанция: %d%s"
 meta_shop_button,Shop,Магазин
 meta_shop_title,Upgrades,Улучшения
