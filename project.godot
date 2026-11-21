@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Bridge="*res://addons/playgama_bridge/bridge.gd"
+Bridge="*uid://cx4klxojbw6ck"
 Utils="*uid://dud2pgoc6ocuo"
 GameState="*res://assets/scripts/globals/game_state.gd"
 AudioSettings="*res://assets/scripts/globals/audio_settings.gd"
@@ -26,14 +26,6 @@ PlatformIntegration="*res://assets/scripts/globals/platform_integration.gd"
 Transition="*res://assets/scripts/globals/transition.gd"
 Music="*res://assets/scripts/globals/music.gd"
 
-[audio]
-
-buses/default_bus_layout="res://default_bus_layout.tres"
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/playgama_bridge/plugin.cfg")
-
 [display]
 
 window/size/viewport_width=720
@@ -41,6 +33,10 @@ window/size/viewport_height=1280
 window/size/window_width_override=540
 window/size/window_height_override=960
 window/handheld/orientation=1
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/playgama_bridge/plugin.cfg")
 
 [global_group]
 

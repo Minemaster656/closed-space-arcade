@@ -1,13 +1,11 @@
-[gd_resource type="Resource" script_class="CardDef" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="CardDef" format=3 uid="uid://cin52ixa8x8bg"]
 
-[ext_resource type="Script" path="res://assets/scripts/resources/card_def.gd" id="1_def"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrades/upg_damage.png" id="2_icon"]
-[ext_resource type="Script" path="res://assets/scripts/resources/stat_modifier.gd" id="3_mod"]
+[ext_resource type="Script" uid="uid://bde7qmmyh0v0n" path="res://assets/scripts/resources/card_def.gd" id="1_def"]
+[ext_resource type="Texture2D" uid="uid://ctymfcsx5gq5c" path="res://assets/sprites/ui/upgrades/upg_damage.png" id="2_icon"]
+[ext_resource type="Script" uid="uid://dml3uf3cb6buv" path="res://assets/scripts/resources/stat_modifier.gd" id="3_mod"]
 
 [sub_resource type="Resource" id="StatModifier_damage"]
 script = ExtResource("3_mod")
-stat = &"damage"
-operation = "add"
 value = 2.0
 
 [sub_resource type="Resource" id="StatModifier_speed"]
@@ -23,7 +21,6 @@ title_key = "card_overcharge_title"
 description_key = "card_overcharge_desc"
 icon = ExtResource("2_icon")
 rarity = &"rare"
-weight = 1.0
 max_stacks = 1
 tags = Array[StringName]([&"stat", &"damage", &"comet"])
 modifiers = Array[ExtResource("3_mod")]([SubResource("StatModifier_damage"), SubResource("StatModifier_speed")])

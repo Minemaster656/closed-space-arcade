@@ -19,10 +19,10 @@
 [ext_resource type="Script" uid="uid://dpwkur5q11ors" path="res://assets/scripts/managers/shooter_enemy_pool.gd" id="16_epool"]
 [ext_resource type="PackedScene" uid="uid://4xweel8in5xt" path="res://assets/prefabs/shooter_enemy.tscn" id="17_eshooter"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/pause_overlay.tscn" id="18_pause"]
-[ext_resource type="Script" path="res://assets/scripts/components/juicy_button.gd" id="19_juicy"]
+[ext_resource type="Script" uid="uid://f0xd2gobp401" path="res://assets/scripts/components/juicy_button.gd" id="19_juicy"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/vignette.tscn" id="20_vignette"]
-[ext_resource type="PackedScene" path="res://assets/prefabs/comet.tscn" id="21_comet"]
-[ext_resource type="Script" path="res://assets/scripts/managers/comet_spawner.gd" id="22_comet_spawner"]
+[ext_resource type="PackedScene" uid="uid://dmax1aimq3xee" path="res://assets/prefabs/comet.tscn" id="21_comet"]
+[ext_resource type="Script" uid="uid://kw8w56spambb" path="res://assets/scripts/managers/comet_spawner.gd" id="22_comet_spawner"]
 [ext_resource type="Resource" path="res://assets/resources/cards/card_pool.tres" id="23_card_pool"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/reward_overlay.tscn" id="24_reward_overlay"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/xp_bar.tscn" id="25_xp_bar"]
@@ -100,11 +100,11 @@ max_active = 160
 [node name="CometSpawner" type="Node" parent="Managers" unique_id=2011010101]
 script = ExtResource("22_comet_spawner")
 comet_scene = ExtResource("21_comet")
-interval_meters = 50.0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1834101567]
 
-[node name="Vignette" parent="UI" instance=ExtResource("20_vignette")]
+[node name="Vignette" parent="UI" unique_id=1920291255 instance=ExtResource("20_vignette")]
+layout_mode = 3
 
 [node name="MetalCounter" type="Label" parent="UI" unique_id=864372652]
 anchors_preset = 7
@@ -139,7 +139,7 @@ text = "Distance: 0m"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="XPBar" parent="UI" instance=ExtResource("25_xp_bar")]
+[node name="XPBar" parent="UI" unique_id=1077458012 instance=ExtResource("25_xp_bar")]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -154,16 +154,16 @@ offset_left = 20.0
 offset_top = 20.0
 offset_right = 84.0
 offset_bottom = 84.0
+tooltip_text = "ui_pause"
 focus_mode = 0
 theme_override_colors/font_color = Color(0.85, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 26
 text = "II"
-tooltip_text = "ui_pause"
 script = ExtResource("19_juicy")
 
-[node name="PauseOverlay" parent="." instance=ExtResource("18_pause")]
+[node name="PauseOverlay" parent="." unique_id=431203817 instance=ExtResource("18_pause")]
 
-[node name="RewardOverlay" parent="." instance=ExtResource("24_reward_overlay")]
+[node name="RewardOverlay" parent="." unique_id=997286127 instance=ExtResource("24_reward_overlay")]
 
 [node name="Starfield" type="GPUParticles2D" parent="." unique_id=517482068]
 modulate = Color(1, 1, 1, 0.38039216)

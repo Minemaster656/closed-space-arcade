@@ -179,11 +179,11 @@ func _on_rocket_died() -> void:
     pause_button.disabled = true
     GameState.submit_distance(_distance)
     GameState.save()
-	asteroid_spawner.stop()
-	comet_spawner.stop()
-	# Смерть — естественная пауза забега: показываем рекламу до магазина.
-	PlatformIntegration.show_interstitial()
-	_begin_meta_progression()
+    asteroid_spawner.stop()
+    comet_spawner.stop()
+    # Смерть — естественная пауза забега: показываем рекламу до магазина.
+    PlatformIntegration.show_interstitial()
+    _begin_meta_progression()
 
 
 func _on_exit_to_shop_requested() -> void:

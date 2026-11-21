@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="CardDef" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="CardDef" format=3 uid="uid://b6jerw5hr0yyb"]
 
-[ext_resource type="Script" path="res://assets/scripts/resources/card_def.gd" id="1_def"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrades/upg_shoot_freq.png" id="2_icon"]
-[ext_resource type="Script" path="res://assets/scripts/resources/stat_modifier.gd" id="3_mod"]
+[ext_resource type="Script" uid="uid://bde7qmmyh0v0n" path="res://assets/scripts/resources/card_def.gd" id="1_def"]
+[ext_resource type="Texture2D" uid="uid://7bynj8u6bswp" path="res://assets/sprites/ui/upgrades/upg_shoot_freq.png" id="2_icon"]
+[ext_resource type="Script" uid="uid://dml3uf3cb6buv" path="res://assets/scripts/resources/stat_modifier.gd" id="3_mod"]
 
 [sub_resource type="Resource" id="StatModifier_fire_rate"]
 script = ExtResource("3_mod")
@@ -16,7 +16,6 @@ id = &"fire_rate_up"
 title_key = "card_fire_rate_title"
 description_key = "card_fire_rate_desc"
 icon = ExtResource("2_icon")
-rarity = &"common"
 weight = 0.9
 repeat_falloff = 0.7
 max_stacks = 5
