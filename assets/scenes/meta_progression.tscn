@@ -4,6 +4,31 @@
 [ext_resource type="Script" uid="uid://f0xd2gobp401" path="res://assets/scripts/components/juicy_button.gd" id="2_juicy"]
 [ext_resource type="Script" uid="uid://c2842u7awm2yr" path="res://assets/scripts/ui/metal_counter.gd" id="3_metal"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/vignette.tscn" id="4_vignette"]
+[ext_resource type="Texture2D" uid="uid://c3o7cadsqgn4g" path="res://assets/sprites/asteroids/metal_small.png" id="5_metal"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_purchase_bar"]
+bg_color = Color(0.08, 0.22, 0.13, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.78, 0.45, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_point_dot"]
+bg_color = Color(1, 0.88, 0.42, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(1, 0.78, 0.22, 0.45)
+shadow_size = 6
 
 [node name="MetaProgression" type="Control" unique_id=2057652826]
 layout_mode = 3
@@ -141,6 +166,57 @@ text = "ui_metal"
 horizontal_alignment = 2
 script = ExtResource("3_metal")
 
+[node name="PurchaseBar" type="PanelContainer" parent="Pages/ShopPage/Margin/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_purchase_bar")
+
+[node name="Margin" type="MarginContainer" parent="Pages/ShopPage/Margin/VBox/PurchaseBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="HBox" type="HBoxContainer" parent="Pages/ShopPage/Margin/VBox/PurchaseBar/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="NextPoint" type="Label" parent="Pages/ShopPage/Margin/VBox/PurchaseBar/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 20
+text = "meta_next_point"
+vertical_alignment = 1
+
+[node name="BuyPointButton" type="Button" parent="Pages/ShopPage/Margin/VBox/PurchaseBar/Margin/HBox"]
+custom_minimum_size = Vector2(150, 56)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 22
+text = "200"
+icon = ExtResource("5_metal")
+expand_icon = true
+script = ExtResource("2_juicy")
+
+[node name="FreePoints" type="HBoxContainer" parent="Pages/ShopPage/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Dot" type="Panel" parent="Pages/ShopPage/Margin/VBox/FreePoints"]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_point_dot")
+
+[node name="Label" type="Label" parent="Pages/ShopPage/Margin/VBox/FreePoints"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.55, 1)
+theme_override_font_sizes/font_size = 20
+text = "meta_free_points"
+
 [node name="Scroll" type="ScrollContainer" parent="Pages/ShopPage/Margin/VBox" unique_id=701450755]
 layout_mode = 2
 size_flags_vertical = 3
@@ -156,3 +232,12 @@ title = "meta_reset_title"
 ok_button_text = "meta_reset_ok"
 dialog_text = "meta_reset_confirm"
 cancel_button_text = "meta_reset_cancel"
+
+[node name="FxLayer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

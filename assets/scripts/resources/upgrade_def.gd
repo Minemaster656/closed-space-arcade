@@ -1,7 +1,8 @@
 extends Resource
 class_name UpgradeDef
 
-## Описание одного мета-апгрейда: иконка, тексты, лимит уровней и формула цены.
+## Описание одного мета-апгрейда: иконка, тексты и лимит уровней.
+## Цена очков общая для всего магазина и живёт в GameState.
 
 @export_group("Identity")
 @export var id: StringName = &"upgrade"
@@ -14,22 +15,8 @@ class_name UpgradeDef
 @export var max_level: int = 0
 
 @export_group("Unlock")
-## Если задано, покупка разблокирует эту карточку в обычном пуле забега.
+## Если задано, первое вложение очка разблокирует эту карточку в обычном пуле забега.
 @export var unlock_card: CardDef
-
-@export_group("Price")
-## price(level) = ceil(a * level^p + b * level + c)
-## level — количество уже купленных уровней.
-@export var price_a: float = 0.0
-@export var price_p: float = 1.0
-@export var price_b: float = 0.0
-@export var price_c: float = 10.0
-
-
-func price_for_level(level: int) -> int:
-	var l := maxi(level, 0)
-	var price := price_a * pow(float(l), price_p) + price_b * float(l) + price_c
-	return int(ceil(price))
 
 
 func is_maxed(level: int) -> bool:

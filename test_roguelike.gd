@@ -43,7 +43,7 @@ func _test_meta() -> void:
 	_check(GameState.get_upgrade_def(&"projectile_speed").max_level == 1, "projectile speed meta max 1")
 	_check(GameState.get_upgrade_def(&"piercing").max_level == 1, "piercing meta max 1")
 	_check(GameState.get_upgrade_def(&"more_metal").max_level == 1, "more metal meta max 1")
-	_check(GameState.get_upgrade_def(&"damage").price_for_level(0) >= 50, "damage price raised")
+	_check(GameState.get_next_point_price() >= GameState.POINT_PRICE_BASE, "next point price base")
 
 
 func _test_pool(game: Variant) -> void:

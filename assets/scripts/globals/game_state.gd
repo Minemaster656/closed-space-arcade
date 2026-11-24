@@ -4,6 +4,9 @@ signal metal_changed(total: int)
 signal record_distance_changed(value: float)
 signal record_metal_changed(value: int)
 signal upgrades_changed
+signal free_points_changed(value: int)
+signal upgrade_point_allocated(id: StringName)
+signal upgrade_point_deallocated(id: StringName)
 signal loaded
 
 # Gameplay events (interceptable/modifiable by perks via listeners)
@@ -24,7 +27,13 @@ const SETTINGS_SECTION := "settings"
 ## Один ключ на весь прогресс. На вебе он читается и пишется только через
 ## Bridge.storage, чтобы Яндекс/Playgama могли хранить сохранение в облаке.
 const STORAGE_KEY := "closed_space_arcade_save"
-const SAVE_VERSION := 1
+const SAVE_VERSION := 2
+
+## Цена следующего очка: ceil(BASE + GROWTH * n^EXPONENT),
+## где n — количество уже купленных очков (свободные + распределённые).
+const POINT_PRICE_BASE: int = 200
+const POINT_PRICE_GROWTH: float = 8.0
+const POINT_PRICE_EXPONENT: float = 1.5
 
 const UPGRADE_DAMAGE: StringName = &"damage"
 const UPGRADE_FIRE_RATE: StringName = &"fire_rate"
@@ -52,6 +61,8 @@ var metal: int = 0
 var record_distance: float = 0.0
 var record_metal: int = 0
 var upgrade_levels: Dictionary = {}
+## Купленные, но ещё не распределённые очки улучшений.
+var upgrade_points: int = 0
 var unlocked_cards: Dictionary = {}
 var music_muted: bool = false
 var sfx_muted: bool = false
@@ -129,6 +140,7 @@ func reset_save() -> void:
 	record_metal = 0
 	_metal_fraction = 0.0
 	upgrade_levels.clear()
+	upgrade_points = 0
 	unlocked_cards.clear()
 	music_muted = keep_music_muted
 	sfx_muted = keep_sfx_muted
@@ -136,6 +148,7 @@ func reset_save() -> void:
 	metal_changed.emit(metal)
 	record_distance_changed.emit(record_distance)
 	record_metal_changed.emit(record_metal)
+	free_points_changed.emit(upgrade_points)
 	upgrades_changed.emit()
 
 	if _web_storage:
@@ -161,11 +174,33 @@ func get_upgrade_level(id: StringName) -> int:
 	return int(upgrade_levels.get(id, 0))
 
 
-func get_upgrade_price(id: StringName) -> int:
-	var def := get_upgrade_def(id)
-	if def == null:
-		return 0
-	return def.price_for_level(get_upgrade_level(id))
+## Сколько очков улучшений уже куплено всего. Распределение очков
+## по строкам не меняет это число, поэтому цена не «сбрасывается»
+## при перекидывании очков между улучшениями.
+func get_points_purchased() -> int:
+	var total := upgrade_points
+	for id in UPGRADE_ORDER:
+		total += get_upgrade_level(id)
+	return total
+
+
+## Цена следующего очка. n — уже купленные очки, поэтому первое очко
+## стоит 200, второе — 208 и т.д.
+func get_next_point_price() -> int:
+	var n := float(get_points_purchased())
+	var price := float(POINT_PRICE_BASE) + POINT_PRICE_GROWTH * pow(n, POINT_PRICE_EXPONENT)
+	return maxi(1, int(ceil(price)))
+
+
+func has_upgrade_capacity() -> bool:
+	for id in UPGRADE_ORDER:
+		if not is_upgrade_maxed(id):
+			return true
+	return false
+
+
+func can_buy_upgrade_point() -> bool:
+	return has_upgrade_capacity() and metal >= get_next_point_price()
 
 
 func is_upgrade_maxed(id: StringName) -> bool:
@@ -175,10 +210,54 @@ func is_upgrade_maxed(id: StringName) -> bool:
 	return def.is_maxed(get_upgrade_level(id))
 
 
-func can_buy_upgrade(id: StringName) -> bool:
-	if is_upgrade_maxed(id):
+func buy_upgrade_point() -> bool:
+	if not can_buy_upgrade_point():
 		return false
-	return metal >= get_upgrade_price(id)
+	metal -= get_next_point_price()
+	upgrade_points += 1
+	metal_changed.emit(metal)
+	free_points_changed.emit(upgrade_points)
+	upgrades_changed.emit()
+	save()
+	return true
+
+
+func allocate_upgrade_point(id: StringName) -> bool:
+	if upgrade_points <= 0 or is_upgrade_maxed(id):
+		return false
+	var def := get_upgrade_def(id)
+	if def == null:
+		return false
+
+	var level := get_upgrade_level(id)
+	upgrade_levels[id] = level + 1
+	upgrade_points -= 1
+	if def.unlock_card != null:
+		unlocked_cards[def.unlock_card.id] = true
+
+	free_points_changed.emit(upgrade_points)
+	upgrade_point_allocated.emit(id)
+	upgrades_changed.emit()
+	save()
+	return true
+
+
+func deallocate_upgrade_point(id: StringName) -> bool:
+	var level := get_upgrade_level(id)
+	if level <= 0:
+		return false
+
+	if level <= 1:
+		upgrade_levels.erase(id)
+	else:
+		upgrade_levels[id] = level - 1
+	upgrade_points += 1
+
+	free_points_changed.emit(upgrade_points)
+	upgrade_point_deallocated.emit(id)
+	upgrades_changed.emit()
+	save()
+	return true
 
 
 func is_card_unlocked(id: StringName) -> bool:
@@ -191,21 +270,6 @@ func unlock_card(id: StringName) -> void:
 	unlocked_cards[id] = true
 	upgrades_changed.emit()
 	save()
-
-
-func buy_upgrade(id: StringName) -> bool:
-	if not can_buy_upgrade(id):
-		return false
-	var def := get_upgrade_def(id)
-	var level := get_upgrade_level(id)
-	metal -= get_upgrade_price(id)
-	upgrade_levels[id] = level + 1
-	if def != null and def.unlock_card != null:
-		unlocked_cards[def.unlock_card.id] = true
-	metal_changed.emit(metal)
-	upgrades_changed.emit()
-	save()
-	return true
 
 
 func get_damage_bonus() -> float:
@@ -294,6 +358,7 @@ func _build_save_data() -> Dictionary:
 		"record_metal": record_metal,
 		"metal_fraction": _metal_fraction,
 		"upgrade_levels": upgrades,
+		"upgrade_points": upgrade_points,
 		"unlocked_cards": unlocks,
 		"music_muted": music_muted,
 		"sfx_muted": sfx_muted,
@@ -305,6 +370,7 @@ func _apply_save_data(data: Dictionary) -> void:
 	metal = int(data.get("metal", 0))
 	record_metal = int(data.get("record_metal", 0))
 	_metal_fraction = float(data.get("metal_fraction", 0.0))
+	upgrade_points = maxi(int(data.get("upgrade_points", 0)), 0)
 	music_muted = bool(data.get("music_muted", false))
 	sfx_muted = bool(data.get("sfx_muted", false))
 
@@ -313,8 +379,14 @@ func _apply_save_data(data: Dictionary) -> void:
 	if typeof(upgrades) == TYPE_DICTIONARY:
 		for key in upgrades:
 			var id := StringName(key)
-			if UPGRADE_DEFS.has(id):
-				upgrade_levels[id] = int(upgrades[key])
+			var def := get_upgrade_def(id)
+			if def == null:
+				continue
+			var level := maxi(int(upgrades[key]), 0)
+			if def.max_level > 0:
+				level = mini(level, def.max_level)
+			if level > 0:
+				upgrade_levels[id] = level
 
 	unlocked_cards.clear()
 	var unlocks: Variant = data.get("unlocked_cards", {})
@@ -326,6 +398,7 @@ func _apply_save_data(data: Dictionary) -> void:
 	metal_changed.emit(metal)
 	record_distance_changed.emit(record_distance)
 	record_metal_changed.emit(record_metal)
+	free_points_changed.emit(upgrade_points)
 	upgrades_changed.emit()
 
 
@@ -376,6 +449,7 @@ func _load_local_save() -> void:
 			if level > 0:
 				upgrades[String(id)] = level
 		data["upgrade_levels"] = upgrades
+		data["upgrade_points"] = maxi(int(cfg.get_value(UPGRADES_SECTION, "points", 0)), 0)
 
 		var unlocks: Dictionary = {}
 		if cfg.has_section(UNLOCKS_SECTION):
@@ -431,6 +505,7 @@ func _save_local_save(data: Dictionary) -> void:
 	if typeof(upgrades) == TYPE_DICTIONARY:
 		for key in upgrades:
 			cfg.set_value(UPGRADES_SECTION, String(key), int(upgrades[key]))
+	cfg.set_value(UPGRADES_SECTION, "points", int(data.get("upgrade_points", 0)))
 
 	var unlocks: Variant = data.get("unlocked_cards", {})
 	if typeof(unlocks) == TYPE_DICTIONARY:

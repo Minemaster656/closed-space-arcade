@@ -1,28 +1,34 @@
 extends Control
 class_name UpgradeRow
 
-## Одна карточка апгрейда: иконка, название/описание, уровень и кнопка цены.
-## Строка не покупает апгрейд сама — она только сообщает менеджеру магазина,
-## что игрок нажал на цену. Это позволяет управлять покупкой из одного места.
+## Одна карточка апгрейда: иконка, название/описание, уровень и кнопки +/−.
+## Строка не меняет состояние сама — она только сообщает менеджеру магазина,
+## какое действие игрок хочет выполнить.
 
-signal purchase_requested(id: StringName)
-signal purchase_succeeded(id: StringName)
-signal purchase_failed(id: StringName)
+signal allocate_requested(id: StringName)
+signal deallocate_requested(id: StringName)
 
 @onready var _icon: TextureRect = $Margin/HBox/Icon
 @onready var _name_label: Label = $Margin/HBox/Info/Name
 @onready var _desc_label: Label = $Margin/HBox/Info/Desc
 @onready var _level_label: Label = $Margin/HBox/Info/Level
-@onready var _price_button: JuicyButton = $Margin/HBox/PriceButton
+@onready var _minus_button: JuicyButton = $Margin/HBox/Actions/MinusButton
+@onready var _plus_button: JuicyButton = $Margin/HBox/Actions/PlusButton
 
 var _def: UpgradeDef
 var _flash_tween: Tween
+var _level_tween: Tween
 
 
 func _ready() -> void:
 	resized.connect(_update_pivot)
+	_level_label.resized.connect(_update_level_pivot)
 	_update_pivot()
-	_price_button.pressed.connect(_on_price_pressed)
+	_update_level_pivot()
+	_minus_button.pressed.connect(_on_minus_pressed)
+	_plus_button.pressed.connect(_on_plus_pressed)
+	_minus_button.tooltip_text = tr("upgrade_minus_tip")
+	_plus_button.tooltip_text = tr("upgrade_plus_tip")
 
 
 ## Задать апгрейд. Вызывается менеджером магазина после instantiate().
@@ -34,26 +40,6 @@ func setup(def: UpgradeDef) -> void:
 	_name_label.text = tr(_def.title_key)
 	_desc_label.text = tr(_def.description_key)
 	refresh()
-
-
-## Полная установка отображаемых значений. Можно вызывать снаружи,
-## если строке нужно показать не стандартные данные из UpgradeDef.
-func set_values(
-	title_text: String,
-	description_text: String,
-	icon_texture: Texture2D,
-	level_text: String,
-	price_text: String,
-	is_maxed: bool,
-	can_afford: bool
-) -> void:
-	_icon.texture = icon_texture
-	_name_label.text = title_text
-	_desc_label.text = description_text
-	_level_label.text = level_text
-	_price_button.text = price_text
-	_price_button.disabled = is_maxed
-	_price_button.modulate = Color.WHITE if (is_maxed or can_afford) else Color(1.0, 1.0, 1.0, 0.55)
 
 
 func get_upgrade_id() -> StringName:
@@ -73,37 +59,61 @@ func refresh() -> void:
 		level_text = tr("upgrade_level_limited") % [level, _def.max_level]
 	else:
 		level_text = tr("upgrade_level") % level
+	_level_label.text = level_text
 
-	var price := _def.price_for_level(level)
-	var price_text := tr("upgrade_max") if maxed else str(price)
-	var can_afford := GameState.metal >= price
+	_minus_button.disabled = level <= 0
+	_plus_button.disabled = maxed or GameState.upgrade_points <= 0
+	_plus_button.tooltip_text = tr("upgrade_max") if maxed else tr("upgrade_plus_tip")
 
-	set_values(
-		tr(_def.title_key),
-		tr(_def.description_key),
-		_def.icon,
-		level_text,
-		price_text,
-		maxed,
-		can_afford
-	)
+	# Приглушаем недоступную кнопку, чтобы состояние читалось без наведения.
+	_minus_button.modulate.a = 1.0 if not _minus_button.disabled else 0.55
+	_plus_button.modulate.a = 1.0 if not _plus_button.disabled else 0.55
 
 
-## Показать результат покупки. Вызывает менеджер магазина.
-func notify_purchase_result(success: bool) -> void:
+## Визуальный отклик на попытку вложить/снять очко.
+func notify_allocation_result(success: bool, added: bool) -> void:
 	if success:
-		_price_button.punch(1.16)
-		_flash(Color(0.45, 1.0, 0.55, 1.0))
-		purchase_succeeded.emit(get_upgrade_id())
+		if added:
+			_plus_button.punch(1.12)
+			_flash(Color(0.5, 1.0, 0.62, 1.0))
+		else:
+			_minus_button.punch(1.12)
+			_flash(Color(1.0, 0.78, 0.5, 1.0))
 	else:
-		_price_button.shake()
-		_flash(Color(1.0, 0.3, 0.3, 1.0))
-		purchase_failed.emit(get_upgrade_id())
+		if added:
+			_plus_button.shake()
+		else:
+			_minus_button.shake()
+		_flash(Color(1.0, 0.35, 0.35, 1.0))
 
 
-func _on_price_pressed() -> void:
+## Пунч уровня в момент, когда к строке «прилетело» очко.
+func bump_level() -> void:
+	if _level_tween != null and _level_tween.is_valid():
+		_level_tween.kill()
+	_level_label.pivot_offset = _level_label.size * 0.5
+	_level_label.scale = Vector2.ONE * 1.28
+	_level_label.modulate = Color(1.0, 0.95, 0.55, 1.0)
+	_level_tween = create_tween().set_parallel(true)
+	_level_tween.tween_property(_level_label, "scale", Vector2.ONE, 0.28) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_level_tween.tween_property(_level_label, "modulate", Color.WHITE, 0.35)
+
+
+## Куда летит очко: центр кнопки + или − в глобальных координатах.
+func get_action_anchor(added: bool) -> Vector2:
+	var button := _plus_button if added else _minus_button
+	return button.get_global_rect().get_center()
+
+
+func _on_minus_pressed() -> void:
 	if _def != null:
-		purchase_requested.emit(_def.id)
+		deallocate_requested.emit(_def.id)
+
+
+func _on_plus_pressed() -> void:
+	if _def != null:
+		allocate_requested.emit(_def.id)
 
 
 func _flash(color: Color) -> void:
@@ -116,3 +126,7 @@ func _flash(color: Color) -> void:
 
 func _update_pivot() -> void:
 	pivot_offset = size * 0.5
+
+
+func _update_level_pivot() -> void:
+	_level_label.pivot_offset = _level_label.size * 0.5

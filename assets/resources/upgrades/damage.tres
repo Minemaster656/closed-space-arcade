@@ -10,6 +10,3 @@ title_key = "upgrade_damage_title"
 description_key = "upgrade_damage_desc"
 icon = ExtResource("2_icon")
 max_level = 5
-price_a = 25.0
-price_p = 1.8
-price_c = 50.0

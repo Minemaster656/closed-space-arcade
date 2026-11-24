@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://cv5e4mawriwsn" path="res://assets/scripts/ui/upgrade_row.gd" id="1_row"]
 [ext_resource type="Script" uid="uid://f0xd2gobp401" path="res://assets/scripts/components/juicy_button.gd" id="2_btn"]
 [ext_resource type="Texture2D" uid="uid://d0wwvcc2cfqsj" path="res://assets/sprites/ui/upgrade_frame_tileable.png" id="3_frame"]
-[ext_resource type="Texture2D" uid="uid://c3o7cadsqgn4g" path="res://assets/sprites/asteroids/metal_small.png" id="4_metal"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_row"]
 bg_color = Color(0.055, 0.065, 0.1, 0.94)
@@ -23,6 +22,90 @@ font_size = 20
 
 [sub_resource type="LabelSettings" id="LabelSettings_yfo1m"]
 font_color = Color(1, 1, 0.58431375, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_plus_normal"]
+bg_color = Color(0.12, 0.32, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.78, 0.45, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_plus_hover"]
+bg_color = Color(0.18, 0.45, 0.28, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42, 0.95, 0.58, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_plus_pressed"]
+bg_color = Color(0.08, 0.24, 0.14, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.24, 0.62, 0.36, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_minus_normal"]
+bg_color = Color(0.34, 0.12, 0.14, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.82, 0.32, 0.36, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_minus_hover"]
+bg_color = Color(0.46, 0.17, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.45, 0.48, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_minus_pressed"]
+bg_color = Color(0.26, 0.08, 0.1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.62, 0.24, 0.28, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_action_disabled"]
+bg_color = Color(0.09, 0.1, 0.14, 0.7)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.22, 0.28, 0.7)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [node name="UpgradeRow" type="Control" unique_id=1348327167]
 custom_minimum_size = Vector2(0, 112)
@@ -104,12 +187,33 @@ theme_override_font_sizes/font_size = 14
 text = "Lv. 0"
 label_settings = SubResource("LabelSettings_yfo1m")
 
-[node name="PriceButton" type="Button" parent="Margin/HBox" unique_id=679146299]
-custom_minimum_size = Vector2(104, 64)
+[node name="Actions" type="HBoxContainer" parent="Margin/HBox" unique_id=679146299]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 22
-text = "10"
-icon = ExtResource("4_metal")
-expand_icon = true
+theme_override_constants/separation = 8
+
+[node name="MinusButton" type="Button" parent="Margin/HBox/Actions" unique_id=1432987071]
+custom_minimum_size = Vector2(58, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.72, 0.72, 1)
+theme_override_colors/font_disabled_color = Color(0.5, 0.5, 0.56, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBox_minus_normal")
+theme_override_styles/hover = SubResource("StyleBox_minus_hover")
+theme_override_styles/pressed = SubResource("StyleBox_minus_pressed")
+theme_override_styles/disabled = SubResource("StyleBox_action_disabled")
+text = "−"
+script = ExtResource("2_btn")
+
+[node name="PlusButton" type="Button" parent="Margin/HBox/Actions" unique_id=1289423581]
+custom_minimum_size = Vector2(58, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 1, 0.78, 1)
+theme_override_colors/font_disabled_color = Color(0.5, 0.5, 0.56, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBox_plus_normal")
+theme_override_styles/hover = SubResource("StyleBox_plus_hover")
+theme_override_styles/pressed = SubResource("StyleBox_plus_pressed")
+theme_override_styles/disabled = SubResource("StyleBox_action_disabled")
+text = "+"
 script = ExtResource("2_btn")

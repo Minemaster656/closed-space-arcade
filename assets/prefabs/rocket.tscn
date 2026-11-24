@@ -28,10 +28,6 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_351fr"]
 curve = SubResource("Curve_rsogh")
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rocket"]
-radius = 14.0
-height = 70.0
-
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7y8sj"]
 lifetime_randomness = 0.05
 particle_flag_disable_z = true
@@ -49,6 +45,10 @@ color_ramp = SubResource("GradientTexture1D_lpcn6")
 color_initial_ramp = SubResource("GradientTexture1D_3oug3")
 turbulence_noise_strength = 0.19
 turbulence_noise_scale = 3.97
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rocket"]
+radius = 14.0
+height = 70.0
 
 [node name="Rocket" type="Node2D" unique_id=1685500372 groups=["player"]]
 script = ExtResource("1_rsogh")

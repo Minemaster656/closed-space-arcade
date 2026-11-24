@@ -26,9 +26,14 @@ meta_reset_title,Reset save,Сброс сохранения
 meta_reset_confirm,"Delete all progress: metal, record and upgrades?","Удалить весь прогресс: металл, рекорд и улучшения?"
 meta_reset_ok,Reset,Сбросить
 meta_reset_cancel,Cancel,Отмена
+meta_next_point,Next upgrade point:,Следующее очко улучшений:
+meta_free_points,Free upgrade points: %d,Свободные очки улучшений: %d
+meta_all_maxed,All upgrades maxed,Все улучшения максимальны
 upgrade_level,Lv. %d,Ур. %d
 upgrade_level_limited,Lv. %d/%d,Ур. %d/%d
 upgrade_max,MAX,МАКС
+upgrade_plus_tip,Spend one free point,Потратить одно свободное очко
+upgrade_minus_tip,Return one point to the pool,Вернуть одно очко в запас
 upgrade_damage_title,Damage,Урон
 upgrade_damage_desc,+1 bullet damage per level. Max 5.,+1 урона пули за уровень. Максимум 5.
 upgrade_fire_rate_title,Fire rate,Скорострельность
