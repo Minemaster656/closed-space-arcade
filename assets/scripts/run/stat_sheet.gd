@@ -21,6 +21,16 @@ func add_modifier(modifier: StatModifier) -> void:
 	recalculate()
 
 
+func remove_modifier(modifier: StatModifier) -> void:
+	if modifier == null:
+		return
+	var index := _modifiers.find(modifier)
+	if index < 0:
+		return
+	_modifiers.remove_at(index)
+	recalculate()
+
+
 func clear_modifiers() -> void:
 	_modifiers.clear()
 	recalculate()

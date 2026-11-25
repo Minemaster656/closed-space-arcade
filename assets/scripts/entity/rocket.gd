@@ -11,6 +11,10 @@ signal died
 @export var bullet_pierce: int = 0
 @export var auto_shoot: bool = true
 
+@export_group("Movement")
+## Множитель скорости следования за пальцем (1 — обычная, 0.85 — замедление).
+@export var move_speed_multiplier: float = 1.0
+
 @export_group("Danger")
 @export var shake_strength_min: float = 0.35
 @export var shake_strength_max: float = 3.0
@@ -34,6 +38,7 @@ func _ready() -> void:
 	_hurtbox.area_entered.connect(_on_hurtbox_area_entered)
 	_sprite.strength = shake_strength_min
 	_break_sound.volume_db = break_sound_volume_db
+	_finger_follower.speed_multiplier = move_speed_multiplier
 
 
 func _process(delta: float) -> void:
@@ -66,6 +71,12 @@ func set_danger(multiplier: float) -> void:
 		return
 	var base := lerpf(shake_strength_min, shake_strength_max, 0.5)
 	_sprite.strength = base * multiplier * 0.5
+
+
+func set_move_speed(multiplier: float) -> void:
+	move_speed_multiplier = clampf(multiplier, 0.05, 5.0)
+	if is_instance_valid(_finger_follower):
+		_finger_follower.speed_multiplier = move_speed_multiplier
 
 
 func _shoot() -> void:
@@ -110,6 +121,9 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 	if asteroid != null and asteroid.is_collectible():
 		asteroid.collect()
 		return
+
+	if asteroid != null:
+		asteroid.on_rocket_collision(self)
 
 	if area.is_in_group("collision_damage"):
 		var hit_damage := 1.0

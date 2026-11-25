@@ -3,6 +3,7 @@ class_name FollowFinger2D
 
 @export var target: Node2D                  ## Что двигаем (если null — двигаем родителя)
 @export var follow_speed: float = 12.0      ## Больше — резче
+@export_range(0.05, 3.0, 0.01) var speed_multiplier: float = 1.0  ## Замедление/ускорение следования
 @export var finger_offset: Vector2 = Vector2.ZERO
 
 @export_group("Rect")
@@ -92,5 +93,5 @@ func _apply_position(global_pos: Vector2) -> void:
 func _process(delta: float) -> void:
 	if not _dragging or target == null:
 		return
-	var t := 1.0 - exp(-follow_speed * delta)
+	var t := 1.0 - exp(-follow_speed * speed_multiplier * delta)
 	_apply_position(target.global_position.lerp(_target_global, t))

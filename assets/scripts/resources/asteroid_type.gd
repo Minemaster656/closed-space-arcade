@@ -9,6 +9,8 @@ class_name AsteroidType
 
 @export_group("Spawn")
 @export_range(0.0, 10.0, 0.01) var weight: float = 1.0
+## Независимый шанс спавна (0..1), проверяется до взвешенного выбора.
+@export_range(0.0, 1.0, 0.01) var spawn_chance: float = 0.0
 @export var min_speed: float = 50.0
 @export var max_speed: float = 120.0
 
@@ -17,6 +19,10 @@ class_name AsteroidType
 @export var damage: float = 1.0
 @export var damageable: bool = true
 @export var harmful: bool = true
+## Бафф/дебафф, который накладывается при столкновении с ракетой.
+@export var collision_buff: BuffDef
+## Разбить астероид при столкновении с ракетой без дропа и без XP.
+@export var break_on_rocket_collision: bool = false
 
 @export_group("Visuals")
 ## Набор текстур типа. Вариант выбирается случайно при спавне.
@@ -37,3 +43,5 @@ class_name AsteroidType
 @export_group("Experience")
 ## Сколько XP получает игрок за уничтожение этого типа.
 @export var xp_value: int = 1
+## Множитель к xp_value (например, 5.0 для редкого ледяного астероида).
+@export var xp_multiplier: float = 1.0

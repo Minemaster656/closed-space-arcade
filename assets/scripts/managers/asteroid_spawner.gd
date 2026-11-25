@@ -55,7 +55,9 @@ func _spawn() -> void:
 		return
 
 	_apply_distance_weights()
-	var type := _pick_type()
+	var type := _pick_rare_type()
+	if type == null:
+		type = _pick_type()
 	if type == null:
 		return
 
@@ -122,5 +124,15 @@ func _pick_type() -> AsteroidType:
 			continue
 		roll -= type.weight
 		if roll <= 0.0:
+			return type
+	return null
+
+
+## Редкие типы с независимым шансом (например, ледяной астероид).
+func _pick_rare_type() -> AsteroidType:
+	for type in types:
+		if type == null or type.spawn_chance <= 0.0:
+			continue
+		if randf() < type.spawn_chance:
 			return type
 	return null

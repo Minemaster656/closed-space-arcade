@@ -19,6 +19,7 @@ const META_SCENE: String = "res://assets/scenes/meta_progression.tscn"
 @onready var ambient: CanvasModulate = $CanvasModulate
 @onready var score_label: Label = $UI/ScoreCounter
 @onready var xp_bar: RunXpBar = $UI/XPBar
+@onready var buff_hud: BuffHud = $UI/BuffHud
 @onready var pause_button: Button = $UI/PauseButton
 @onready var start_platform: ColorRect = $StartPlatform
 @onready var reward_overlay: RewardOverlay = $RewardOverlay
@@ -66,6 +67,7 @@ func _setup_run() -> void:
     add_child(run_context)
     run_context.setup(rocket, self, asteroid_spawner, comet_spawner, card_pool)
     xp_bar.setup(run_context.progression)
+    buff_hud.setup(run_context.buffs)
     comet_spawner.run_context = run_context
 
     run_flow = RunFlow.new()

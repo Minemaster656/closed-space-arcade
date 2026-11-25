@@ -11,6 +11,7 @@ var comet_spawner: Node
 var card_pool: CardPool
 
 var stats: StatSheet = StatSheet.new()
+var buffs: BuffSystem
 var behavior_root: Node
 var progression: RunProgression
 var card_counts: Dictionary = {}
@@ -47,7 +48,13 @@ func setup(
 	stats.set_base(&"bullet_speed", rocket.bullet_speed)
 	stats.set_base(&"bullet_pierce", float(rocket.bullet_pierce))
 	stats.set_base(&"hp", rocket.hp)
+	stats.set_base(&"move_speed", 1.0)
 	stats.recalculate()
+
+	buffs = BuffSystem.new()
+	buffs.name = "Buffs"
+	add_child(buffs)
+	buffs.setup(self)
 
 
 ## Применяет карточку. Возвращает false, если достигнут лимит стаков.
@@ -90,6 +97,16 @@ func get_stat(stat: StringName, fallback: float = 0.0) -> float:
 	return stats.get_value(stat, fallback)
 
 
+## Удобный вход для карточек/поведений, которым нужно наложить бафф.
+func apply_buff(def: BuffDef, event: Dictionary = {}) -> BuffInstance:
+	return buffs.apply(def, event) if buffs != null else null
+
+
+## Применяет текущие статы к ракете. Нужен баффам после добавления/снятия модификаторов.
+func apply_stats() -> void:
+	_apply_stats()
+
+
 func _apply_stats() -> void:
 	if rocket == null:
 		return
@@ -98,3 +115,4 @@ func _apply_stats() -> void:
 	rocket.bullet_speed = get_stat(&"bullet_speed", rocket.bullet_speed)
 	rocket.bullet_pierce = int(round(get_stat(&"bullet_pierce", float(rocket.bullet_pierce))))
 	rocket.hp = maxi(1, int(round(get_stat(&"hp", float(rocket.hp)))))
+	rocket.set_move_speed(get_stat(&"move_speed", 1.0))

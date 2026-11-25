@@ -17,6 +17,8 @@ signal projectile_hit_meteor(event: Dictionary)
 signal meteor_shatter_requested(event: Dictionary)
 signal asteroid_destroyed(event: Dictionary)
 signal xp_granted(amount: int)
+## Запрос на наложение временного баффа/дебаффа.
+signal buff_requested(buff: BuffDef, event: Dictionary)
 
 const SAVE_PATH := "user://save.cfg"
 const SAVE_SECTION := "records"

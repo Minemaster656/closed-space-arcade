@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="BuffDef" format=3 uid="uid://b1ksn8pt0ici1"]
+
+[ext_resource type="Script" uid="uid://durwxwaunrxw" path="res://assets/scripts/resources/buff_def.gd" id="1_def"]
+[ext_resource type="Texture2D" uid="uid://c4hc6l3upa30l" path="res://assets/sprites/asteroids/asteroid_ice.png" id="2_icon"]
+[ext_resource type="Script" uid="uid://dml3uf3cb6buv" path="res://assets/scripts/resources/stat_modifier.gd" id="3_mod"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/buffs/slow_buff_handler.tscn" id="4_handler"]
+
+[sub_resource type="Resource" id="StatModifier_slow"]
+script = ExtResource("3_mod")
+stat = &"move_speed"
+operation = "mul"
+value = 0.85
+
+[resource]
+script = ExtResource("1_def")
+id = &"slow"
+display_name = "Slow"
+icon = ExtResource("2_icon")
+duration = 10.0
+reapply_mode = "refresh"
+max_stacks = 1
+is_debuff = true
+modifiers = Array[ExtResource("3_mod")]([SubResource("StatModifier_slow")])
+handlers = Array[PackedScene]([ExtResource("4_handler")])

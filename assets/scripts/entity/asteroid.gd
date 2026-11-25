@@ -174,6 +174,26 @@ func collect() -> void:
     _collect()
 
 
+## Вызывается ракетой при касании. Может наложить бафф и/или разбить астероид.
+func on_rocket_collision(rocket: Node) -> void:
+    if _dead or type == null:
+        return
+    if type.collision_buff != null:
+        GameState.buff_requested.emit(type.collision_buff, {
+            "source": self,
+            "rocket": rocket,
+            "position": global_position,
+        })
+    if type.break_on_rocket_collision:
+        _break_without_reward()
+
+
+func _xp_reward() -> int:
+    if type == null:
+        return 0
+    return int(round(float(type.xp_value) * maxf(0.0, type.xp_multiplier)))
+
+
 func park() -> void:
     _dead = true
     _kill_tweens()
@@ -225,7 +245,7 @@ func _shatter() -> void:
         "child_type": type.child_type if type != null else null,
         "child_min": type.child_min if type != null else 0,
         "child_max": type.child_max if type != null else 0,
-        "xp": type.xp_value if type != null else 0,
+        "xp": _xp_reward(),
         "handled": false,
     }
     GameState.meteor_shatter_requested.emit(event)
@@ -283,7 +303,7 @@ func _collect() -> void:
         return
     _dead = true
     GameState.add_metal(type.metal_value)
-    GameState.xp_granted.emit(type.xp_value)
+    GameState.xp_granted.emit(_xp_reward())
     if _spawn_tween != null and _spawn_tween.is_valid():
         _spawn_tween.kill()
     _spawn_tween = create_tween().set_parallel(true)
@@ -294,6 +314,28 @@ func _collect() -> void:
 
 
 func _on_collect_finished() -> void:
+    despawned.emit(self)
+
+
+## Разбитие без дропа и XP — например, ледяной астероид об ракету.
+func _break_without_reward() -> void:
+    if _dead:
+        return
+    _dead = true
+    _kill_tweens()
+    remove_from_group(GROUP_DAMAGEABLE)
+    remove_from_group(GROUP_COLLISION_DAMAGE)
+    set_deferred("monitorable", false)
+    hp_bar.hide_bar()
+
+    var tween := create_tween().set_parallel(true)
+    tween.tween_property(self, "scale", Vector2.ZERO, 0.12) \
+        .set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+    tween.tween_property(self, "modulate:a", 0.0, 0.12)
+    tween.finished.connect(_on_break_without_reward_finished)
+
+
+func _on_break_without_reward_finished() -> void:
     despawned.emit(self)
 
 
