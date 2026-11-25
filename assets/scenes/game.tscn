@@ -7,16 +7,11 @@
 [ext_resource type="PackedScene" uid="uid://dmqhece1lhs1f" path="res://assets/prefabs/asteroid.tscn" id="4_ast_scene"]
 [ext_resource type="Script" uid="uid://cnr166p0xqc6b" path="res://assets/scripts/managers/asteroid_pool.gd" id="5_ast_pool"]
 [ext_resource type="Script" uid="uid://bemgjchgbji8d" path="res://assets/scripts/managers/asteroid_spawner.gd" id="6_spawner"]
-[ext_resource type="Script" uid="uid://fpfwvm4d1oyk" path="res://assets/scripts/resources/asteroid_type.gd" id="7_ast_type"]
-[ext_resource type="Resource" path="res://assets/resources/asteroids/large.tres" id="8_large"]
-[ext_resource type="Resource" path="res://assets/resources/asteroids/medium.tres" id="9_medium"]
-[ext_resource type="Resource" path="res://assets/resources/asteroids/small.tres" id="10_small"]
 [ext_resource type="Script" uid="uid://crsv826ymna7t" path="res://assets/scripts/game.gd" id="11_game"]
 [ext_resource type="Script" uid="uid://c2842u7awm2yr" path="res://assets/scripts/ui/metal_counter.gd" id="12_metal"]
-[ext_resource type="Resource" path="res://assets/resources/asteroids/shooter.tres" id="13_shooter"]
 [ext_resource type="Script" uid="uid://ca64lsdftha4h" path="res://assets/scripts/managers/enemy_bullet_pool.gd" id="14_ebp"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/enemy_bullet.tscn" id="15_ebullet"]
-[ext_resource type="Script" uid="uid://dpwkur5q11ors" path="res://assets/scripts/managers/shooter_enemy_pool.gd" id="16_epool"]
+[ext_resource type="Script" path="res://assets/scripts/managers/enemy_pool.gd" id="16_epool"]
 [ext_resource type="PackedScene" uid="uid://4xweel8in5xt" path="res://assets/prefabs/shooter_enemy.tscn" id="17_eshooter"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/pause_overlay.tscn" id="18_pause"]
 [ext_resource type="Script" uid="uid://f0xd2gobp401" path="res://assets/scripts/components/juicy_button.gd" id="19_juicy"]
@@ -27,7 +22,7 @@
 [ext_resource type="PackedScene" path="res://assets/prefabs/reward_overlay.tscn" id="24_reward_overlay"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/xp_bar.tscn" id="25_xp_bar"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/buff_hud.tscn" id="26_buff_hud"]
-[ext_resource type="Resource" path="res://assets/resources/asteroids/ice.tres" id="27_ice"]
+[ext_resource type="Resource" path="res://assets/resources/locations/first_location.tres" id="28_location"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_stars"]
 particles_animation = true
@@ -85,18 +80,19 @@ bullet_scene = ExtResource("15_ebullet")
 
 [node name="EnemyPool" type="Node2D" parent="Managers" unique_id=280912482]
 script = ExtResource("16_epool")
-scene = ExtResource("17_eshooter")
+default_scene = ExtResource("17_eshooter")
+prewarm_per_scene = 8
 
 [node name="AsteroidPool" type="Node2D" parent="Managers" unique_id=1393017530]
 script = ExtResource("5_ast_pool")
 default_scene = ExtResource("4_ast_scene")
 prewarm_per_scene = 192
 
-[node name="AsteroidSpawner" type="Node" parent="Managers" unique_id=454640812 node_paths=PackedStringArray("asteroid_pool", "shooter_pool")]
+[node name="AsteroidSpawner" type="Node" parent="Managers" unique_id=454640812 node_paths=PackedStringArray("asteroid_pool", "enemy_pool")]
 script = ExtResource("6_spawner")
 asteroid_pool = NodePath("../AsteroidPool")
-types = Array[ExtResource("7_ast_type")]([ExtResource("8_large"), ExtResource("9_medium"), ExtResource("10_small"), ExtResource("13_shooter"), ExtResource("27_ice")])
-shooter_pool = NodePath("../EnemyPool")
+enemy_pool = NodePath("../EnemyPool")
+location = ExtResource("28_location")
 max_active = 160
 
 [node name="CometSpawner" type="Node" parent="Managers" unique_id=2011010101]

@@ -1,11 +1,13 @@
 extends Node
 class_name AsteroidSpawner
 
-const SHOOTER_RATE_DIVIDER: float = 3.0
+## Спавнер объектов активной локации. Не знает о конкретных астероидах/врагах:
+## берёт взвешенную запись из LocationDef и просит SpawnUtil заспавнить её.
+## Тиры сложности и редкие типы тоже описаны данными (SpawnEntry), а не хардкодом.
 
 @export var asteroid_pool: AsteroidPool
-@export var types: Array[AsteroidType] = []
-@export var shooter_pool: ShooterEnemyPool
+@export var enemy_pool: EnemyPool
+@export var location: LocationDef
 
 @export_group("Spawn rate")
 @export var base_interval: float = 1.1
@@ -23,13 +25,11 @@ var distance: float = 0.0
 var enabled: bool = true
 
 var _timer: float = 0.0
-var _total_weight: float = 0.0
-var _last_tier: int = -1
+var _tier: int = -1
 
 
 func _ready() -> void:
 	_timer = base_interval
-	_apply_distance_weights()
 
 
 func _process(delta: float) -> void:
@@ -54,85 +54,67 @@ func _spawn() -> void:
 	if asteroid_pool.active_count >= max_active:
 		return
 
-	_apply_distance_weights()
-	var type := _pick_rare_type()
-	if type == null:
-		type = _pick_type()
-	if type == null:
-		return
-
-	if type.id == &"shooter":
-		_spawn_shooter()
+	_update_tier()
+	var entry := _pick_entry()
+	if entry == null:
 		return
 
 	var rect := Utils.get_visible_world_rect()
 	var spawn_x := randf_range(rect.position.x + horizontal_padding, rect.end.x - horizontal_padding)
 	var spawn_y := rect.position.y - spawn_margin
 	var direction := Vector2.DOWN.rotated(randf_range(-horizontal_spread, horizontal_spread))
-	var speed := randf_range(type.min_speed, type.max_speed)
-	asteroid_pool.spawn(type, Vector2(spawn_x, spawn_y), direction, speed)
+	SpawnUtil.spawn(entry.spawn, Vector2(spawn_x, spawn_y), direction, 0.0)
 
 
-func _spawn_shooter() -> void:
-	if shooter_pool == null:
+func _update_tier() -> void:
+	var tier := _tier_for_distance()
+	if tier == _tier:
 		return
-	var rect := Utils.get_visible_world_rect()
-	var spawn_x := randf_range(rect.position.x + horizontal_padding, rect.end.x - horizontal_padding)
-	var spawn_y := rect.position.y - spawn_margin
-	shooter_pool.spawn(Vector2(spawn_x, spawn_y))
+	_tier = tier
 
 
-func _apply_distance_weights() -> void:
-	var tier: int
+func _tier_for_distance() -> int:
 	if distance < 5.0:
-		tier = 0
+		return 0
 	elif distance < 10.0:
-		tier = 1
+		return 1
 	elif distance < 20.0:
-		tier = 2
-	else:
-		tier = 3
-	if tier == _last_tier:
-		return
-	_last_tier = tier
-	for t in types:
-		if t == null:
-			continue
-		match t.id:
-			&"medium_asteroid", &"medium":
-				t.weight = 1.0 if tier == 0 else (1.0 if tier == 1 else (1.0 if tier == 2 else 3.0))
-			&"large_asteroid", &"large":
-				t.weight = 0.0 if tier == 0 else (1.0 if tier == 1 else (1.0 if tier == 2 else 5.0))
-			&"shooter":
-				t.weight = (0.0 if tier < 2 else (1.0 if tier == 2 else 3.0)) / SHOOTER_RATE_DIVIDER
-	_recalculate_weights()
+		return 2
+	return 3
 
 
-func _recalculate_weights() -> void:
-	_total_weight = 0.0
-	for type in types:
-		if type != null and type.weight > 0.0:
-			_total_weight += type.weight
-
-
-func _pick_type() -> AsteroidType:
-	if _total_weight <= 0.0:
+func _pick_entry() -> SpawnEntry:
+	if location == null:
 		return null
-	var roll := randf() * _total_weight
-	for type in types:
-		if type == null or type.weight <= 0.0:
+
+	# Сначала редкие типы с независимым шансом.
+	for entry in location.entries:
+		if entry == null or entry.spawn == null or entry.spawn_chance <= 0.0:
 			continue
-		roll -= type.weight
+		if randf() < entry.spawn_chance:
+			return entry
+
+	var total := 0.0
+	for entry in location.entries:
+		total += _entry_weight(entry)
+	if total <= 0.0:
+		return null
+
+	var roll := randf() * total
+	for entry in location.entries:
+		var weight := _entry_weight(entry)
+		if weight <= 0.0:
+			continue
+		roll -= weight
 		if roll <= 0.0:
-			return type
+			return entry
 	return null
 
 
-## Редкие типы с независимым шансом (например, ледяной астероид).
-func _pick_rare_type() -> AsteroidType:
-	for type in types:
-		if type == null or type.spawn_chance <= 0.0:
-			continue
-		if randf() < type.spawn_chance:
-			return type
-	return null
+func _entry_weight(entry: SpawnEntry) -> float:
+	if entry == null or entry.spawn == null:
+		return 0.0
+	if not entry.tier_weights.is_empty():
+		var index := clampi(_tier, 0, entry.tier_weights.size() - 1)
+		return maxf(0.0, entry.tier_weights[index])
+	return maxf(0.0, entry.weight)

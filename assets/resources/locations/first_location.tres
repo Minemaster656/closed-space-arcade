@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="LocationDef" load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://assets/scripts/resources/location_def.gd" id="1_loc"]
+[ext_resource type="Script" path="res://assets/scripts/resources/spawn_entry.gd" id="2_entry"]
+[ext_resource type="Resource" path="res://assets/resources/asteroids/large.tres" id="3_large"]
+[ext_resource type="Resource" path="res://assets/resources/asteroids/medium.tres" id="4_medium"]
+[ext_resource type="Resource" path="res://assets/resources/asteroids/ice.tres" id="5_ice"]
+[ext_resource type="Resource" path="res://assets/resources/enemies/shooter.tres" id="6_shooter"]
+[ext_resource type="PackedScene" path="res://assets/scenes/spawn/enemy_behind_asteroids.tscn" id="7_structure"]
+
+[sub_resource type="Resource" id="Entry_large"]
+script = ExtResource("2_entry")
+spawn = ExtResource("3_large")
+tier_weights = PackedFloat32Array(0, 1, 1, 5)
+
+[sub_resource type="Resource" id="Entry_medium"]
+script = ExtResource("2_entry")
+spawn = ExtResource("4_medium")
+tier_weights = PackedFloat32Array(1, 1, 1, 3)
+
+[sub_resource type="Resource" id="Entry_ice"]
+script = ExtResource("2_entry")
+spawn = ExtResource("5_ice")
+weight = 0.0
+spawn_chance = 0.05
+
+[sub_resource type="Resource" id="Entry_shooter"]
+script = ExtResource("2_entry")
+spawn = ExtResource("6_shooter")
+tier_weights = PackedFloat32Array(0, 0, 0.333, 1)
+
+[sub_resource type="Resource" id="Entry_structure"]
+script = ExtResource("2_entry")
+spawn = ExtResource("7_structure")
+tier_weights = PackedFloat32Array(0, 0, 0.5, 1.5)
+
+[resource]
+script = ExtResource("1_loc")
+id = &"first_location"
+display_name = "First Location"
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_large"), SubResource("Entry_medium"), SubResource("Entry_ice"), SubResource("Entry_shooter"), SubResource("Entry_structure")])

@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://assets/scripts/spawn/spawn_structure.gd" id="1_structure"]
+[ext_resource type="Script" path="res://assets/scripts/spawn/spawn_node.gd" id="2_node"]
+[ext_resource type="Resource" path="res://assets/resources/asteroids/large.tres" id="3_large"]
+[ext_resource type="Resource" path="res://assets/resources/enemies/shooter.tres" id="4_shooter"]
+
+[node name="EnemyBehindAsteroids" type="Node2D"]
+script = ExtResource("1_structure")
+
+[node name="AsteroidFront" type="Node2D" parent="."]
+position = Vector2(0, 0)
+script = ExtResource("2_node")
+definition = ExtResource("3_large")
+
+[node name="AsteroidBack" type="Node2D" parent="."]
+position = Vector2(0, -90)
+script = ExtResource("2_node")
+definition = ExtResource("3_large")
+
+[node name="Enemy" type="Node2D" parent="."]
+position = Vector2(0, -190)
+script = ExtResource("2_node")
+definition = ExtResource("4_shooter")

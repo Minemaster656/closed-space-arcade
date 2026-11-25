@@ -3,10 +3,12 @@ class_name ShooterEnemy
 
 ## Вражеский стрелок. Живёт в пуле, поэтому при смерти не удаляется,
 ## а проигрывает анимацию и возвращается в пул через сигнал despawned.
+##
+## Все характеристики берутся из EnemyType (tres), поэтому конкретный враг
+## не хардкодится в скрипте — достаточно создать новый EnemyType.
 
 signal despawned(who: Area2D)
 
-const SHARD_TYPE_PATH: String = "res://assets/resources/asteroids/metal_shard.tres"
 const POOL_PATH: String = "Managers/AsteroidPool"
 const BULLET_POOL_PATH: String = "Managers/EnemyBulletPool"
 const DESPAWN_MARGIN: float = 0.15
@@ -16,24 +18,13 @@ const DEATH_SCALE: float = 1.6
 const HIT_FLASH_DURATION: float = 0.18
 const HIT_FLASH_COLOR: Color = Color(1.0, 0.18, 0.18, 1.0)
 
-@export_group("Combat")
-@export var max_hp: float = 5.0
-@export var shoot_interval: float = 2.0
-@export var bullet_offset: float = 18.0
-
-@export_group("Movement")
-## Базовая скорость сноса вниз. Умножается на speed_multiplier пула астероидов.
-@export var base_drift: float = 90.0
-
-@export_group("Drop")
-@export var shard_type: AsteroidType
-@export_range(0, 4) var shard_min: int = 1
-@export_range(0, 4) var shard_max: int = 2
+var type: EnemyType
+var pool_scene: PackedScene
 
 @onready var _sprite: Sprite2D = $Sprite2D
 @onready var hp_bar: HPBar = $HPBar
 
-var _hp: float = 5.0
+var _hp: float = 1.0
 var _shoot_timer: float = 0.0
 var _dead: bool = false
 var _pool: AsteroidPool
@@ -46,18 +37,19 @@ var _death_tween: Tween
 
 func _ready() -> void:
 	_sprite_base_scale = _sprite.scale
-	if shard_type == null:
-		shard_type = load(SHARD_TYPE_PATH) as AsteroidType
 	_resolve_pools()
-	hp_bar.reset(max_hp)
 
 
-## Готовит врага к выдаче из пула.
-func spawn_reset(spawn_position: Vector2) -> void:
+## Готовит врага к выдаче из пула: применяет характеристики типа и ставит
+## в указанную точку.
+func setup(new_type: EnemyType, scene: PackedScene, spawn_position: Vector2) -> void:
 	_resolve_pools()
 	_kill_tweens()
-	_hp = max_hp
-	_shoot_timer = shoot_interval
+
+	type = new_type
+	pool_scene = scene
+	_hp = type.max_hp
+	_shoot_timer = type.shoot_interval
 	_dead = false
 	_bounds_timer = randf_range(0.0, 0.2)
 	global_position = spawn_position
@@ -70,7 +62,7 @@ func spawn_reset(spawn_position: Vector2) -> void:
 	add_to_group("damageable")
 	add_to_group("collision_damage")
 	set_deferred("monitorable", true)
-	hp_bar.reset(max_hp)
+	hp_bar.reset(type.max_hp)
 
 
 ## Возвращает врага в неактивное состояние (вызывается пулом).
@@ -89,18 +81,18 @@ func park() -> void:
 
 
 func _process(delta: float) -> void:
-	if _dead:
+	if _dead or type == null:
 		return
 
 	var mult := 1.0
 	if is_instance_valid(_pool):
 		mult = _pool.speed_multiplier
 
-	global_position.y += base_drift * mult * delta
+	global_position.y += type.base_drift * mult * delta
 
 	_shoot_timer -= delta
 	if _shoot_timer <= 0.0:
-		_shoot_timer = shoot_interval
+		_shoot_timer = type.shoot_interval
 		_shoot()
 
 	_bounds_timer -= delta
@@ -132,9 +124,9 @@ func _resolve_pools() -> void:
 
 
 func _shoot() -> void:
-	if _bullet_pool == null or _dead:
+	if _bullet_pool == null or _dead or type == null:
 		return
-	_bullet_pool.spawn(global_position + Vector2(0.0, bullet_offset))
+	_bullet_pool.spawn(global_position + Vector2(0.0, type.bullet_offset))
 
 
 func _die() -> void:
@@ -150,13 +142,13 @@ func _die() -> void:
 
 
 func _drop_shards() -> void:
-	var count := randi_range(shard_min, shard_max)
-	if shard_type == null or not is_instance_valid(_pool):
+	if type == null or type.shard_type == null or not is_instance_valid(_pool):
 		return
+	var count := randi_range(type.shard_min, type.shard_max)
 	for i in count:
 		var offset := Vector2(randf_range(-12.0, 12.0), randf_range(-12.0, 12.0))
-		var speed := randf_range(shard_type.min_speed, shard_type.max_speed)
-		_pool.spawn(shard_type, global_position + offset, Vector2.DOWN, speed)
+		var speed := randf_range(type.shard_type.min_speed, type.shard_type.max_speed)
+		_pool.spawn(type.shard_type, global_position + offset, Vector2.DOWN, speed)
 
 
 func _play_death_animation() -> void:
