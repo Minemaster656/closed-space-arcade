@@ -8,8 +8,6 @@
 script = ExtResource("1_type")
 id = &"ice"
 display_name = "Ice"
-weight = 0.0
-spawn_chance = 0.05
 min_speed = 130.0
 max_speed = 180.0
 max_hp = 1.0

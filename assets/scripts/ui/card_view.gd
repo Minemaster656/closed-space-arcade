@@ -23,7 +23,7 @@ func setup(def: CardDef) -> void:
 	if def == null:
 		return
 
-	_title.text = tr(def.title_key) if not def.title_key.is_empty() else String(def.id)
+	_title.text = tr(def.title_key) if not def.title_key.is_empty() else ""
 	_description.text = tr(def.description_key) if not def.description_key.is_empty() else ""
 	_icon.texture = def.icon
 	_icon.visible = def.icon != null

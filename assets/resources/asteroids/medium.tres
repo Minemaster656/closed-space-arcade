@@ -10,7 +10,6 @@
 script = ExtResource("1_script")
 id = &"medium"
 display_name = "Medium"
-weight = 0.4
 min_speed = 110.0
 max_speed = 160.0
 max_hp = 2.0
