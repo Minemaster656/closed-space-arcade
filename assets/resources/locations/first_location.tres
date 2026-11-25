@@ -1,41 +1,139 @@
-[gd_resource type="Resource" script_class="LocationDef" load_steps=13 format=3]
+[gd_resource type="Resource" script_class="LocationDef" format=3 uid="uid://cp8qi77sjtn0s"]
 
-[ext_resource type="Script" path="res://assets/scripts/resources/location_def.gd" id="1_loc"]
-[ext_resource type="Script" path="res://assets/scripts/resources/spawn_entry.gd" id="2_entry"]
-[ext_resource type="Resource" path="res://assets/resources/asteroids/large.tres" id="3_large"]
-[ext_resource type="Resource" path="res://assets/resources/asteroids/medium.tres" id="4_medium"]
-[ext_resource type="Resource" path="res://assets/resources/asteroids/ice.tres" id="5_ice"]
-[ext_resource type="Resource" path="res://assets/resources/enemies/shooter.tres" id="6_shooter"]
-[ext_resource type="PackedScene" path="res://assets/scenes/spawn/enemy_behind_asteroids.tscn" id="7_structure"]
+[ext_resource type="Script" uid="uid://3fv1anxkrfma" path="res://assets/scripts/resources/location_def.gd" id="1_loc"]
+[ext_resource type="Script" path="res://assets/scripts/resources/wave_def.gd" id="2_wave"]
+[ext_resource type="Script" path="res://assets/scripts/resources/spawn_pool.gd" id="3_pool"]
+[ext_resource type="Script" path="res://assets/scripts/resources/spawn_pool_entry.gd" id="4_pool_entry"]
+[ext_resource type="Script" uid="uid://dkjxtihwgwu8g" path="res://assets/scripts/resources/spawn_variant.gd" id="5_variant"]
+[ext_resource type="Script" uid="uid://dkglx46scg8ft" path="res://assets/scripts/resources/spawn_entry.gd" id="6_spawn_entry"]
+[ext_resource type="Resource" uid="uid://db4mlj1dmon0" path="res://assets/resources/asteroids/large.tres" id="7_large"]
+[ext_resource type="Resource" uid="uid://dqvyj84dgt41p" path="res://assets/resources/asteroids/medium.tres" id="8_medium"]
+[ext_resource type="Resource" uid="uid://6or38fycyiuj" path="res://assets/resources/asteroids/ice.tres" id="9_ice"]
+[ext_resource type="Resource" uid="uid://dfbu0i57ashgc" path="res://assets/resources/enemies/shooter.tres" id="10_shooter"]
+[ext_resource type="Resource" path="res://assets/resources/comets/comet.tres" id="11_comet"]
 
-[sub_resource type="Resource" id="Entry_large"]
-script = ExtResource("2_entry")
-spawn = ExtResource("3_large")
-tier_weights = PackedFloat32Array(0, 1, 1, 5)
+[sub_resource type="Resource" id="Var_large"]
+script = ExtResource("5_variant")
+definition = ExtResource("7_large")
+weight = 1.0
 
-[sub_resource type="Resource" id="Entry_medium"]
-script = ExtResource("2_entry")
-spawn = ExtResource("4_medium")
-tier_weights = PackedFloat32Array(1, 1, 1, 3)
+[sub_resource type="Resource" id="Var_ice"]
+script = ExtResource("5_variant")
+definition = ExtResource("9_ice")
+weight = 1.0
 
-[sub_resource type="Resource" id="Entry_ice"]
-script = ExtResource("2_entry")
-spawn = ExtResource("5_ice")
-weight = 0.0
-spawn_chance = 0.05
+[sub_resource type="Resource" id="Var_shooter"]
+script = ExtResource("5_variant")
+definition = ExtResource("10_shooter")
+weight = 1.0
 
-[sub_resource type="Resource" id="Entry_shooter"]
-script = ExtResource("2_entry")
-spawn = ExtResource("6_shooter")
-tier_weights = PackedFloat32Array(0, 0, 0.333, 1)
+[sub_resource type="Resource" id="Var_comet"]
+script = ExtResource("5_variant")
+definition = ExtResource("11_comet")
+weight = 1.0
 
-[sub_resource type="Resource" id="Entry_structure"]
-script = ExtResource("2_entry")
-spawn = ExtResource("7_structure")
-tier_weights = PackedFloat32Array(0, 0, 0.5, 1.5)
+[sub_resource type="Resource" id="PE_comet"]
+script = ExtResource("4_pool_entry")
+chance = 1.0
+group = Array[ExtResource("5_variant")]([SubResource("Var_comet")])
+
+[sub_resource type="Resource" id="PE_w1_start"]
+script = ExtResource("4_pool_entry")
+chance = 3.0
+group = Array[ExtResource("5_variant")]([SubResource("Var_shooter")])
+
+[sub_resource type="Resource" id="PE_w2_large"]
+script = ExtResource("4_pool_entry")
+chance = 6.0
+group = Array[ExtResource("5_variant")]([SubResource("Var_large")])
+
+[sub_resource type="Resource" id="PE_w2_ice"]
+script = ExtResource("4_pool_entry")
+chance = 7.5
+group = Array[ExtResource("5_variant")]([SubResource("Var_ice")])
+
+[sub_resource type="Resource" id="Pool_w0_end"]
+script = ExtResource("3_pool")
+entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_comet")])
+
+[sub_resource type="Resource" id="Pool_w1_start"]
+script = ExtResource("3_pool")
+entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_w1_start")])
+
+[sub_resource type="Resource" id="Pool_w1_end"]
+script = ExtResource("3_pool")
+entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_comet")])
+
+[sub_resource type="Resource" id="Pool_w2_start"]
+script = ExtResource("3_pool")
+entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_w2_large"), SubResource("PE_w2_ice")])
+
+[sub_resource type="Resource" id="Pool_w2_end"]
+script = ExtResource("3_pool")
+entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_comet")])
+
+[sub_resource type="Resource" id="SE_large_10"]
+script = ExtResource("6_spawn_entry")
+spawn = ExtResource("7_large")
+weight = 10.0
+
+[sub_resource type="Resource" id="SE_medium_6"]
+script = ExtResource("6_spawn_entry")
+spawn = ExtResource("8_medium")
+weight = 6.0
+
+[sub_resource type="Resource" id="SE_ice_3"]
+script = ExtResource("6_spawn_entry")
+spawn = ExtResource("9_ice")
+weight = 3.0
+
+[sub_resource type="Resource" id="SE_shooter_2"]
+script = ExtResource("6_spawn_entry")
+spawn = ExtResource("10_shooter")
+weight = 2.0
+
+[sub_resource type="Resource" id="SE_large_14"]
+script = ExtResource("6_spawn_entry")
+spawn = ExtResource("7_large")
+weight = 14.0
+
+[sub_resource type="Resource" id="SE_medium_4"]
+script = ExtResource("6_spawn_entry")
+spawn = ExtResource("8_medium")
+weight = 4.0
+
+[sub_resource type="Resource" id="SE_ice_4"]
+script = ExtResource("6_spawn_entry")
+spawn = ExtResource("9_ice")
+weight = 4.0
+
+[sub_resource type="Resource" id="SE_shooter_3"]
+script = ExtResource("6_spawn_entry")
+spawn = ExtResource("10_shooter")
+weight = 3.0
+
+[sub_resource type="Resource" id="Wave0"]
+script = ExtResource("2_wave")
+length_meters = 50.0
+end_pool = SubResource("Pool_w0_end")
+entries = Array[ExtResource("6_spawn_entry")]([SubResource("SE_large_10"), SubResource("SE_medium_6")])
+
+[sub_resource type="Resource" id="Wave1"]
+script = ExtResource("2_wave")
+length_meters = 50.0
+start_pool = SubResource("Pool_w1_start")
+end_pool = SubResource("Pool_w1_end")
+entries = Array[ExtResource("6_spawn_entry")]([SubResource("SE_large_10"), SubResource("SE_medium_6"), SubResource("SE_ice_3"), SubResource("SE_shooter_2")])
+
+[sub_resource type="Resource" id="Wave2"]
+script = ExtResource("2_wave")
+length_meters = 50.0
+start_pool = SubResource("Pool_w2_start")
+end_pool = SubResource("Pool_w2_end")
+entries = Array[ExtResource("6_spawn_entry")]([SubResource("SE_large_14"), SubResource("SE_medium_4"), SubResource("SE_ice_4"), SubResource("SE_shooter_3")])
 
 [resource]
 script = ExtResource("1_loc")
 id = &"first_location"
 display_name = "First Location"
-entries = Array[ExtResource("2_entry")]([SubResource("Entry_large"), SubResource("Entry_medium"), SubResource("Entry_ice"), SubResource("Entry_shooter"), SubResource("Entry_structure")])
+waves = Array[ExtResource("2_wave")]([SubResource("Wave0"), SubResource("Wave1"), SubResource("Wave2")])

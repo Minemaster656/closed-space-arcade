@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CometType" format=3]
+
+[ext_resource type="Script" path="res://assets/scripts/resources/comet_type.gd" id="1_comet_type"]
+[ext_resource type="PackedScene" uid="uid://dmax1aimq3xee" path="res://assets/prefabs/comet.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_comet_type")
+id = &"comet"
+display_name = "Comet"
+scene = ExtResource("2_scene")

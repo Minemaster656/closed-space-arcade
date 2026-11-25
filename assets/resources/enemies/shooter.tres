@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="EnemyType" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="EnemyType" format=3 uid="uid://dfbu0i57ashgc"]
 
-[ext_resource type="Script" path="res://assets/scripts/resources/enemy_type.gd" id="1_enemy_type"]
+[ext_resource type="Script" uid="uid://dulb6my0d8gk1" path="res://assets/scripts/resources/enemy_type.gd" id="1_enemy_type"]
 [ext_resource type="PackedScene" uid="uid://4xweel8in5xt" path="res://assets/prefabs/shooter_enemy.tscn" id="2_scene"]
 [ext_resource type="Resource" path="res://assets/resources/asteroids/metal_shard.tres" id="3_shard"]
 
@@ -9,11 +9,5 @@ script = ExtResource("1_enemy_type")
 id = &"shooter"
 display_name = "Shooter"
 scene = ExtResource("2_scene")
-base_drift = 90.0
-max_hp = 5.0
-shoot_interval = 2.0
-bullet_offset = 18.0
 shard_type = ExtResource("3_shard")
-shard_min = 1
-shard_max = 2
 xp_value = 8

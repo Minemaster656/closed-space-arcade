@@ -1,28 +1,21 @@
-[gd_resource type="Resource" script_class="AsteroidType" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="AsteroidType" format=3 uid="uid://db4mlj1dmon0"]
 
-[ext_resource type="Script" path="res://assets/scripts/resources/asteroid_type.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://fpfwvm4d1oyk" path="res://assets/scripts/resources/asteroid_type.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://01agrb0v6iey" path="res://assets/sprites/asteroids/asteroid_big_0.png" id="2_big0"]
 [ext_resource type="Texture2D" uid="uid://tfb0ab5fev8" path="res://assets/sprites/asteroids/asteroid_big_1.png" id="3_big1"]
 [ext_resource type="Texture2D" uid="uid://doe81igfte8r3" path="res://assets/sprites/asteroids/asteroid_big_2.png" id="4_big2"]
-[ext_resource type="Resource" path="res://assets/resources/asteroids/medium.tres" id="5_medium"]
+[ext_resource type="Resource" uid="uid://dqvyj84dgt41p" path="res://assets/resources/asteroids/medium.tres" id="5_medium"]
 
 [resource]
 script = ExtResource("1_script")
 id = &"large"
 display_name = "Large"
 min_speed = 80.0
-max_speed = 120.0
-max_hp = 3.0
-damage = 1.0
-damageable = true
-harmful = true
 textures = Array[Texture2D]([ExtResource("2_big0"), ExtResource("3_big1"), ExtResource("4_big2")])
 scale_multiplier = 2.0
 collision_radius = 44.0
-tint = Color(1, 1, 1, 1)
 child_type = ExtResource("5_medium")
 child_min = 2
 child_max = 4
-collectible = false
 metal_value = 0
 xp_value = 4

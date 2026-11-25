@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://c2842u7awm2yr" path="res://assets/scripts/ui/metal_counter.gd" id="12_metal"]
 [ext_resource type="Script" uid="uid://ca64lsdftha4h" path="res://assets/scripts/managers/enemy_bullet_pool.gd" id="14_ebp"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/enemy_bullet.tscn" id="15_ebullet"]
-[ext_resource type="Script" path="res://assets/scripts/managers/enemy_pool.gd" id="16_epool"]
+[ext_resource type="Script" uid="uid://cvnv3xrdow2ge" path="res://assets/scripts/managers/enemy_pool.gd" id="16_epool"]
 [ext_resource type="PackedScene" uid="uid://4xweel8in5xt" path="res://assets/prefabs/shooter_enemy.tscn" id="17_eshooter"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/pause_overlay.tscn" id="18_pause"]
 [ext_resource type="Script" uid="uid://f0xd2gobp401" path="res://assets/scripts/components/juicy_button.gd" id="19_juicy"]
@@ -81,17 +81,17 @@ bullet_scene = ExtResource("15_ebullet")
 [node name="EnemyPool" type="Node2D" parent="Managers" unique_id=280912482]
 script = ExtResource("16_epool")
 default_scene = ExtResource("17_eshooter")
-prewarm_per_scene = 8
 
 [node name="AsteroidPool" type="Node2D" parent="Managers" unique_id=1393017530]
 script = ExtResource("5_ast_pool")
 default_scene = ExtResource("4_ast_scene")
 prewarm_per_scene = 192
 
-[node name="AsteroidSpawner" type="Node" parent="Managers" unique_id=454640812 node_paths=PackedStringArray("asteroid_pool", "enemy_pool")]
+[node name="AsteroidSpawner" type="Node" parent="Managers" unique_id=454640812 node_paths=PackedStringArray("asteroid_pool", "enemy_pool", "comet_spawner")]
 script = ExtResource("6_spawner")
 asteroid_pool = NodePath("../AsteroidPool")
 enemy_pool = NodePath("../EnemyPool")
+comet_spawner = NodePath("../CometSpawner")
 location = ExtResource("28_location")
 max_active = 160
 
@@ -133,7 +133,7 @@ offset_right = 110.0
 offset_bottom = 50.0
 theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
 theme_override_font_sizes/font_size = 24
-text = ""
+text = "SCORE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -147,7 +147,7 @@ offset_right = 260.0
 offset_bottom = 72.0
 grow_horizontal = 2
 
-[node name="BuffHud" parent="UI" instance=ExtResource("26_buff_hud")]
+[node name="BuffHud" parent="UI" unique_id=181100259 instance=ExtResource("26_buff_hud")]
 
 [node name="PauseButton" type="Button" parent="UI" unique_id=1902384761]
 offset_left = 20.0

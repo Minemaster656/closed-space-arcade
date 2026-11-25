@@ -121,7 +121,6 @@ func _process(_delta: float) -> void:
     asteroid_pool.speed_multiplier = mult * world_mult
 
     _distance += mult * world_mult * _delta
-    comet_spawner.distance = _distance
     var dist := int(_distance)
     var record := int(GameState.record_distance)
     var meter := tr("ui_meter")
@@ -157,7 +156,6 @@ func _start_launch() -> void:
         follower.set_process(false)
     asteroid_spawner.stop()
     comet_spawner.stop()
-    comet_spawner.reset_distance(0.0)
     _launch_tween = create_tween()
     _launch_tween.tween_property(rocket, "global_position", _play_position, 0.8) \
         .set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)

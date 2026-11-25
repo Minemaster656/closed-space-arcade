@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AsteroidType" format=3 uid="uid://dxut6n6frhrtr"]
+
+[ext_resource type="Script" uid="uid://fpfwvm4d1oyk" path="res://assets/scripts/resources/asteroid_type.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"shooter"
+display_name = "Shooter"
+min_speed = 90.0
+max_speed = 90.0
+max_hp = 5.0
+collision_radius = 13.0
+xp_value = 8

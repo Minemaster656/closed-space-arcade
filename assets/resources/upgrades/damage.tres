@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="UpgradeDef" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="UpgradeDef" format=3 uid="uid://dn1ygfe7dui3f"]
 
-[ext_resource type="Script" path="res://assets/scripts/resources/upgrade_def.gd" id="1_def"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrades/upg_damage.png" id="2_icon"]
+[ext_resource type="Script" uid="uid://d2yfnclcqjoam" path="res://assets/scripts/resources/upgrade_def.gd" id="1_def"]
+[ext_resource type="Texture2D" uid="uid://ctymfcsx5gq5c" path="res://assets/sprites/ui/upgrades/upg_damage.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
