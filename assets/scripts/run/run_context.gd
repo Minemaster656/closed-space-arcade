@@ -49,6 +49,7 @@ func setup(
 	stats.set_base(&"bullet_pierce", float(rocket.bullet_pierce))
 	stats.set_base(&"hp", rocket.hp)
 	stats.set_base(&"move_speed", 1.0)
+	stats.set_base(&"world_speed", 1.0)
 	stats.recalculate()
 
 	buffs = BuffSystem.new()

@@ -11,6 +11,12 @@ stat = &"move_speed"
 operation = "mul"
 value = 0.85
 
+[sub_resource type="Resource" id="StatModifier_slow_world"]
+script = ExtResource("3_mod")
+stat = &"world_speed"
+operation = "mul"
+value = 0.85
+
 [resource]
 script = ExtResource("1_def")
 id = &"slow"
@@ -20,5 +26,5 @@ duration = 10.0
 reapply_mode = "refresh"
 max_stacks = 1
 is_debuff = true
-modifiers = Array[ExtResource("3_mod")]([SubResource("StatModifier_slow")])
+modifiers = Array[ExtResource("3_mod")]([SubResource("StatModifier_slow"), SubResource("StatModifier_slow_world")])
 handlers = Array[PackedScene]([ExtResource("4_handler")])

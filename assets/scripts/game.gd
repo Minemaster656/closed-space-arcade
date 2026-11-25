@@ -111,13 +111,16 @@ func _process(_delta: float) -> void:
     )
 
     var mult := _danger_multiplier(danger)
+    var world_mult := 1.0
+    if run_context != null:
+        world_mult = run_context.get_stat(&"world_speed", 1.0)
 
     rocket.set_danger(mult)
     asteroid_spawner.difficulty = danger
     asteroid_spawner.distance = _distance
-    asteroid_pool.speed_multiplier = mult
+    asteroid_pool.speed_multiplier = mult * world_mult
 
-    _distance += mult * _delta
+    _distance += mult * world_mult * _delta
     comet_spawner.distance = _distance
     var dist := int(_distance)
     var record := int(GameState.record_distance)
