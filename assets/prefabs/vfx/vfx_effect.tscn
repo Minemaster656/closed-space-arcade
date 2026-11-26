@@ -1,15 +1,12 @@
-[gd_scene load_steps=25 format=3]
+[gd_scene format=3 uid="uid://r35448qirj5i"]
 
-[ext_resource type="Script" path="res://assets/scripts/vfx/vfx_effect.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/sprites/fx/atlas_spark.png" id="2_spark"]
-[ext_resource type="Texture2D" path="res://assets/sprites/fx/atlas_smoke.png" id="3_smoke"]
-[ext_resource type="Texture2D" path="res://assets/sprites/fx/atlas_flash.png" id="4_flash"]
-[ext_resource type="Texture2D" path="res://assets/sprites/fx/atlas_muzzle.png" id="5_muzzle"]
-[ext_resource type="Texture2D" path="res://assets/sprites/fx/atlas_ring.png" id="6_ring"]
-[ext_resource type="Texture2D" path="res://assets/sprites/fx/atlas_pickup.png" id="7_pickup"]
-[ext_resource type="Texture2D" path="res://assets/sprites/fx/atlas_debris_rock.png" id="8_debris_rock"]
-[ext_resource type="Texture2D" path="res://assets/sprites/fx/atlas_debris_ice.png" id="9_debris_ice"]
-[ext_resource type="Texture2D" path="res://assets/sprites/fx/atlas_debris_metal.png" id="10_debris_metal"]
+[ext_resource type="Script" uid="uid://gndutrwswj7v" path="res://assets/scripts/vfx/vfx_effect.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://x8b58eqmsktl" path="res://assets/sprites/fx/atlas_spark.png" id="2_spark"]
+[ext_resource type="Texture2D" uid="uid://hq0enra4v1ge" path="res://assets/sprites/fx/atlas_smoke.png" id="3_smoke"]
+[ext_resource type="Texture2D" uid="uid://d2fsqv6bwv6u2" path="res://assets/sprites/fx/atlas_flash.png" id="4_flash"]
+[ext_resource type="Texture2D" uid="uid://d1s0bayxdas6h" path="res://assets/sprites/fx/atlas_ring.png" id="6_ring"]
+[ext_resource type="Texture2D" uid="uid://clb06wubuq7wi" path="res://assets/sprites/fx/atlas_pickup.png" id="7_pickup"]
+[ext_resource type="Texture2D" uid="uid://oxn3isrx05yu" path="res://assets/sprites/fx/atlas_debris_rock.png" id="8_debris_rock"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_add16"]
 blend_mode = 1
@@ -17,6 +14,10 @@ particles_animation = true
 particles_anim_h_frames = 4
 particles_anim_v_frames = 4
 particles_anim_loop = true
+
+[sub_resource type="Gradient" id="Gradient_7y8sj"]
+offsets = PackedFloat32Array(0.0070588235, 0.3035294, 1)
+colors = PackedColorArray(0.99607843, 0.99607843, 0.99607843, 0, 0.9955804, 0.99558026, 0.99558026, 1, 1, 1, 1, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mix16"]
 particles_animation = true
@@ -37,46 +38,11 @@ particles_anim_h_frames = 2
 particles_anim_v_frames = 2
 particles_anim_loop = true
 
-[sub_resource type="Gradient" id="Gradient_fade"]
-offsets = PackedFloat32Array(0, 0.15, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.8, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_fade"]
-gradient = SubResource("Gradient_fade")
-
-[sub_resource type="Gradient" id="Gradient_soft"]
-offsets = PackedFloat32Array(0, 0.2, 1)
-colors = PackedColorArray(1, 1, 1, 0.45, 1, 1, 1, 0.7, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_soft"]
-gradient = SubResource("Gradient_soft")
-
-[sub_resource type="Curve" id="Curve_grow"]
-_data = [Vector2(0, 0.4), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_grow"]
-curve = SubResource("Curve_grow")
-
-[sub_resource type="Curve" id="Curve_ring"]
-_data = [Vector2(0, 0.4), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_ring"]
-curve = SubResource("Curve_ring")
-
-[sub_resource type="Curve" id="Curve_shrink"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.2), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_shrink"]
-curve = SubResource("Curve_shrink")
-
-[node name="VfxEffect" type="Node2D"]
+[node name="VfxEffect" type="Node2D" unique_id=1315209530]
 texture_filter = 1
 script = ExtResource("1_script")
 
-[node name="Sparks" type="CPUParticles2D" parent="."]
+[node name="Sparks" type="CPUParticles2D" parent="." unique_id=1751323874]
 visible = false
 material = SubResource("CanvasItemMaterial_add16")
 amount = 6
@@ -86,9 +52,9 @@ one_shot = true
 explosiveness = 1.0
 randomness = 0.55
 fixed_fps = 60
-local_coords = false
 emission_shape = 1
 emission_sphere_radius = 3.0
+particle_flag_align_y = true
 direction = Vector2(0, -1)
 spread = 180.0
 gravity = Vector2(0, 260)
@@ -98,14 +64,10 @@ angular_velocity_min = -180.0
 angular_velocity_max = 180.0
 scale_amount_min = 0.4
 scale_amount_max = 0.9
-scale_amount_curve = SubResource("CurveTexture_shrink")
-color_ramp = SubResource("GradientTexture1D_fade")
-particle_flag_align_y = true
-anim_speed_min = 0.0
-anim_speed_max = 0.0
+color_ramp = SubResource("Gradient_7y8sj")
 anim_offset_max = 0.999
 
-[node name="Debris" type="CPUParticles2D" parent="."]
+[node name="Debris" type="CPUParticles2D" parent="." unique_id=2098723968]
 visible = false
 material = SubResource("CanvasItemMaterial_mix16")
 amount = 10
@@ -115,7 +77,6 @@ one_shot = true
 explosiveness = 1.0
 randomness = 0.6
 fixed_fps = 60
-local_coords = false
 emission_shape = 1
 emission_sphere_radius = 5.0
 direction = Vector2(0, -1)
@@ -126,25 +87,21 @@ initial_velocity_max = 260.0
 angular_velocity_min = -360.0
 angular_velocity_max = 360.0
 scale_amount_min = 0.45
-scale_amount_max = 1.0
-scale_amount_curve = SubResource("CurveTexture_shrink")
-color_ramp = SubResource("GradientTexture1D_fade")
-anim_speed_min = 0.0
-anim_speed_max = 0.0
+color_ramp = SubResource("Gradient_7y8sj")
 anim_offset_max = 0.999
 
-[node name="Smoke" type="CPUParticles2D" parent="."]
+[node name="Smoke" type="CPUParticles2D" parent="." unique_id=1567687655]
 visible = false
 texture_filter = 2
 material = SubResource("CanvasItemMaterial_mix32")
-amount = 4
+amount = 16
 texture = ExtResource("3_smoke")
-lifetime = 1.0
+lifetime = 2.0
 one_shot = true
-explosiveness = 1.0
+explosiveness = 0.75
 randomness = 0.7
+lifetime_randomness = 0.09
 fixed_fps = 30
-local_coords = false
 emission_shape = 1
 emission_sphere_radius = 7.0
 direction = Vector2(0, -1)
@@ -155,38 +112,27 @@ initial_velocity_max = 50.0
 damping_min = 20.0
 damping_max = 40.0
 scale_amount_min = 0.5
-scale_amount_max = 1.0
-scale_amount_curve = SubResource("CurveTexture_grow")
-color_ramp = SubResource("GradientTexture1D_soft")
-anim_speed_min = 0.0
-anim_speed_max = 0.0
+color_ramp = SubResource("Gradient_7y8sj")
 anim_offset_max = 0.999
 
-[node name="Flash" type="CPUParticles2D" parent="."]
+[node name="Flash" type="CPUParticles2D" parent="." unique_id=645796093]
 visible = false
 material = SubResource("CanvasItemMaterial_add16")
 amount = 1
 texture = ExtResource("4_flash")
-lifetime = 0.14
+lifetime = 0.2
 one_shot = true
 explosiveness = 1.0
 fixed_fps = 60
-local_coords = false
-emission_shape = 0
 direction = Vector2(0, -1)
 spread = 0.0
 gravity = Vector2(0, 0)
-initial_velocity_min = 0.0
-initial_velocity_max = 0.0
 scale_amount_min = 0.7
 scale_amount_max = 1.2
-scale_amount_curve = SubResource("CurveTexture_grow")
-color_ramp = SubResource("GradientTexture1D_fade")
-anim_speed_min = 0.0
-anim_speed_max = 0.0
+color_ramp = SubResource("Gradient_7y8sj")
 anim_offset_max = 0.999
 
-[node name="Ring" type="CPUParticles2D" parent="."]
+[node name="Ring" type="CPUParticles2D" parent="." unique_id=10384945]
 visible = false
 material = SubResource("CanvasItemMaterial_add64")
 amount = 1
@@ -195,22 +141,12 @@ lifetime = 0.4
 one_shot = true
 explosiveness = 1.0
 fixed_fps = 60
-local_coords = false
-emission_shape = 0
 direction = Vector2(0, -1)
 spread = 0.0
 gravity = Vector2(0, 0)
-initial_velocity_min = 0.0
-initial_velocity_max = 0.0
-scale_amount_min = 1.0
-scale_amount_max = 1.0
-scale_amount_curve = SubResource("CurveTexture_ring")
-color_ramp = SubResource("GradientTexture1D_fade")
-anim_speed_min = 0.0
-anim_speed_max = 0.0
 anim_offset_max = 0.999
 
-[node name="Sparkles" type="CPUParticles2D" parent="."]
+[node name="Sparkles" type="CPUParticles2D" parent="." unique_id=1582525562]
 visible = false
 material = SubResource("CanvasItemMaterial_add16")
 amount = 6
@@ -220,7 +156,6 @@ one_shot = true
 explosiveness = 1.0
 randomness = 0.6
 fixed_fps = 60
-local_coords = false
 emission_shape = 1
 emission_sphere_radius = 8.0
 direction = Vector2(0, -1)
@@ -232,11 +167,8 @@ damping_min = 30.0
 damping_max = 60.0
 scale_amount_min = 0.4
 scale_amount_max = 0.8
-scale_amount_curve = SubResource("CurveTexture_shrink")
-color_ramp = SubResource("GradientTexture1D_fade")
-anim_speed_min = 0.0
-anim_speed_max = 0.0
+color_ramp = SubResource("Gradient_7y8sj")
 anim_offset_max = 0.999
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=103901312]
 one_shot = true

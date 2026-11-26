@@ -362,7 +362,7 @@ func _retire(effect: VfxEffect) -> void:
     _active.remove_at(index)
     _active_particles = maxi(0, _active_particles - effect.particle_budget)
     effect.particle_budget = 0
-    effect.fade_out(0.08)
+    effect.fade_out(0.16)
 
 
 func _release(effect: VfxEffect) -> void:

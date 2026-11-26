@@ -29,15 +29,19 @@ var particle_budget: int = 0
 
 var _playing: bool = false
 var _layers: Array[CPUParticles2D] = []
+var _base_modulates: Array[Color] = []
 var _fading: bool = false
 var _fade_elapsed: float = 0.0
+var _fade_from_alpha: float = 1.0
 var _fade_delay: float = 0.0
 var _fade_duration: float = 0.0
 
 
 func _ready() -> void:
     _layers = [_sparks, _debris, _smoke, _flash, _ring, _sparkles]
+    _base_modulates.clear()
     for layer in _layers:
+        _base_modulates.append(layer.modulate)
         layer.anim_speed_min = 0.0
         layer.anim_speed_max = 0.0
         layer.anim_offset_max = 0.999
@@ -59,14 +63,15 @@ func play(
     _playing = true
     _fading = false
     _fade_elapsed = 0.0
+    _fade_from_alpha = 1.0
     visible = true
     set_process(true)
     position = world_position
     rotation = direction.angle() + PI * 0.5 if direction != Vector2.ZERO else 0.0
     scale = Vector2.ONE * scale_mult
     modulate = Color.WHITE
-    for layer in _layers:
-        layer.modulate = Color.WHITE
+    for i in _layers.size():
+        _layers[i].modulate = _base_modulates[i]
 
     var q_sparks := 1.0
     var q_debris := 1.0
@@ -114,9 +119,11 @@ func _process(delta: float) -> void:
         _fading = true
         _fade_elapsed = 0.0
 
-    var alpha := 1.0 - clampf(_fade_elapsed / _fade_duration, 0.0, 1.0)
-    for layer in _layers:
-        layer.modulate.a = alpha
+    var alpha := 1.0
+    if _fading:
+        alpha = lerpf(_fade_from_alpha, 0.0, clampf(_fade_elapsed / _fade_duration, 0.0, 1.0))
+    for i in _layers.size():
+        _layers[i].modulate.a = _base_modulates[i].a * alpha
 
 
 ## Быстрое затухание, если эффект нужно освободить под более важный.
@@ -126,6 +133,7 @@ func fade_out(duration: float = 0.1) -> void:
     _fading = true
     _fade_delay = 0.0
     _fade_duration = maxf(0.01, duration)
+    _fade_from_alpha = _current_alpha()
     _fade_elapsed = 0.0
     _timer.stop()
     _timer.wait_time = _fade_duration
@@ -137,6 +145,7 @@ func park() -> void:
     _playing = false
     _fading = false
     _fade_elapsed = 0.0
+    _fade_from_alpha = 1.0
     set_process(false)
     _timer.stop()
     visible = false
@@ -145,6 +154,8 @@ func park() -> void:
         layer.visible = false
         layer.restart()
         layer.emitting = false
+    for i in _layers.size():
+        _layers[i].modulate = _base_modulates[i]
     position = Vector2(0.0, 100000.0)
     priority = 0
     particle_budget = 0
@@ -152,6 +163,12 @@ func park() -> void:
 
 func is_playing() -> bool:
     return _playing
+
+
+func _current_alpha() -> float:
+    if _base_modulates.is_empty():
+        return 1.0
+    return _layers[0].modulate.a / maxf(0.001, _base_modulates[0].a)
 
 
 func _setup_layer(
@@ -197,7 +214,7 @@ func _on_timer_timeout() -> void:
     if not _playing:
         return
     _playing = false
-    for layer in _layers:
-        layer.modulate.a = 0.0
+    for i in _layers.size():
+        _layers[i].modulate.a = 0.0
     set_process(false)
     finished.emit(self)
