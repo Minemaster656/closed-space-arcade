@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="LocationDef" format=3 uid="uid://cp8qi77sjtn0s"]
 
 [ext_resource type="Script" uid="uid://3fv1anxkrfma" path="res://assets/scripts/resources/location_def.gd" id="1_loc"]
-[ext_resource type="Script" path="res://assets/scripts/resources/wave_def.gd" id="2_wave"]
-[ext_resource type="Script" path="res://assets/scripts/resources/spawn_pool.gd" id="3_pool"]
-[ext_resource type="Script" path="res://assets/scripts/resources/spawn_pool_entry.gd" id="4_pool_entry"]
+[ext_resource type="Script" uid="uid://8xli78x1sf3" path="res://assets/scripts/resources/wave_def.gd" id="2_wave"]
+[ext_resource type="Script" uid="uid://c7gentvtvjhf6" path="res://assets/scripts/resources/spawn_pool.gd" id="3_pool"]
+[ext_resource type="Script" uid="uid://wgwutbpj8ujj" path="res://assets/scripts/resources/spawn_pool_entry.gd" id="4_pool_entry"]
 [ext_resource type="Script" uid="uid://dkjxtihwgwu8g" path="res://assets/scripts/resources/spawn_variant.gd" id="5_variant"]
 [ext_resource type="Script" uid="uid://dkglx46scg8ft" path="res://assets/scripts/resources/spawn_entry.gd" id="6_spawn_entry"]
 [ext_resource type="Resource" uid="uid://db4mlj1dmon0" path="res://assets/resources/asteroids/large.tres" id="7_large"]
@@ -12,63 +12,16 @@
 [ext_resource type="Resource" uid="uid://dfbu0i57ashgc" path="res://assets/resources/enemies/shooter.tres" id="10_shooter"]
 [ext_resource type="Resource" path="res://assets/resources/comets/comet.tres" id="11_comet"]
 
-[sub_resource type="Resource" id="Var_large"]
-script = ExtResource("5_variant")
-definition = ExtResource("7_large")
-weight = 1.0
-
-[sub_resource type="Resource" id="Var_ice"]
-script = ExtResource("5_variant")
-definition = ExtResource("9_ice")
-weight = 1.0
-
-[sub_resource type="Resource" id="Var_shooter"]
-script = ExtResource("5_variant")
-definition = ExtResource("10_shooter")
-weight = 1.0
-
 [sub_resource type="Resource" id="Var_comet"]
 script = ExtResource("5_variant")
 definition = ExtResource("11_comet")
-weight = 1.0
 
 [sub_resource type="Resource" id="PE_comet"]
 script = ExtResource("4_pool_entry")
 chance = 1.0
 group = Array[ExtResource("5_variant")]([SubResource("Var_comet")])
 
-[sub_resource type="Resource" id="PE_w1_start"]
-script = ExtResource("4_pool_entry")
-chance = 3.0
-group = Array[ExtResource("5_variant")]([SubResource("Var_shooter")])
-
-[sub_resource type="Resource" id="PE_w2_large"]
-script = ExtResource("4_pool_entry")
-chance = 6.0
-group = Array[ExtResource("5_variant")]([SubResource("Var_large")])
-
-[sub_resource type="Resource" id="PE_w2_ice"]
-script = ExtResource("4_pool_entry")
-chance = 7.5
-group = Array[ExtResource("5_variant")]([SubResource("Var_ice")])
-
 [sub_resource type="Resource" id="Pool_w0_end"]
-script = ExtResource("3_pool")
-entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_comet")])
-
-[sub_resource type="Resource" id="Pool_w1_start"]
-script = ExtResource("3_pool")
-entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_w1_start")])
-
-[sub_resource type="Resource" id="Pool_w1_end"]
-script = ExtResource("3_pool")
-entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_comet")])
-
-[sub_resource type="Resource" id="Pool_w2_start"]
-script = ExtResource("3_pool")
-entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_w2_large"), SubResource("PE_w2_ice")])
-
-[sub_resource type="Resource" id="Pool_w2_end"]
 script = ExtResource("3_pool")
 entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_comet")])
 
@@ -82,6 +35,15 @@ script = ExtResource("6_spawn_entry")
 spawn = ExtResource("8_medium")
 weight = 6.0
 
+[sub_resource type="Resource" id="Wave0"]
+script = ExtResource("2_wave")
+end_pool = SubResource("Pool_w0_end")
+entries = Array[ExtResource("6_spawn_entry")]([SubResource("SE_large_10"), SubResource("SE_medium_6")])
+
+[sub_resource type="Resource" id="Pool_w1_end"]
+script = ExtResource("3_pool")
+entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_comet")])
+
 [sub_resource type="Resource" id="SE_ice_3"]
 script = ExtResource("6_spawn_entry")
 spawn = ExtResource("9_ice")
@@ -91,6 +53,29 @@ weight = 3.0
 script = ExtResource("6_spawn_entry")
 spawn = ExtResource("10_shooter")
 weight = 2.0
+
+[sub_resource type="Resource" id="Var_shooter"]
+script = ExtResource("5_variant")
+definition = ExtResource("10_shooter")
+
+[sub_resource type="Resource" id="PE_w1_start"]
+script = ExtResource("4_pool_entry")
+chance = 3.0
+group = Array[ExtResource("5_variant")]([SubResource("Var_shooter")])
+
+[sub_resource type="Resource" id="Pool_w1_start"]
+script = ExtResource("3_pool")
+entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_w1_start")])
+
+[sub_resource type="Resource" id="Wave1"]
+script = ExtResource("2_wave")
+start_pool = SubResource("Pool_w1_start")
+end_pool = SubResource("Pool_w1_end")
+entries = Array[ExtResource("6_spawn_entry")]([SubResource("SE_large_10"), SubResource("SE_medium_6"), SubResource("SE_ice_3"), SubResource("SE_shooter_2")])
+
+[sub_resource type="Resource" id="Pool_w2_end"]
+script = ExtResource("3_pool")
+entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_comet")])
 
 [sub_resource type="Resource" id="SE_large_14"]
 script = ExtResource("6_spawn_entry")
@@ -112,22 +97,30 @@ script = ExtResource("6_spawn_entry")
 spawn = ExtResource("10_shooter")
 weight = 3.0
 
-[sub_resource type="Resource" id="Wave0"]
-script = ExtResource("2_wave")
-length_meters = 50.0
-end_pool = SubResource("Pool_w0_end")
-entries = Array[ExtResource("6_spawn_entry")]([SubResource("SE_large_10"), SubResource("SE_medium_6")])
+[sub_resource type="Resource" id="Var_large"]
+script = ExtResource("5_variant")
+definition = ExtResource("7_large")
 
-[sub_resource type="Resource" id="Wave1"]
-script = ExtResource("2_wave")
-length_meters = 50.0
-start_pool = SubResource("Pool_w1_start")
-end_pool = SubResource("Pool_w1_end")
-entries = Array[ExtResource("6_spawn_entry")]([SubResource("SE_large_10"), SubResource("SE_medium_6"), SubResource("SE_ice_3"), SubResource("SE_shooter_2")])
+[sub_resource type="Resource" id="PE_w2_large"]
+script = ExtResource("4_pool_entry")
+chance = 6.0
+group = Array[ExtResource("5_variant")]([SubResource("Var_large")])
+
+[sub_resource type="Resource" id="Var_ice"]
+script = ExtResource("5_variant")
+definition = ExtResource("9_ice")
+
+[sub_resource type="Resource" id="PE_w2_ice"]
+script = ExtResource("4_pool_entry")
+chance = 7.5
+group = Array[ExtResource("5_variant")]([SubResource("Var_ice")])
+
+[sub_resource type="Resource" id="Pool_w2_start"]
+script = ExtResource("3_pool")
+entries = Array[ExtResource("4_pool_entry")]([SubResource("PE_w2_large"), SubResource("PE_w2_ice")])
 
 [sub_resource type="Resource" id="Wave2"]
 script = ExtResource("2_wave")
-length_meters = 50.0
 start_pool = SubResource("Pool_w2_start")
 end_pool = SubResource("Pool_w2_end")
 entries = Array[ExtResource("6_spawn_entry")]([SubResource("SE_large_14"), SubResource("SE_medium_4"), SubResource("SE_ice_4"), SubResource("SE_shooter_3")])

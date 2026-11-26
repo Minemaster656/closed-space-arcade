@@ -22,7 +22,7 @@
 [ext_resource type="PackedScene" path="res://assets/prefabs/reward_overlay.tscn" id="24_reward_overlay"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/xp_bar.tscn" id="25_xp_bar"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/buff_hud.tscn" id="26_buff_hud"]
-[ext_resource type="Resource" path="res://assets/resources/locations/first_location.tres" id="28_location"]
+[ext_resource type="Resource" uid="uid://cp8qi77sjtn0s" path="res://assets/resources/locations/first_location.tres" id="28_location"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_stars"]
 particles_animation = true
@@ -148,6 +148,8 @@ offset_bottom = 72.0
 grow_horizontal = 2
 
 [node name="BuffHud" parent="UI" unique_id=181100259 instance=ExtResource("26_buff_hud")]
+offset_top = 72.0
+offset_bottom = 572.0
 
 [node name="PauseButton" type="Button" parent="UI" unique_id=1902384761]
 offset_left = 20.0
