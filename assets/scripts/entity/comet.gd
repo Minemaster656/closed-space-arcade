@@ -47,6 +47,10 @@ func collect() -> void:
 		return
 	_taken = true
 	_kill_hint_tween()
+	GameState.comet_collected.emit({
+		"comet": self,
+		"position": global_position,
+	})
 	collected.emit(self)
 	queue_free()
 

@@ -23,6 +23,12 @@
 [ext_resource type="PackedScene" path="res://assets/prefabs/xp_bar.tscn" id="25_xp_bar"]
 [ext_resource type="PackedScene" path="res://assets/prefabs/buff_hud.tscn" id="26_buff_hud"]
 [ext_resource type="Resource" uid="uid://cp8qi77sjtn0s" path="res://assets/resources/locations/first_location.tres" id="28_location"]
+[ext_resource type="Script" path="res://assets/scripts/managers/vfx_manager.gd" id="29_vfx_manager"]
+[ext_resource type="Script" path="res://assets/scripts/managers/audio_manager.gd" id="30_audio_manager"]
+[ext_resource type="Resource" path="res://assets/resources/audio/library.tres" id="31_audio_library"]
+[ext_resource type="PackedScene" path="res://assets/prefabs/vfx/vfx_effect.tscn" id="32_vfx_scene"]
+[ext_resource type="Script" path="res://assets/scripts/components/camera_shake.gd" id="33_camera_shake"]
+[ext_resource type="Script" path="res://assets/scripts/ui/screen_flash.gd" id="34_screen_flash"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_stars"]
 particles_animation = true
@@ -58,6 +64,7 @@ ambient_color = Color(0.62967473, 0.62967473, 0.6296747, 1)
 card_pool = ExtResource("23_card_pool")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=916745351]
+script = ExtResource("33_camera_shake")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=-885748531]
 color = Color(0.843608, 0.83693993, 0.9259373, 1)
@@ -98,6 +105,15 @@ max_active = 160
 [node name="CometSpawner" type="Node" parent="Managers" unique_id=2011010101]
 script = ExtResource("22_comet_spawner")
 comet_scene = ExtResource("21_comet")
+
+[node name="Audio" type="Node" parent="Managers" unique_id=2026112701]
+script = ExtResource("30_audio_manager")
+library = ExtResource("31_audio_library")
+
+[node name="Vfx" type="Node2D" parent="Managers" unique_id=2026112702]
+z_index = 10
+script = ExtResource("29_vfx_manager")
+effect_scene = ExtResource("32_vfx_scene")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1834101567]
 
@@ -162,6 +178,16 @@ theme_override_colors/font_color = Color(0.85, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 26
 text = "II"
 script = ExtResource("19_juicy")
+
+[node name="ScreenFlash" type="ColorRect" parent="UI" unique_id=2026112703]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+script = ExtResource("34_screen_flash")
 
 [node name="PauseOverlay" parent="." unique_id=431203817 instance=ExtResource("18_pause")]
 

@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://cpeoycey03xyj" path="res://assets/sprites/rocket/rocket_parts_white.png" id="3_k2vdt"]
 [ext_resource type="Texture2D" uid="uid://bj6fw7bq7voue" path="res://assets/sprites/fx/fire.png" id="4_saxsb"]
 [ext_resource type="Script" uid="uid://c8mcjpr5s1jav" path="res://assets/scripts/components/finger_follower.gd" id="6_4v76y"]
-[ext_resource type="AudioStream" uid="uid://uofdo34eqtk3" path="res://assets/sounds/lego-breaking.ogg" id="7_break"]
 
 [sub_resource type="Gradient" id="Gradient_k2vdt"]
 colors = PackedColorArray(1, 0.38431373, 0, 1, 1, 0.8039216, 0.6392157, 1)
@@ -84,11 +83,6 @@ position = Vector2(0, -63)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1842654202]
 position = Vector2(0, 4)
 shape = SubResource("CapsuleShape2D_rocket")
-
-[node name="BreakSound" type="AudioStreamPlayer" parent="." unique_id=1842654203]
-stream = ExtResource("7_break")
-volume_db = -4.0
-bus = &"SFX"
 
 [node name="FingerFollower" type="Node2D" parent="." unique_id=375218279 node_paths=PackedStringArray("target")]
 script = ExtResource("6_4v76y")

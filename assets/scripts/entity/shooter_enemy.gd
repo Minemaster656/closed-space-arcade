@@ -102,6 +102,10 @@ func _process(delta: float) -> void:
 			_despawn_out_of_bounds()
 
 
+func is_dead() -> bool:
+	return _dead
+
+
 func take_damage(amount: float) -> void:
 	if _dead:
 		return
@@ -137,6 +141,12 @@ func _die() -> void:
 	remove_from_group("collision_damage")
 	set_deferred("monitorable", false)
 	hp_bar.hide_bar()
+	GameState.enemy_destroyed.emit({
+		"enemy": self,
+		"type": type,
+		"type_id": type.id if type != null else &"",
+		"position": global_position,
+	})
 	_drop_shards()
 	_play_death_animation()
 

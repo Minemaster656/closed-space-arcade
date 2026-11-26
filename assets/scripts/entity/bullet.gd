@@ -54,6 +54,8 @@ func _on_area_entered(area: Area2D) -> void:
 	GameState.projectile_hit_meteor.emit(hit_event)
 	if not hit_event.get("cancelled", false):
 		area.take_damage(float(hit_event.get("damage", damage)))
+		hit_event["lethal"] = area.has_method("is_dead") and area.is_dead()
+		GameState.projectile_hit_resolved.emit(hit_event)
 
 	if pierce > 0:
 		pierce -= 1

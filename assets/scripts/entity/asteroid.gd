@@ -19,11 +19,6 @@ const BOUNDS_CHECK_INTERVAL := 0.2
 @export var magnet_speed_min: float = 200.0
 @export var magnet_speed_max: float = 1000.0
 
-@export_group("Audio")
-## Звук попадания пока не добавлен. Можно назначить позже в инспекторе.
-@export var hit_sound: AudioStream
-@export var hit_sound_volume_db: float = -6.0
-
 var type: AsteroidType
 var pool: AsteroidPool
 var pool_scene: PackedScene
@@ -147,11 +142,14 @@ func take_damage(amount: float) -> void:
     _hp -= amount
     hp_bar.set_health(_hp)
     hp_bar.show_bar()
-    _play_hit_sound()
     if _hp <= 0.0:
         _shatter()
     else:
         _flash_hit()
+
+
+func is_dead() -> bool:
+    return _dead
 
 
 func is_damageable() -> bool:
@@ -304,6 +302,11 @@ func _collect() -> void:
     _dead = true
     GameState.add_metal(type.metal_value)
     GameState.xp_granted.emit(_xp_reward())
+    GameState.shard_collected.emit({
+        "asteroid": self,
+        "type": type,
+        "position": global_position,
+    })
     if _spawn_tween != null and _spawn_tween.is_valid():
         _spawn_tween.kill()
     _spawn_tween = create_tween().set_parallel(true)
@@ -327,6 +330,13 @@ func _break_without_reward() -> void:
     remove_from_group(GROUP_COLLISION_DAMAGE)
     set_deferred("monitorable", false)
     hp_bar.hide_bar()
+    GameState.asteroid_broken.emit({
+        "asteroid": self,
+        "type": type,
+        "type_id": type.id if type != null else &"",
+        "position": global_position,
+        "direction": _direction,
+    })
 
     var tween := create_tween().set_parallel(true)
     tween.tween_property(self, "scale", Vector2.ZERO, 0.12) \
@@ -344,19 +354,3 @@ func _is_out_of_bounds() -> bool:
     var margin := rect.size * despawn_margin
     var bounds := rect.grow_individual(margin.x, margin.y, margin.x, margin.y)
     return not bounds.has_point(global_position)
-
-
-func _play_hit_sound() -> void:
-    if hit_sound == null:
-        return
-    var player := AudioStreamPlayer2D.new()
-    player.bus = AudioSettings.SFX_BUS
-    player.stream = hit_sound
-    player.volume_db = hit_sound_volume_db
-    player.global_position = global_position
-    player.finished.connect(player.queue_free)
-    var host := Utils.get_game_root()
-    if host == null:
-        host = get_parent()
-    host.add_child(player)
-    player.play()

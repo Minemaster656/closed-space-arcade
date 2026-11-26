@@ -26,7 +26,6 @@ signal died
 @onready var _shoot_point: Node2D = $ShootPoint
 @onready var _sprite: SmoothShake2D = $Sprite
 @onready var _hurtbox: Area2D = $Hurtbox
-@onready var _break_sound: AudioStreamPlayer = $BreakSound
 @onready var _finger_follower: FollowFinger2D = $FingerFollower
 
 var _shoot_timer: float = 0.0
@@ -37,7 +36,6 @@ var _death_pending: bool = false
 func _ready() -> void:
 	_hurtbox.area_entered.connect(_on_hurtbox_area_entered)
 	_sprite.strength = shake_strength_min
-	_break_sound.volume_db = break_sound_volume_db
 	_finger_follower.speed_multiplier = move_speed_multiplier
 
 
@@ -156,7 +154,7 @@ func _break_apart() -> void:
 	_finger_follower.set_process(false)
 	_finger_follower.set_process_unhandled_input(false)
 	_sprite.set_process(false)
-	_break_sound.play()
+	AudioManager.play_2d(&"explosion_player", global_position, break_sound_volume_db)
 
 	var host := Utils.get_game_root()
 	if host == null:
