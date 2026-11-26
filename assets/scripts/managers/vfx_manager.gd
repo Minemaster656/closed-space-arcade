@@ -29,39 +29,39 @@ const PRESETS := {
         "scale": 0.8, "shake": 0.05, "sound_volume": -2.0,
     },
     &"break_rock": {
-        "lifetime": 0.95, "fade": 0.2, "priority": 1, "cooldown": 0.04,
-        "sparks": 5, "debris": 6, "debris_tex": &"rock", "smoke": 1,
+        "lifetime": 1.1, "fade": 0.2, "priority": 1, "cooldown": 0.04,
+        "sparks": 5, "debris": 6, "debris_tex": &"rock", "smoke": 2,
         "flash": 1, "speed": 1.0, "scale": 0.8, "shake": 0.07,
         "sound": &"break_rock", "sound_volume": -2.0,
     },
     &"break_rock_large": {
-        "lifetime": 1.15, "fade": 0.25, "priority": 2, "cooldown": 0.06,
-        "sparks": 8, "debris": 10, "debris_tex": &"rock", "smoke": 2,
-        "flash": 1, "ring": 1, "speed": 1.15, "scale": 0.95, "shake": 0.14,
+        "lifetime": 1.25, "fade": 0.25, "priority": 2, "cooldown": 0.06,
+        "sparks": 8, "debris": 10, "debris_tex": &"rock", "smoke": 4,
+        "flash": 1, "speed": 1.15, "scale": 0.95, "shake": 0.14,
         "sound": &"break_rock", "sound_volume": -1.0,
     },
     &"break_ice": {
-        "lifetime": 0.95, "fade": 0.2, "priority": 1, "cooldown": 0.04,
-        "sparks": 5, "debris": 6, "debris_tex": &"ice", "smoke": 1,
-        "flash": 1, "ring": 1, "speed": 1.0, "scale": 0.8, "shake": 0.07,
+        "lifetime": 1.1, "fade": 0.2, "priority": 1, "cooldown": 0.04,
+        "sparks": 5, "debris": 6, "debris_tex": &"ice", "smoke": 2,
+        "flash": 1, "speed": 1.0, "scale": 0.8, "shake": 0.07,
         "sound": &"break_ice", "sound_volume": -2.0,
     },
     &"break_metal": {
-        "lifetime": 0.9, "fade": 0.2, "priority": 1, "cooldown": 0.04,
-        "sparks": 6, "debris": 4, "debris_tex": &"metal", "smoke": 0,
+        "lifetime": 1.05, "fade": 0.2, "priority": 1, "cooldown": 0.04,
+        "sparks": 6, "debris": 4, "debris_tex": &"metal", "smoke": 1,
         "flash": 1, "speed": 1.0, "scale": 0.8, "shake": 0.07,
         "sound": &"break_metal", "sound_volume": -2.0,
     },
     &"explosion_enemy": {
-        "lifetime": 1.05, "fade": 0.25, "priority": 2, "cooldown": 0.06,
-        "sparks": 10, "debris": 4, "debris_tex": &"metal", "smoke": 2,
-        "flash": 1, "ring": 1, "speed": 1.25, "scale": 0.9, "shake": 0.18,
+        "lifetime": 1.2, "fade": 0.25, "priority": 2, "cooldown": 0.06,
+        "sparks": 10, "debris": 4, "debris_tex": &"metal", "smoke": 4,
+        "flash": 1, "speed": 1.25, "scale": 0.9, "shake": 0.18,
         "screen_flash": 0.05, "sound": &"explosion_enemy", "sound_volume": -1.0,
     },
     &"explosion_player": {
-        "lifetime": 1.4, "fade": 0.3, "priority": 3, "cooldown": 0.0,
-        "sparks": 18, "debris": 8, "debris_tex": &"rock", "smoke": 4,
-        "flash": 1, "ring": 1, "speed": 1.5, "scale": 1.1,
+        "lifetime": 1.25, "fade": 0.25, "priority": 3, "cooldown": 0.0,
+        "sparks": 18, "debris": 8, "debris_tex": &"rock", "smoke": 6,
+        "flash": 1, "speed": 1.5, "scale": 1.1,
         "shake": 0.5, "screen_flash": 0.22,
     },
     &"pickup": {
@@ -71,7 +71,7 @@ const PRESETS := {
     },
     &"comet_pickup": {
         "lifetime": 0.8, "fade": 0.2, "priority": 1, "cooldown": 0.1,
-        "sparkles": 8, "flash": 1, "ring": 1, "speed": 0.9,
+        "sparkles": 8, "flash": 1, "speed": 0.9,
         "shake": 0.04, "screen_flash": 0.03, "scale": 0.85,
         "sound": &"pickup_comet", "sound_volume": -3.0,
     },
@@ -196,7 +196,8 @@ func play(
     _active.append(effect)
     _active_particles += particles
     _last_played[id] = now
-    effect.play(preset, world_position, direction, tint, scale_mult, quality)
+    var final_scale := scale_mult * float(preset.get("scale", 1.0))
+    effect.play(preset, world_position, direction, tint, final_scale, quality)
 
     var shake := float(preset.get("shake", 0.0))
     if shake > 0.0 and _camera_shake != null:
@@ -273,7 +274,6 @@ func _on_asteroid_destroyed(event: Dictionary) -> void:
         sound = &"break_metal"
     elif type != null and type.collision_radius >= 35.0:
         id = &"break_rock_large"
-        scale_mult = 1.25
 
     play(id, position, direction, tint, scale_mult, sound)
 
@@ -304,7 +304,7 @@ func _on_rocket_died() -> void:
         _rocket = get_tree().get_first_node_in_group("player") as Rocket
     if not is_instance_valid(_rocket):
         return
-    play(&"explosion_player", _rocket.global_position, Vector2.ZERO, PLAYER_TINT, 1.3)
+    play(&"explosion_player", _rocket.global_position, Vector2.ZERO, PLAYER_TINT, 1.0)
 
 
 func _estimate_particles(preset: Dictionary) -> int:

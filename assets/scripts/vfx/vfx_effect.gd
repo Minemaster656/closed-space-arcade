@@ -65,6 +65,8 @@ func play(
     rotation = direction.angle() + PI * 0.5 if direction != Vector2.ZERO else 0.0
     scale = Vector2.ONE * scale_mult
     modulate = Color.WHITE
+    for layer in _layers:
+        layer.modulate = Color.WHITE
 
     var q_sparks := 1.0
     var q_debris := 1.0
@@ -112,8 +114,9 @@ func _process(delta: float) -> void:
         _fading = true
         _fade_elapsed = 0.0
 
-    var t := clampf(_fade_elapsed / _fade_duration, 0.0, 1.0)
-    modulate.a = 1.0 - t
+    var alpha := 1.0 - clampf(_fade_elapsed / _fade_duration, 0.0, 1.0)
+    for layer in _layers:
+        layer.modulate.a = alpha
 
 
 ## Быстрое затухание, если эффект нужно освободить под более важный.
@@ -136,10 +139,12 @@ func park() -> void:
     _fade_elapsed = 0.0
     set_process(false)
     _timer.stop()
+    visible = false
     for layer in _layers:
         layer.emitting = false
         layer.visible = false
-    visible = false
+        layer.restart()
+        layer.emitting = false
     position = Vector2(0.0, 100000.0)
     priority = 0
     particle_budget = 0
@@ -192,6 +197,7 @@ func _on_timer_timeout() -> void:
     if not _playing:
         return
     _playing = false
-    modulate.a = 0.0
+    for layer in _layers:
+        layer.modulate.a = 0.0
     set_process(false)
     finished.emit(self)
